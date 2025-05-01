@@ -2,7 +2,7 @@
 
 Explore my EO scripting documentation:
 
-👉 [Eudemons cq_action Script Guide](/eudemons-cq_action-guide/)
+👉 [Eudemons cq_action Script Guide]([/eudemons-cq_action-guide/](https://duaselipar.github.io/eudemons-cq_action-guide/))
 
 ---
 
