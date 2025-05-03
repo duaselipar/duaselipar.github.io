@@ -102,8 +102,8 @@ title: DuaSelipar Dev Hub
 <div class="section" data-aos="fade-up" id="guides">
   <h2>📚 Guides & References</h2>
   <div class="grid">
-    <a href="/eudemons-cq_action-guide/" data-aos="flip-left">⚙️ cq_action Type Reference</a>
-    <a href="#" data-aos="flip-left">📜 Task Flow System (Coming Soon)</a>
+    <a href="/eudemons-cq_action-guide/" data-aos="flip-left">⚙️ CQ_Action Type Explaination</a>
+    <a href="#" data-aos="flip-left">📜 CQ_Map Explaination (Coming Soon)</a>
   </div>
 </div>
 
@@ -116,6 +116,8 @@ title: DuaSelipar Dev Hub
      <a href="/eoscripts/cq_action-tracker.html" data-aos="zoom-in" data-aos-delay="300">🧠 CQ Action Tracker</a>
   </div>
 </div>
+
+
 
 <div class="footer" id="footer" data-aos="fade-up">
   <p>© 2025 DuaSelipar Dev Hub. Powered by GitHub Pages. View on <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank">GitHub</a></p>
