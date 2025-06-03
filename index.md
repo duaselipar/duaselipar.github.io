@@ -116,7 +116,7 @@ title: DuaSelipar Dev Hub
      <a href="/eoscripts/cq_action-tracker.html" data-aos="zoom-in" data-aos-delay="300">🧠 CQ Action Tracker</a>
     <a href="https://github.com/duaselipar/Mail-Sender" target="_blank" data-aos="zoom-in" data-aos-delay="400">📬 Mail Sender</a>
     <a href="https://github.com/duaselipar/AutoPatchServerGUIEO" target="_blank" data-aos="zoom-in" data-aos-delay="500">🔧 Auto Patch Server</a>
-     <a href="https://github.com/duaselipar/Eudemon-Patch-Maker" target="_blank" data-aos="zoom-in" data-aos-delay="500">📦 Patch Maker</a>
+     <a href="https://github.com/duaselipar/Eudemon-Patch-Maker" target="_blank" data-aos="zoom-in" data-aos-delay="600">📦 Patch Maker</a>
 
   </div>
 </div>
