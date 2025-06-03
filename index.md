@@ -114,7 +114,7 @@ title: DuaSelipar Dev Hub
     <a href="/eoscripts/cq_card-generator.html" data-aos="zoom-in" data-aos-delay="100">🃏 CQ Card Generator</a>
     <a href="/eoscripts/register-generator.html" data-aos="zoom-in" data-aos-delay="200">📝 Register Generator</a>
      <a href="/eoscripts/cq_action-tracker.html" data-aos="zoom-in" data-aos-delay="300">🧠 CQ Action Tracker</a>
-    <a href="https://duaselipar.github.io/Mail-Sender/" target="_blank">📬 Mail Sender</a>
+    <a href="https://duaselipar.github.io/Mail-Sender/" target="_blank" data-aos="zoom-in" data-aos-delay="400">📬 Mail Sender</a>
 
   </div>
 </div>
