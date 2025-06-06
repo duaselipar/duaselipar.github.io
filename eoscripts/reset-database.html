@@ -37,9 +37,12 @@
   </div>
 
   <div class="container py-4 flex-grow-1">
-      <div class="alert alert-info mt-3 mb-1" role="alert">
-        Paste into your navicat after backup. <b>All character/account data will be wiped!</b>
-      </div>
+<div class="alert alert-info mt-3 mb-1" role="alert">
+  <b>Warning:</b> Make sure <u>all tables in this script exist</u> in your database before running.<br>
+  If any table does not exist, the script will stop at that point.<br>
+  <span class="text-danger"><b>Tip:</b> Always backup your database first!</span>
+</div>
+
     <!-- Old DB Section -->
     <div class="section" data-aos="fade-up">
       <h2>💾 Old Database Structure</h2>
