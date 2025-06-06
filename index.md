@@ -236,6 +236,14 @@ title: DuaSelipar Dev Hub
         <div class="desc">One-click patch package builder and updater.</div>
       </div>
     </li>
+    <li>
+  <div class="icon">🗑️</div>
+  <div class="desc-group">
+    <a class="label" href="/eoscripts/reset-database.html" target="_blank">Reset Database</a>
+    <div class="desc">Wipe & reset EO account, character, and related tables (old & new db scripts, with Copy feature).</div>
+  </div>
+</li>
+
   </ul>
 </section>
 
