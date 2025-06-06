@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Reset EO database (old & new) safely. DuaSelipar Dev Hub.">
+  <title>🗑️ Reset EO Database | DuaSelipar Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; color: #212529; min-height: 100vh; }
+    .hero { background: #fff; text-align: center; padding: 3rem 2rem 2rem 2rem; border-bottom: 1px solid #dee2e6; }
+    .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.08rem; margin-bottom: 1.3rem; }
+    .section { margin-top: 2.5rem; padding: 2rem; border-radius: 0.7rem; background: #fff; border: 1px solid #e9ecef; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
+    .section h2 { font-size: 1.19rem; margin-bottom: 1.1rem; border-left: 4px solid #0d6efd; padding-left: 0.7rem;}
+    .code-box { position: relative; background: #23272e; color: #fff; border-radius: 8px; padding: 1.15rem 1.1rem 1.2rem 1.2rem; font-size: 1rem; font-family: 'Fira Mono','Consolas','monospace'; margin: 1.1rem 0 1.5rem 0; overflow-x: auto; border: 1.5px solid #2d3748; line-height: 1.63; }
+    .copy-btn { position: absolute; top: 10px; right: 15px; z-index: 2; background: #0d6efd; color: #fff; border: none; font-weight: 600; border-radius: 6px; padding: 0.36em 1.3em 0.36em 2.1em; font-size: 0.96em; cursor: pointer; box-shadow: 0 2px 12px #2256f621; transition: background .14s;}
+    .copy-btn:before { content: '📋'; position: absolute; left: 0.7em; top: 0.36em; font-size: 1.1em; opacity: 0.8;}
+    .copy-btn:active { background: #2563eb;}
+    .copied-label { display: none; position: absolute; top: 11px; right: 115px; background: #198754; color: #fff; font-size: .96em; border-radius: 5px; padding: 0.17em 0.9em; z-index: 99; opacity: 0.93;}
+    .code-box.copied .copied-label { display: inline-block; animation: fadeout 1.4s linear; }
+    @keyframes fadeout { 0%{opacity:1;} 60%{opacity:1;} 100%{opacity:0;} }
+    .footer { text-align: center; margin-top: auto; padding: 1.3rem 0 0.5rem 0; font-size: 0.96rem; color: #6c757d; background: #f1f1f1;}
+    .footer a { color: #0d6efd; text-decoration: none;} .footer a:hover { text-decoration: underline;}
+    @media (max-width:600px) { .section{padding: 1.1rem 0.45rem;} .hero{padding: 2rem 0.5rem;} .code-box{font-size:0.97rem;} }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <div class="hero" data-aos="zoom-in">
+    <h1>🗑️ Reset EO Database</h1>
+    <p>
+      <b>Danger Zone:</b> These scripts will <span class="text-danger">WIPE</span> player & account data.<br>
+      <span class="text-danger">Backup your database before running!</span>
+    </p>
+    <a href="/eoscripts/" class="btn btn-primary btn-sm">← Back to Tools</a>
+  </div>
+
+  <div class="container py-4 flex-grow-1">
+      <div class="alert alert-info mt-3 mb-1" role="alert">
+        Paste into your navicat after backup. <b>All character/account data will be wiped!</b>
+      </div>
+    <!-- Old DB Section -->
+    <div class="section" data-aos="fade-up">
+      <h2>💾 Old Database Structure</h2>
+      <div class="mb-2" style="color:#7285a7">Classic EO database (2014/older). Includes auto-increment reset for <code>account</code> & <code>cq_user</code>.</div>
+      <div class="position-relative">
+        <pre class="code-box" id="sql-block-old">
+TRUNCATE TABLE account;
+ALTER TABLE account AUTO_INCREMENT = 1000000;
+TRUNCATE TABLE account_pwd;
+TRUNCATE TABLE account_old;
+TRUNCATE TABLE cq_ad_log;
+TRUNCATE TABLE cq_addresslist;
+TRUNCATE TABLE cq_advert_log;
+TRUNCATE TABLE cq_building;
+TRUNCATE TABLE cq_card;
+TRUNCATE TABLE cq_card2;
+TRUNCATE TABLE cq_card3;
+TRUNCATE TABLE cq_castle;
+TRUNCATE TABLE cq_castleitem;
+TRUNCATE TABLE cq_castlemap;
+TRUNCATE TABLE cq_deluser;
+TRUNCATE TABLE cq_donation_dynasort_rec;
+TRUNCATE TABLE cq_enemy;
+TRUNCATE TABLE cq_eudemon;
+TRUNCATE TABLE cq_family;
+TRUNCATE TABLE cq_family_attr;
+TRUNCATE TABLE cq_flower;
+TRUNCATE TABLE cq_friend;
+TRUNCATE TABLE cq_ip_log;
+TRUNCATE TABLE cq_item;
+TRUNCATE TABLE cq_leaveword;
+TRUNCATE TABLE cq_magic;
+TRUNCATE TABLE cq_partner;
+TRUNCATE TABLE cq_pet;
+TRUNCATE TABLE cq_pk_item;
+TRUNCATE TABLE cq_shortcut_key;
+TRUNCATE TABLE cq_skill;
+TRUNCATE TABLE cq_special_status;
+TRUNCATE TABLE cq_suspicion_event;
+TRUNCATE TABLE cq_suspicion_log;
+TRUNCATE TABLE cq_suspicion_punish;
+TRUNCATE TABLE cq_synattr;
+TRUNCATE TABLE cq_syndicate;
+TRUNCATE TABLE cq_taskdetail;
+TRUNCATE TABLE cq_totem_add;
+TRUNCATE TABLE cq_tutor;
+TRUNCATE TABLE cq_tutor_contributions;
+TRUNCATE TABLE cq_tutorexp;
+TRUNCATE TABLE cq_user;
+ALTER TABLE cq_user AUTO_INCREMENT = 1000000;
+        </pre>
+        <button class="copy-btn" onclick="copySQL('sql-block-old', this)">Copy</button>
+        <span class="copied-label" id="copiedLabelOld">Copied!</span>
+      </div>
+    </div>
+
+    <!-- New DB Section -->
+    <div class="section" data-aos="fade-up">
+      <h2>💾 New Database Structure</h2>
+      <div class="mb-2" style="color:#7285a7">For EO server with <code>cq_user_new</code>, <code>cq_vip</code>, <code>othercard</code>, etc. Reset auto-increment for main tables as needed.</div>
+      <div class="position-relative">
+        <pre class="code-box" id="sql-block-new">
+-- account table
+TRUNCATE TABLE account;
+TRUNCATE TABLE account_pwd;
+TRUNCATE TABLE cq_vip;
+ALTER TABLE account AUTO_INCREMENT = 1000000;
+-- main table
+TRUNCATE TABLE cq_activitynewshoprecord;
+TRUNCATE TABLE cq_delcount;
+TRUNCATE TABLE cq_deluser;
+TRUNCATE TABLE cq_donation_dynasort_rec;
+TRUNCATE TABLE cq_enemy;
+TRUNCATE TABLE cq_eudemon;
+TRUNCATE TABLE cq_eudlookinfo;
+TRUNCATE TABLE cq_faceinfo;
+TRUNCATE TABLE cq_friend;
+TRUNCATE TABLE cq_goddess;
+TRUNCATE TABLE cq_goddessservant;
+TRUNCATE TABLE cq_hairinfo;
+TRUNCATE TABLE cq_item;
+TRUNCATE TABLE cq_magic;
+TRUNCATE TABLE cq_mailinfo;
+TRUNCATE TABLE cq_newcard;
+TRUNCATE TABLE cq_newcard2;
+TRUNCATE TABLE cq_newtaskdetail;
+TRUNCATE TABLE cq_packpetinfo;
+TRUNCATE TABLE cq_partner;
+TRUNCATE TABLE cq_skill;
+TRUNCATE TABLE cq_special_status;
+TRUNCATE TABLE cq_suspicion_event;
+TRUNCATE TABLE cq_suspicion_log;
+TRUNCATE TABLE cq_suspicion_punish;
+TRUNCATE TABLE cq_syndicate;
+TRUNCATE TABLE cq_synattr;
+TRUNCATE TABLE cq_taskdetail;
+TRUNCATE TABLE cq_titleid;
+TRUNCATE TABLE cq_totem_add;
+TRUNCATE TABLE cq_tutor;
+TRUNCATE TABLE cq_tutor_contributions;
+TRUNCATE TABLE cq_tutorexp;
+TRUNCATE TABLE cq_user_new;
+TRUNCATE TABLE othercard;
+TRUNCATE TABLE othercard_log;
+ALTER TABLE cq_user_new AUTO_INCREMENT = 1000000;
+
+-- Celebrity Hall Statue
+UPDATE cq_npc
+SET
+  data1 = 0, data2 = 0, data3 = 0,
+  newdata1 = 0, newdata2 = 0, newdata3 = 0,
+  newdata4 = 0, newdata5 = 0, newdata6 = 0,
+  newdata7 = 0, newdata8 = 0,
+  datastr = ''
+WHERE (id BETWEEN 11000 AND 11199 OR id BETWEEN 10200 AND 10999);
+
+-- PK Statue
+UPDATE cq_npc
+SET
+  data1 = 0, data2 = 0, data3 = 0,
+  newdata1 = 0, newdata2 = 0, newdata3 = 0,
+  newdata6 = 0, newdata7 = 0,
+  datastr = ''
+WHERE id = 12850;
+
+-- Divine Fire Statue
+UPDATE cq_npc
+SET
+  data1 = 0, data2 = 0, data3 = 0,
+  newdata1 = 0, newdata2 = 0, newdata3 = 0,
+  newdata4 = 0, newdata6 = 0, newdata7 = 0, newdata8 = 0,
+  datastr = '', newstrdata1 = '', newstrdata2 = ''
+WHERE id BETWEEN 12116 AND 12118;
+
+        </pre>
+        <button class="copy-btn" onclick="copySQL('sql-block-new', this)">Copy</button>
+        <span class="copied-label" id="copiedLabelNew">Copied!</span>
+      </div>
+
+    </div>
+
+  </div>
+
+    <div class="footer" id="footer" data-aos="fade-up">
+        <p>© 2025 DuaSelipar Dev Hub. Powered by GitHub Pages. View on <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank">GitHub</a></p>
+      </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+    function copySQL(blockId, btn) {
+      const block = document.getElementById(blockId);
+      let labelId = blockId === 'sql-block-old' ? 'copiedLabelOld' : 'copiedLabelNew';
+      const label = document.getElementById(labelId);
+      let text = block.innerText || block.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        block.classList.add('copied');
+        setTimeout(() => { block.classList.remove('copied'); }, 1400);
+      });
+    }
+  </script>
+</body>
+</html>

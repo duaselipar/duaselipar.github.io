@@ -4,36 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#121212"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-    <meta property="og:title" content="DuaSelipar Dev Hub">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:title" content="DuaSelipar Dev Hub">
   <meta property="og:description" content="Scripting tools, EO references, and automation for private server developers.">
   <meta property="og:image" content="/assets/preview.png">
   <meta property="og:type" content="website">
   <title>DuaSelipar Dev Hub</title>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
     :root {
       --bg: #f9f9f9;
-      --text: #1c1c1c;
+      --text: #18181b;
+      --border: #e6eaf2;
+      --accent: #18e8c6;
+      --section: #fff;
+      --icon-bg: #eafff7;
+      --footer: #f1f2f4;
     }
-    .dark-mode {
-      --bg: #121212;
+    html.dark-mode {
+      --bg: #18181b;
       --text: #f5f5f5;
+      --border: #292933;
+      --accent: #21ffd2;
+      --section: #16181e;
+      --icon-bg: #2c4242;
+      --footer: #181a1e;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      margin: 0; padding: 0;
+      transition: background 0.3s, color 0.3s;
     }
     main {
-      max-width: 1080px;
-      margin: auto;
-      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      background: transparent;
     }
     .toggle-mode {
       position: fixed;
@@ -44,106 +55,262 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--text);
+      z-index: 99;
+      opacity: 0.9;
+      transition: color 0.2s;
+    }
+    a { color: var(--accent); text-decoration: underline; transition: color .18s;}
+    a:hover { color: #2cd8a7; }
+    @media (max-width: 600px) {
+      main { padding: 0 0.3rem; }
     }
   </style>
 </head>
 <body>
   <button class="toggle-mode" onclick="toggleMode()" title="Toggle dark mode">🌓</button>
   <main>
-    <!-- Tailwind CSS CDN for easy drop-in (replace with your build if preferred) -->
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.3/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+.hero-nocard {
+  text-align: center;
+  padding: 4rem 0 2.2rem 0;
+}
+.hero-nocard .hero-ico {
+  width: 64px; height: 64px;
+  background: var(--icon-bg);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 2.4rem;
+  margin: 0 auto 1.5rem auto;
+}
+.hero-nocard h1 {
+  font-size: 2.7rem;
+  font-weight: 800;
+  margin-bottom: 0.7rem;
+  letter-spacing: -1.2px;
+}
+.hero-nocard p {
+  font-size: 1.16rem;
+  color: #535669;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+.hero-nocard .hero-btns {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+}
+.hero-nocard .hero-btn {
+  background: var(--accent);
+  color: #18181b;
+  border-radius: 999px;
+  padding: 0.93rem 2.1rem;
+  font-size: 1.07rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  transition: background .18s, color .18s;
+  cursor: pointer;
+  box-shadow: 0 2px 12px #1bd2a36c;
+}
+.hero-nocard .hero-btn:hover {
+  background: #14b8a6;
+  color: #fff;
+}
+.section-nocard {
+  margin-top: 3.5rem;
+  margin-bottom: 3.5rem;
+  background: var(--section);
+  border-radius: 18px;
+  padding: 2rem 1.4rem 1.6rem 1.4rem;
+  box-shadow: 0 1.5px 10px 0 #0001;
+  border: 1px solid var(--border);
+}
+.section-nocard h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  color: var(--text);
+  display: flex; align-items: center; gap: .5em;
+  letter-spacing: -.2px;
+}
+.list-nocard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0; padding: 0;
+}
+.list-nocard li {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.12rem 0 1.12rem 0;
+  border-bottom: 1.3px solid var(--border);
+  background: none;
+  transition: background .13s;
+}
+.list-nocard li:last-child { border-bottom: none; }
+.list-nocard li .icon {
+  width: 38px; height: 38px;
+  background: var(--icon-bg);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  margin-top: 0.07rem;
+  flex-shrink: 0;
+}
+.list-nocard li .desc-group {
+  flex: 1;
+  min-width: 0;
+}
+.list-nocard li .label {
+  font-size: 1.09rem;
+  font-weight: 600;
+  margin-bottom: .12rem;
+  color: var(--text);
+  line-height: 1.3;
+  text-decoration: none;
+  transition: color .16s;
+}
+.list-nocard li .label[aria-disabled="true"] {
+  color: #c3c6d0;
+  cursor: not-allowed;
+}
+.list-nocard li .desc {
+  color: #5d6484;
+  font-size: .98rem;
+  margin-top: 0.07rem;
+  line-height: 1.4;
+}
+.list-nocard li.disabled .label,
+.list-nocard li.disabled .desc { color: #c3c6d0;}
+.list-nocard li.disabled .icon { filter: grayscale(0.9) opacity(.4);}
+.list-nocard li a.label {
+  text-decoration: none;
+  color: inherit;
+}
+.list-nocard li:hover:not(.disabled) { background: #eafff7; }
+.footer-nocard {
+  text-align: center;
+  color: #a2adc7;
+  font-size: .99rem;
+  margin: 3.5rem 0 1.6rem 0;
+  padding-top: 1.1rem;
+  border-top: 1.2px solid var(--border);
+}
+.footer-nocard a { color: var(--accent); text-decoration: underline dotted;}
+.footer-nocard a:hover { color: #18e8c6; }
+@media (max-width: 600px) {
+  .hero-nocard h1 { font-size: 1.45rem;}
+  .section-nocard { margin-top:2rem;margin-bottom:2rem; padding:1.1rem .4rem;}
+  .list-nocard li { padding: 0.78rem 0; gap:0.65rem;}
+}
+</style>
 
-<!-- Glassy Hero Section -->
-<section class="relative flex flex-col items-center justify-center text-center py-24 px-4 sm:px-8 bg-gradient-to-br from-emerald-400 via-cyan-500 to-blue-900 rounded-3xl shadow-2xl mt-6 mx-auto max-w-4xl backdrop-blur-md">
-  <div class="absolute inset-0 bg-white/10 rounded-3xl pointer-events-none"></div>
-  <div class="relative z-10">
-    <h1 class="text-4xl md:text-6xl font-extrabold mb-4 flex items-center justify-center gap-2">
-      🛠️ <span id="typed" class="bg-clip-text text-transparent bg-gradient-to-r from-white to-emerald-100"></span>
-    </h1>
-    <p class="text-lg md:text-xl font-medium mb-8 text-white/90 drop-shadow-lg">Tools, guides, and scripting utilities for EO Private Server developers.</p>
-    <a href="https://www.facebook.com/profile.php?id=61554036273018" target="_blank" class="inline-block px-6 py-3 bg-white/20 hover:bg-white/40 rounded-xl text-white font-semibold shadow-lg transition">
-      📘 Connect with DuaSelipar
-    </a>
+<div class="hero-nocard">
+  <div class="hero-ico">
+    <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" opacity="0.16" /><path d="M8 16l4-8 4 8" /><path d="M9.5 13h5" /></svg>
   </div>
+  <h1>DuaSelipar Dev Hub</h1>
+  <p>
+    Developer tools and guides for Eudemons Online private server.<br />
+    Simple, fast, and built for the EO scripting community.
+  </p>
+  <div class="hero-btns">
+    <a href="#tools" class="hero-btn">EO Tools</a>
+    <a href="#guides" class="hero-btn">Guides</a>
+    <a href="https://www.facebook.com/profile.php?id=61554036273018" target="_blank" class="hero-btn">Facebook</a>
+    <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank" class="hero-btn">GitHub</a>
+  </div>
+</div>
+
+<section class="section-nocard" id="guides">
+  <h2>
+    <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" /><path d="M16 3v4" /></svg>
+    Guides &amp; References
+  </h2>
+  <ul class="list-nocard">
+    <li>
+      <div class="icon">⚙️</div>
+      <div class="desc-group">
+        <a class="label" href="/eudemons-cq_action-guide/">CQ_Action Type Explained</a>
+        <div class="desc">Understand action chains, triggers, and scripting for EO servers.</div>
+      </div>
+    </li>
+    <li class="disabled">
+      <div class="icon">🗺️</div>
+      <div class="desc-group">
+        <span class="label" aria-disabled="true">CQ_Map Guide</span>
+        <div class="desc">Map structure, attributes, and customizing EO worlds. <em>Coming soon</em></div>
+      </div>
+    </li>
+  </ul>
 </section>
 
-<!-- Guides & References -->
-<section class="mt-14 max-w-5xl mx-auto px-4">
-  <div class="bg-white/70 dark:bg-slate-900/70 rounded-2xl shadow-xl py-10 px-6 md:px-10 backdrop-blur-md ring-1 ring-white/30">
-    <h2 class="text-2xl md:text-3xl font-bold mb-8 border-l-8 border-emerald-400 pl-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">📚 Guides &amp; References</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <a href="/eudemons-cq_action-guide/" class="group bg-gradient-to-br from-emerald-100 to-white dark:from-slate-900 dark:to-slate-800 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl transition-all border border-transparent hover:border-emerald-400 ring-1 ring-emerald-200/10 dark:ring-0">
-        <span class="text-2xl">⚙️</span>
-        <span class="block mt-3 text-lg font-bold group-hover:text-emerald-600 dark:group-hover:text-emerald-400">CQ_Action Type Explanation</span>
-      </a>
-      <a href="#" class="group bg-gradient-to-br from-blue-100 to-white dark:from-slate-900 dark:to-slate-800 p-5 rounded-xl shadow-md opacity-60 cursor-not-allowed">
-        <span class="text-2xl">📜</span>
-        <span class="block mt-3 text-lg font-bold">CQ_Map Explanation <span class="text-xs font-normal text-gray-400">(Coming Soon)</span></span>
-      </a>
-    </div>
-  </div>
+<section class="section-nocard" id="tools">
+  <h2>
+    <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="6" y="4" width="16" height="16" rx="4" /><path d="M12 9v6" /><path d="M9 12h6" /></svg>
+    EO Tools
+  </h2>
+  <ul class="list-nocard">
+    <li>
+      <div class="icon">🎨</div>
+      <div class="desc-group">
+        <a class="label" href="/eoscripts/color-generator.html">Color Code Generator</a>
+        <div class="desc">Visual color generator for item codes and NPCs.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🃏</div>
+      <div class="desc-group">
+        <a class="label" href="/eoscripts/cq_card-generator.html">CQ Card Generator</a>
+        <div class="desc">Generate, preview, and export card scripts for EO servers.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">📝</div>
+      <div class="desc-group">
+        <a class="label" href="/eoscripts/register-generator.html">Register Generator</a>
+        <div class="desc">Create custom registration links and hashes for your players.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🧠</div>
+      <div class="desc-group">
+        <a class="label" href="/eoscripts/cq_action-tracker.html">CQ Action Tracker</a>
+        <div class="desc">Trace and debug action chain calls live.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">📬</div>
+      <div class="desc-group">
+        <a class="label" href="https://github.com/duaselipar/Mail-Sender" target="_blank">Mail Sender</a>
+        <div class="desc">Automate in-game mail and rewards for events.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">🔧</div>
+      <div class="desc-group">
+        <a class="label" href="https://github.com/duaselipar/AutoPatchServerGUIEO" target="_blank">Auto Patch Server</a>
+        <div class="desc">Modern patch delivery system for EO clients.</div>
+      </div>
+    </li>
+    <li>
+      <div class="icon">📦</div>
+      <div class="desc-group">
+        <a class="label" href="https://github.com/duaselipar/Eudemon-Patch-Maker" target="_blank">Patch Maker</a>
+        <div class="desc">One-click patch package builder and updater.</div>
+      </div>
+    </li>
+  </ul>
 </section>
 
-<!-- EO Tools Section -->
-<section class="mt-14 max-w-5xl mx-auto px-4">
-  <div class="bg-white/70 dark:bg-slate-900/70 rounded-2xl shadow-xl py-10 px-6 md:px-10 backdrop-blur-md ring-1 ring-white/30">
-    <h2 class="text-2xl md:text-3xl font-bold mb-8 border-l-8 border-cyan-400 pl-4 text-gray-900 dark:text-gray-100 flex items-center gap-2">🧰 EO Tools</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      <a href="/eoscripts/color-generator.html" class="group bg-gradient-to-br from-emerald-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-emerald-400 transition ring-1 ring-emerald-200/10 dark:ring-0">
-        <span class="text-2xl">🎨</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Color Code Generator</span>
-      </a>
-      <a href="/eoscripts/cq_card-generator.html" class="group bg-gradient-to-br from-cyan-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-cyan-400 transition ring-1 ring-cyan-200/10 dark:ring-0">
-        <span class="text-2xl">🃏</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-cyan-600 dark:group-hover:text-cyan-400">CQ Card Generator</span>
-      </a>
-      <a href="/eoscripts/register-generator.html" class="group bg-gradient-to-br from-purple-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-purple-400 transition ring-1 ring-purple-200/10 dark:ring-0">
-        <span class="text-2xl">📝</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-purple-600 dark:group-hover:text-purple-400">Register Generator</span>
-      </a>
-      <a href="/eoscripts/cq_action-tracker.html" class="group bg-gradient-to-br from-sky-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-sky-400 transition ring-1 ring-sky-200/10 dark:ring-0">
-        <span class="text-2xl">🧠</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-sky-600 dark:group-hover:text-sky-400">CQ Action Tracker</span>
-      </a>
-      <a href="https://github.com/duaselipar/Mail-Sender" target="_blank" class="group bg-gradient-to-br from-pink-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-pink-400 transition ring-1 ring-pink-200/10 dark:ring-0">
-        <span class="text-2xl">📬</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-pink-600 dark:group-hover:text-pink-400">Mail Sender</span>
-      </a>
-      <a href="https://github.com/duaselipar/AutoPatchServerGUIEO" target="_blank" class="group bg-gradient-to-br from-orange-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-orange-400 transition ring-1 ring-orange-200/10 dark:ring-0">
-        <span class="text-2xl">🔧</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-orange-600 dark:group-hover:text-orange-400">Auto Patch Server</span>
-      </a>
-      <a href="https://github.com/duaselipar/Eudemon-Patch-Maker" target="_blank" class="group bg-gradient-to-br from-yellow-50 to-white dark:from-slate-800 dark:to-slate-900 p-5 rounded-xl shadow-md hover:-translate-y-1 hover:shadow-2xl border border-transparent hover:border-yellow-400 transition ring-1 ring-yellow-200/10 dark:ring-0">
-        <span class="text-2xl">📦</span>
-        <span class="block mt-3 text-lg font-semibold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">Patch Maker</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="mt-20 mb-6 text-center text-gray-600 dark:text-gray-400 text-base select-none">
-  <div class="inline-block bg-white/60 dark:bg-slate-800/60 px-6 py-3 rounded-2xl shadow-md backdrop-blur-md">
-    © 2025 <span class="font-bold text-emerald-600 dark:text-emerald-400">DuaSelipar Dev Hub</span> · Powered by
-    <a href="https://github.com/duaselipar/duaselipar.github.io" class="text-cyan-700 dark:text-cyan-400 hover:underline" target="_blank">GitHub Pages</a>
-  </div>
-</footer>
-
-<!-- Typed.js effect -->
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-
-<script>
-  new Typed("#typed", {
-    strings: ["DuaSelipar Dev Hub", "EO Scripting Tools", "Private Server Resources"],
-    typeSpeed: 38,
-    backSpeed: 18,
-    loop: true
-  });
-</script>
-
+<div class="footer-nocard">
+  © 2025 DuaSelipar Dev Hub.
+  Powered by <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank">GitHub Pages</a>
+</div>
 
   </main>
-
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ once: true });

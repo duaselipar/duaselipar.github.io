@@ -4,36 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#121212"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-    <meta property="og:title" content="DuaSelipar Dev Hub">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:title" content="DuaSelipar Dev Hub">
   <meta property="og:description" content="Scripting tools, EO references, and automation for private server developers.">
   <meta property="og:image" content="/assets/preview.png">
   <meta property="og:type" content="website">
   <title>{{ page.title }}</title>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
     :root {
       --bg: #f9f9f9;
-      --text: #1c1c1c;
+      --text: #18181b;
+      --border: #e6eaf2;
+      --accent: #18e8c6;
+      --section: #fff;
+      --icon-bg: #eafff7;
+      --footer: #f1f2f4;
     }
-    .dark-mode {
-      --bg: #121212;
+    html.dark-mode {
+      --bg: #18181b;
       --text: #f5f5f5;
+      --border: #292933;
+      --accent: #21ffd2;
+      --section: #16181e;
+      --icon-bg: #2c4242;
+      --footer: #181a1e;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      margin: 0; padding: 0;
+      transition: background 0.3s, color 0.3s;
     }
     main {
-      max-width: 1080px;
-      margin: auto;
-      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      background: transparent;
     }
     .toggle-mode {
       position: fixed;
@@ -44,6 +55,14 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--text);
+      z-index: 99;
+      opacity: 0.9;
+      transition: color 0.2s;
+    }
+    a { color: var(--accent); text-decoration: underline; transition: color .18s;}
+    a:hover { color: #2cd8a7; }
+    @media (max-width: 600px) {
+      main { padding: 0 0.3rem; }
     }
   </style>
 </head>
@@ -52,7 +71,6 @@
   <main>
     {{ content }}
   </main>
-
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     AOS.init({ once: true });
