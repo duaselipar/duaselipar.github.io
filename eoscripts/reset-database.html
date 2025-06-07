@@ -93,6 +93,9 @@ TRUNCATE TABLE cq_tutor_contributions;
 TRUNCATE TABLE cq_tutorexp;
 TRUNCATE TABLE cq_user;
 ALTER TABLE cq_user AUTO_INCREMENT = 1000000;
+REPLACE INTO `cq_dynanpc` VALUES (21150, 0, 2, 'LegionPole', 10, 9800, 0000, 0000, -1, 1100, 473, 614, 8410410, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 805987127, 0, 0, 1000, 'None', 8410450, 66000000, 66000000, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'None', 'None', 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `cq_dynanpc` VALUES (21151, 0, 2, 'LegionShield', 124, 9837, 0000, 0000, -1, 1100, 461, 269, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 10000000, 0, 0, 1000, 'None', 8410460, 207000000, 207000000, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'None', 'None', 0, 0, 0, 0, 0, 0, 0, 0);
+
         </pre>
         <button class="copy-btn" onclick="copySQL('sql-block-old', this)">Copy</button>
         <span class="copied-label" id="copiedLabelOld">Copied!</span>
@@ -176,6 +179,9 @@ SET
   newdata4 = 0, newdata6 = 0, newdata7 = 0, newdata8 = 0,
   datastr = '', newstrdata1 = '', newstrdata2 = ''
 WHERE id BETWEEN 12116 AND 12118;
+
+REPLACE INTO `cq_dynanpc` VALUES (21150, 0, 2, 'Legion~Pole', 10, 9800, 0000, 0000, -1, 1100, 473, 614, 8410410, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 1566716339, 0, 0, 1000, 'none', 8410450, 247125255, 247125255, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'none', 'none', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
+REPLACE INTO `cq_dynanpc` VALUES (21151, 0, 2, 'Legion~Shield', 124, 9837, 0000, 0000, -1, 1100, 461, 269, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 1000, 'none', 8410460, 741375765, 741375765, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'none', 'none', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
 
         </pre>
         <button class="copy-btn" onclick="copySQL('sql-block-new', this)">Copy</button>
