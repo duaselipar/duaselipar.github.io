@@ -242,6 +242,9 @@ title: DuaSelipar Dev Hub
     <a class="label" href="/eoscripts/reset-database.html" target="_blank">Reset Database</a>
     <div class="desc">Wipe & reset EO account, character, and related tables (old & new database).</div>
   </div>
+</li>
+
+<li>
 <div class="icon">📝</div>
 <div class="desc-group">
   <a class="label" href="https://github.com/duaselipar/ActivityEditorEO" target="_blank">Activity Editor EO</a>
@@ -249,8 +252,9 @@ title: DuaSelipar Dev Hub
     Editor for <b>playexplain.ini</b>, <b>activitycalendarnew.ini</b> &amp; trigger scripts.<br>
   </div>
 </div>
-
 </li>
+
+
 
   </ul>
 </section>
