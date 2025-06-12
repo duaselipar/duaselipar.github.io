@@ -254,6 +254,15 @@ title: DuaSelipar Dev Hub
 </div>
 </li>
 
+<li>
+  <div class="icon">🛒</div>
+  <div class="desc-group">
+    <a class="label" href="https://github.com/duaselipar/Event-Shop-Editor-EO" target="_blank">Event Shop Editor EO</a>
+    <div class="desc">
+      Editor for <b>event shop</b> configuration &amp; items.<br>
+    </div>
+  </div>
+</li>
 
 
   </ul>
