@@ -264,6 +264,15 @@ title: DuaSelipar Dev Hub
   </div>
 </li>
 
+<li>
+  <div class="icon">🗃️</div>
+  <div class="desc-group">
+    <a class="label" href="https://github.com/duaselipar/FDBEditorEO" target="_blank">FDB Editor EO</a>
+    <div class="desc">
+      All-in-one FDB file editor. Supports full editing, CSV import/export, copy-paste, and more.<br>
+    </div>
+  </div>
+</li>
 
   </ul>
 </section>
