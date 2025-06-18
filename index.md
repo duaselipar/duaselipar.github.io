@@ -274,6 +274,17 @@ title: DuaSelipar Dev Hub
   </div>
 </li>
 
+<li>
+  <div class="icon">🗄️</div>
+  <div class="desc-group">
+    <a class="label" href="https://github.com/duaselipar/FDB-Merge-Replace" target="_blank">FDB Merge & Replace</a>
+    <div class="desc">
+      Merge or replace .fdb database files for EO. Supports field mapping, duplicate checking, and instant preview.<br>
+    </div>
+  </div>
+</li>
+
+
   </ul>
 </section>
 
