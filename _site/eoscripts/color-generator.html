@@ -1,213 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <title>🎨 Color Tag Generator</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #f9f9f9;
-      --fg: #333;
-      --card: #ffffff;
-      --accent: #4CAF50;
-      --code-bg: #272822;
-      --code-fg: #f8f8f2;
-      --preview-color: #000;
-    }
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🎨 Color Tag Generator</title>
+  <meta name="description" content="Generate EO color tags like <ffff00>Text</> with live preview.">
 
-    body.dark {
-      --bg: #121212;
-      --fg: #e0e0e0;
-      --card: #1e1e1e;
-      --accent: #81c784;
-      --code-bg: #1a1a1a;
-      --code-fg: #dcdcdc;
-      --preview-color: #fff;
+  <!-- Tailwind CDN only -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config (dark mode + Inter)
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
     }
+  </script>
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg);
-      color: var(--fg);
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin: 0;
-    }
-
-    .toggle-theme {
-      background: none;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    form {
-      background: var(--card);
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      transition: background 0.3s;
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-
-    input[type="text"], input[type="color"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: var(--card);
-      color: var(--fg);
-      box-sizing: border-box;
-    }
-
-    input[type="color"] {
-      height: 50px;
-      cursor: pointer;
-    }
-
-    button {
-      margin-top: 1rem;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .result {
-      background: #e8f5e9;
-      border-left: 5px solid var(--accent);
-      padding: 20px;
-      margin-top: 2rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      position: relative;
-    }
-
-    body.dark .result {
-      background: #324d39;
-    }
-
-    .preview {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: var(--preview-color);
-    }
-
-    code {
-      background: var(--code-bg);
-      color: var(--code-fg);
-      display: block;
-      padding: 25px;
-      margin-top: 1rem;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 1.1rem;
-      overflow-x: auto;
-      position: relative;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #444;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
 </head>
-<body>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
-  <header>
-    <h2>🎨 Color Tag Generator</h2>
-    <button class="toggle-theme" onclick="toggleTheme()">🌗 Toggle Dark Mode</button>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🎨 Color Tag Generator</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <!-- sun (shows in dark) -->
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <!-- moon (shows in light) -->
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <form onsubmit="event.preventDefault(); generateCode();">
-    <label for="color">Choose your color:</label>
-    <input type="color" id="color" value="#ffff00">
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16">
 
-    <label for="text">Enter your text:</label>
-    <input type="text" id="text" placeholder="your text here">
+    <!-- Form card -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold">Build EO Color Tag</h2>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Format: <code class="font-mono">&lt;RRGGBB&gt;Your text&lt;/&gt;</code></p>
 
-    <button type="submit">Generate</button>
-  </form>
+      <form class="mt-5 grid gap-4" onsubmit="event.preventDefault(); generateCode();">
+        <!-- Color -->
+        <div>
+          <label for="color" class="block text-sm font-semibold">Choose your color</label>
+          <div class="mt-1 flex items-center gap-3">
+            <input id="color" type="color" value="#ffff00"
+                   class="h-12 w-16 rounded-md ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 cursor-pointer"/>
+            <input id="hex" type="text" inputmode="text" spellcheck="false"
+                   class="flex-1 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm font-mono"
+                   placeholder="RRGGBB (optional)" />
+          </div>
+          <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Tip: you can type hex in the box, e.g. <code class="font-mono">FF8800</code>.</p>
+        </div>
 
-  <div class="result" id="result" style="display:none;">
-    <p><strong>🖊️ Preview Colour:</strong></p>
-    <div class="preview" id="preview">Preview will appear here...</div>
+        <!-- Text -->
+        <div>
+          <label for="text" class="block text-sm font-semibold">Text</label>
+          <input id="text" type="text" placeholder="your text here"
+                 class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm"/>
+        </div>
 
-    <p><strong>💡 Output Code:</strong></p>
-    <code id="output"></code>
-    <button class="copy-btn" onclick="copyCode()">Copy</button>
-  </div>
+        <!-- Actions -->
+        <div class="flex items-center gap-2">
+          <button type="submit"
+                  class="inline-flex items-center gap-2 rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-sky-400 transition">
+            Generate
+          </button>
+          <button type="button" onclick="resetForm()"
+                  class="inline-flex items-center gap-2 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 px-4 py-2 text-sm font-semibold hover:bg-slate-950/5 dark:hover:bg-white/5 transition">
+            Clear
+          </button>
+        </div>
+      </form>
 
+      <!-- Result -->
+      <div id="result" class="hidden mt-6 rounded-xl border border-emerald-200/70 dark:border-emerald-800/50 bg-emerald-50/60 dark:bg-emerald-900/20 p-4">
+        <p class="text-sm font-semibold text-emerald-900 dark:text-emerald-100">🖊️ Preview Colour:</p>
+        <div id="preview" class="mt-1 text-lg font-semibold">Preview will appear here...</div>
+
+        <p class="mt-4 text-sm font-semibold text-emerald-900 dark:text-emerald-100">💡 Output Code:</p>
+
+        <div class="relative mt-2">
+          <span id="copied-badge" class="pointer-events-none absolute top-2 right-24 hidden rounded-md bg-emerald-600 text-white text-xs px-2 py-1">Copied!</span>
+          <button class="absolute top-2 right-2 text-xs rounded-md border border-slate-700/70 dark:border-slate-700 hover:border-sky-400 px-2 py-1"
+                  onclick="copyCode(this)">Copy</button>
+
+          <pre class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 text-slate-100 p-4 text-sm leading-6"><code id="output" class="font-mono"></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script>
-    function generateCode() {
-      const colorHex = document.getElementById('color').value;
-      const colorCode = colorHex.replace('#', '');
-      const text = document.getElementById('text').value || 'your text here';
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-      const tagCode = `<${colorCode}>${text}</>`;
-      document.getElementById('output').textContent = tagCode;
-      document.getElementById('preview').innerHTML = `<span style="color:#${colorCode}">${text}</span>`;
-      document.getElementById('result').style.display = 'block';
+    // Normalize hex (returns RRGGBB without '#')
+    function normalizeHex(x) {
+      if (!x) return '';
+      x = x.trim().replace(/^#/, '');
+      if (x.length === 3) x = x.split('').map(c => c + c).join('');
+      return x.toUpperCase().replace(/[^0-9A-F]/g,'').slice(0,6).padEnd(6,'0');
     }
 
-    function copyCode() {
-      const codeText = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(codeText).then(() => {
-        alert('Copied to clipboard!');
+    // Sync color input <-> hex field
+    const colorInput = document.getElementById('color');
+    const hexInput = document.getElementById('hex');
+    colorInput.addEventListener('input', () => {
+      hexInput.value = normalizeHex(colorInput.value);
+      generateCode(true); // live preview
+    });
+    hexInput.addEventListener('input', () => {
+      const h = normalizeHex(hexInput.value);
+      hexInput.value = h;
+      if (h.length === 6) colorInput.value = '#' + h;
+      generateCode(true); // live preview
+    });
+
+    // Generate tag + preview
+    function generateCode(isLive){
+      const hex = normalizeHex(hexInput.value || colorInput.value);
+      const text = document.getElementById('text').value || 'your text here';
+      if (!hex) return;
+
+      const tagCode = `<${hex}>` + text + `</>`;
+      document.getElementById('output').textContent = tagCode;
+      document.getElementById('preview').innerHTML = `<span style="color:#${hex}">${text}</span>`;
+      document.getElementById('result').classList.remove('hidden');
+
+      // If it was a submit, scroll to result
+      if (!isLive) document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    // Copy to clipboard
+    function copyCode(btn){
+      const codeText = document.getElementById('output').textContent || '';
+      if(!codeText) return;
+      navigator.clipboard.writeText(codeText).then(()=>{
+        const badge = document.getElementById('copied-badge');
+        if(badge){ badge.classList.remove('hidden'); setTimeout(()=>badge.classList.add('hidden'), 1200); }
+        if(btn){ const t = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=t, 1200); }
       });
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    // Clear form/result
+    function resetForm(){
+      document.getElementById('text').value = '';
+      hexInput.value = '';
+      colorInput.value = '#ffff00';
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('output').textContent = '';
+      document.getElementById('preview').textContent = 'Preview will appear here...';
     }
-
-    window.onload = () => {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark') {
-        document.body.classList.add('dark');
-      }
-    };
   </script>
-
 </body>
 </html>

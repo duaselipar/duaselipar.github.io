@@ -1,213 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <title>🛡️ Checksum Calculator - cq_card / cq_card2</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #f9f9f9;
-      --fg: #333;
-      --card: #ffffff;
-      --accent: #4CAF50;
-      --code-bg: #272822;
-      --code-fg: #f8f8f2;
-    }
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🛡️ Checksum Calculator - cq_card / cq_card2</title>
+  <meta name="description" content="Calculate EO cq_card / cq_card2 checksum and generate SQL insert.">
 
-    body.dark {
-      --bg: #121212;
-      --fg: #e0e0e0;
-      --card: #1e1e1e;
-      --accent: #81c784;
-      --code-bg: #1a1a1a;
-      --code-fg: #dcdcdc;
+  <!-- Tailwind only -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config (dark mode + Inter)
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
     }
+  </script>
 
-    body {
-      margin: 0;
-      padding: 2rem;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      transition: background 0.3s, color 0.3s;
-      max-width: 800px;
-      margin: auto;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .toggle {
-      background: none;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    form {
-      background: var(--card);
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      transition: background 0.3s;
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: var(--card);
-      color: var(--fg);
-      box-sizing: border-box;
-    }
-
-    input[type="submit"] {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-      opacity: 0.9;
-    }
-
-    .result {
-      background: #e8f5e9;
-      border-left: 5px solid var(--accent);
-      padding: 20px;
-      margin-top: 2rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      position: relative;
-    }
-
-    body.dark .result {
-      background: #324d39;
-    }
-
-    code {
-      background: var(--code-bg);
-      color: var(--code-fg);
-      display: block;
-      padding: 25px;
-      margin-top: 1rem;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 1.1rem;
-      overflow-x: auto;
-      position: relative;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #444;
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      font-size: 0.9rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
 </head>
-<body>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
-  <header>
-    <h2>🛡️ Checksum Calculator</h2>
-    <button class="toggle" onclick="toggleDarkMode()">🌗 Toggle Dark Mode</button>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🛡️ Checksum Calculator</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <!-- sun (shows in dark) -->
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <!-- moon (shows in light) -->
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <form id="checksumForm">
-    <label for="base_chk_sum">Base Checksum:</label>
-    <select id="base_chk_sum">
-      <option value="780000">cq_card</option>
-      <option value="780001">cq_card2</option>
-    </select>
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16">
 
-    <label for="account_id">Account ID:</label>
-    <input type="number" id="account_id" required>
+    <!-- Form card -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold">cq_card / cq_card2</h2>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Checksum = <code class="font-mono">base_chk_sum ^ account_id</code>. Then insert row to selected table.</p>
 
-    <input type="submit" value="Calculate">
-  </form>
+      <form id="checksumForm" class="mt-5 grid gap-4" onsubmit="event.preventDefault(); calculate();">
+        <!-- Base checksum -->
+        <div>
+          <label for="base_chk_sum" class="block text-sm font-semibold">Base Checksum</label>
+          <select id="base_chk_sum"
+                  class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm">
+            <option value="780000">cq_card (780000)</option>
+            <option value="780001">cq_card2 (780001)</option>
+          </select>
+        </div>
 
-  <div class="result" id="result" style="display:none;">
-    <p id="chkSumOutput"></p>
-    <p><strong>SQL Query:</strong></p>
-    <code id="sqlOutput"></code>
-    <button class="copy-btn" onclick="copyCode()">Copy</button>
-  </div>
+        <!-- Account ID -->
+        <div>
+          <label for="account_id" class="block text-sm font-semibold">Account ID</label>
+          <input id="account_id" type="number" inputmode="numeric" min="0" step="1" required
+                 class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"/>
+        </div>
 
+        <!-- Actions -->
+        <div class="flex items-center gap-2">
+          <button type="submit"
+                  class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-emerald-400 transition">
+            Calculate
+          </button>
+          <button type="button" onclick="clearForm()"
+                  class="inline-flex items-center gap-2 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 px-4 py-2 text-sm font-semibold hover:bg-slate-950/5 dark:hover:bg-white/5 transition">
+            Clear
+          </button>
+        </div>
+      </form>
+
+      <!-- Result panel -->
+      <div id="result" class="hidden mt-6 rounded-xl border border-emerald-200/70 dark:border-emerald-800/50 bg-emerald-50/60 dark:bg-emerald-900/20 p-4">
+        <p id="chkSumOutput" class="text-sm font-semibold text-emerald-900 dark:text-emerald-100"></p>
+
+        <p class="mt-3 text-sm font-semibold text-emerald-900 dark:text-emerald-100">SQL Query:</p>
+        <div class="relative mt-2">
+          <span id="copied-badge" class="pointer-events-none absolute top-2 right-24 hidden rounded-md bg-emerald-600 text-white text-xs px-2 py-1">Copied!</span>
+          <button class="absolute top-2 right-2 text-xs rounded-md border border-slate-700/70 dark:border-slate-700 hover:border-sky-400 px-2 py-1"
+                  onclick="copySQL(this)">Copy</button>
+
+          <pre class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 text-slate-100 p-4 text-sm leading-6"><code id="sqlOutput" class="font-mono"></code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script>
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    }
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    window.onload = () => {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark') {
-        document.body.classList.add('dark');
-      }
-    };
+    // Calculate checksum and compose SQL
+    function calculate(){
+      const base = Number(document.getElementById('base_chk_sum').value);
+      const accountId = Number(document.getElementById('account_id').value);
+      if (!Number.isFinite(base) || !Number.isInteger(accountId)) return;
 
-    document.getElementById("checksumForm").addEventListener("submit", function(event) {
-      event.preventDefault();
+      const chkSum = base ^ accountId;                       // XOR
+      const table = (base === 780000) ? 'cq_card' : 'cq_card2';
 
-      const base_chk_sum = parseInt(document.getElementById("base_chk_sum").value);
-      const account_id = parseInt(document.getElementById("account_id").value);
-      const chk_sum = base_chk_sum ^ account_id;
-      const table = base_chk_sum === 780000 ? 'cq_card' : 'cq_card2';
-
+      // Static/default fields (adjust if needed)
       const ref_id = 1;
       const time_stamp = 0;
       const used = 0;
       const flag = 3;
       const ordernumber = 0;
-      const card_in_time = Math.floor(Date.now() / 1000);
+      const card_in_time = Math.floor(Date.now()/1000);      // unix time
 
-      document.getElementById("chkSumOutput").innerHTML =
-        `Checksum for account ID <strong>${account_id}</strong> with base checksum <strong>${base_chk_sum}</strong> is: <strong>${chk_sum}</strong>`;
+      // Human line
+      document.getElementById('chkSumOutput').innerHTML =
+        `Checksum for account ID <b>${accountId}</b> with base <b>${base}</b> is <b>${chkSum}</b> (table: <b>${table}</b>).`;
 
-      document.getElementById("sqlOutput").textContent =
-        `INSERT INTO \`${table}\` (\`id\`, \`type\`, \`account_id\`, \`ref_id\`, \`chk_sum\`, \`time_stamp\`, \`used\`, \`flag\`, \`ordernumber\`, \`card_in_time\`) VALUES (NULL, ${base_chk_sum}, ${account_id}, ${ref_id}, ${chk_sum}, ${time_stamp}, ${used}, ${flag}, '${ordernumber}', ${card_in_time});`;
+      // SQL line
+      const sql =
+`INSERT INTO \`${table}\`
+  (\`id\`, \`type\`, \`account_id\`, \`ref_id\`, \`chk_sum\`, \`time_stamp\`, \`used\`, \`flag\`, \`ordernumber\`, \`card_in_time\`)
+VALUES
+  (NULL, ${base}, ${accountId}, ${ref_id}, ${chkSum}, ${time_stamp}, ${used}, ${flag}, '${ordernumber}', ${card_in_time});`;
 
-      document.getElementById("result").style.display = "block";
-    });
+      document.getElementById('sqlOutput').textContent = sql;
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+    }
 
-    function copyCode() {
-      const codeText = document.getElementById('sqlOutput').textContent;
-      navigator.clipboard.writeText(codeText).then(() => {
-        alert("Copied to clipboard!");
+    // Copy helper
+    function copySQL(btn){
+      const codeText = document.getElementById('sqlOutput').textContent || '';
+      if(!codeText) return;
+      navigator.clipboard.writeText(codeText).then(()=>{
+        const badge = document.getElementById('copied-badge');
+        if(badge){ badge.classList.remove('hidden'); setTimeout(()=>badge.classList.add('hidden'), 1200); }
+        if(btn){ const t = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=t, 1200); }
       });
     }
-  </script>
 
+    // Clear form/result
+    function clearForm(){
+      document.getElementById('account_id').value = '';
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('sqlOutput').textContent = '';
+      document.getElementById('chkSumOutput').textContent = '';
+    }
+  </script>
 </body>
 </html>

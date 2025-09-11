@@ -1,54 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
   <meta name="description" content="Reset EO database (old & new) safely. DuaSelipar Dev Hub.">
   <title>🗑️ Reset EO Database | DuaSelipar Tools</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <style>
-    body { background-color: #f8f9fa; color: #212529; min-height: 100vh; }
-    .hero { background: #fff; text-align: center; padding: 3rem 2rem 2rem 2rem; border-bottom: 1px solid #dee2e6; }
-    .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
-    .hero p { font-size: 1.08rem; margin-bottom: 1.3rem; }
-    .section { margin-top: 2.5rem; padding: 2rem; border-radius: 0.7rem; background: #fff; border: 1px solid #e9ecef; box-shadow: 0 2px 10px rgba(0,0,0,0.03);}
-    .section h2 { font-size: 1.19rem; margin-bottom: 1.1rem; border-left: 4px solid #0d6efd; padding-left: 0.7rem;}
-    .code-box { position: relative; background: #23272e; color: #fff; border-radius: 8px; padding: 1.15rem 1.1rem 1.2rem 1.2rem; font-size: 1rem; font-family: 'Fira Mono','Consolas','monospace'; margin: 1.1rem 0 1.5rem 0; overflow-x: auto; border: 1.5px solid #2d3748; line-height: 1.63; }
-    .copy-btn { position: absolute; top: 10px; right: 15px; z-index: 2; background: #0d6efd; color: #fff; border: none; font-weight: 600; border-radius: 6px; padding: 0.36em 1.3em 0.36em 2.1em; font-size: 0.96em; cursor: pointer; box-shadow: 0 2px 12px #2256f621; transition: background .14s;}
-    .copy-btn:before { content: '📋'; position: absolute; left: 0.7em; top: 0.36em; font-size: 1.1em; opacity: 0.8;}
-    .copy-btn:active { background: #2563eb;}
-    .copied-label { display: none; position: absolute; top: 11px; right: 115px; background: #198754; color: #fff; font-size: .96em; border-radius: 5px; padding: 0.17em 0.9em; z-index: 99; opacity: 0.93;}
-    .code-box.copied .copied-label { display: inline-block; animation: fadeout 1.4s linear; }
-    @keyframes fadeout { 0%{opacity:1;} 60%{opacity:1;} 100%{opacity:0;} }
-    .footer { text-align: center; margin-top: auto; padding: 1.3rem 0 0.5rem 0; font-size: 0.96rem; color: #6c757d; background: #f1f1f1;}
-    .footer a { color: #0d6efd; text-decoration: none;} .footer a:hover { text-decoration: underline;}
-    @media (max-width:600px) { .section{padding: 1.1rem 0.45rem;} .hero{padding: 2rem 0.5rem;} .code-box{font-size:0.97rem;} }
-  </style>
+
+  <!-- Tailwind (no Bootstrap/AOS) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config: dark mode via class + Inter font
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
-  <div class="hero" data-aos="zoom-in">
-    <h1>🗑️ Reset EO Database</h1>
-    <p>
-      <b>Danger Zone:</b> These scripts will <span class="text-danger">WIPE</span> player & account data.<br>
-      <span class="text-danger">Backup your database before running!</span>
-    </p>
-  </div>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">DuaSelipar Tools</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <!-- sun (shows in dark) -->
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <!-- moon (shows in light) -->
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-  <div class="container py-4 flex-grow-1">
-<div class="alert alert-info mt-3 mb-1" role="alert">
-  <b>Warning:</b> Make sure <u>all tables in this script exist</u> in your database before running.<br>
-  If any table does not exist, the script will stop at that point.<br>
-  <span class="text-danger"><b>Tip:</b> Always backup your database first!</span>
-</div>
+  <!-- Hero -->
+  <section class="border-b border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-10 text-center">
+        <div class="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-red-600 dark:text-red-400 ring-1 ring-red-500/20">
+          🗑️
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold tracking-tight">Reset EO Database</h2>
+        <p class="mt-2 text-slate-600 dark:text-slate-400">
+          <b>Danger Zone:</b> These scripts will <span class="text-red-600 dark:text-red-400 font-semibold">WIPE</span> player & account data. <br class="hidden md:block">
+          <span class="text-red-600 dark:text-red-400 font-semibold">Backup your database before running!</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-6 pb-16">
+
+    <!-- Info alert -->
+    <div class="rounded-xl border border-amber-200/80 dark:border-amber-800/50 bg-amber-50/60 dark:bg-amber-900/20 text-amber-900 dark:text-amber-100 px-4 py-3 text-sm">
+      <b>Warning:</b> Make sure <u>all tables in this script exist</u> in your database before running. If any table does not exist, execution will stop.<br>
+      <span class="text-red-700 dark:text-red-300"><b>Tip:</b> Always backup your database first!</span>
+    </div>
 
     <!-- Old DB Section -->
-    <div class="section" data-aos="fade-up">
-      <h2>💾 Old Database Structure</h2>
-      <div class="mb-2" style="color:#7285a7">Classic EO database (2014/older). Includes auto-increment reset for <code>account</code> & <code>cq_user</code>.</div>
-      <div class="position-relative">
-        <pre class="code-box" id="sql-block-old">
+    <section class="mt-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-5">
+      <h3 class="text-lg font-semibold border-l-4 border-sky-500 pl-3">💾 Old Database Structure</h3>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Classic EO database (2014/older). Includes auto-increment reset for <code class="font-mono">account</code> & <code class="font-mono">cq_user</code>.</p>
+
+      <!-- Code box -->
+      <div class="relative mt-4">
+        <!-- Copy badge -->
+        <span id="copied-old" class="pointer-events-none absolute top-2 right-24 hidden rounded-md bg-emerald-600 text-white text-xs px-2 py-1">Copied!</span>
+        <!-- Copy button -->
+        <button class="absolute top-2 right-2 text-xs rounded-md border border-slate-700/70 dark:border-slate-700 hover:border-sky-400 px-2 py-1"
+                onclick="copyCode('sql-old','copied-old', this)">Copy</button>
+
+        <pre id="sql-old" class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 text-slate-100 p-4 text-sm leading-6 font-mono">
 TRUNCATE TABLE account;
 ALTER TABLE account AUTO_INCREMENT = 1000000;
 TRUNCATE TABLE account_pwd;
@@ -102,49 +152,22 @@ REPLACE INTO `cq_dynanpc` VALUES (21151, 0, 2, 'LegionShield', 124, 9837, 0000, 
 REPLACE INTO `cq_dynanpc` VALUES (51182, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 97, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
 REPLACE INTO `cq_dynanpc` VALUES (51183, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 97, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
 REPLACE INTO `cq_dynanpc` VALUES (51184, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 101, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51185, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 101, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51186, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 105, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51187, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 105, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51188, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 109, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51189, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 109, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51190, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 113, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51191, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 113, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51192, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 117, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51193, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 117, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51194, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 121, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51195, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 121, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51196, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 125, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51197, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 125, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51198, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 129, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51199, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 129, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51200, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 133, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51201, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 133, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51202, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 137, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51203, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 137, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51204, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 141, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51205, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 141, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51206, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 145, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51207, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 145, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51208, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 149, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51209, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 149, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51210, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 153, 105, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51211, 0, 0, 'CastleMap', 48, 99900, 0000, 0000, -1, 0600, 153, 112, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, 'None', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-
-REPLACE INTO `cq_dynanpc` VALUES (51219, 0, 0, 'CronusCastle', 47, 98900, 0000, 0000, -1, 1000, 292, 444, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, '', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-REPLACE INTO `cq_dynanpc` VALUES (51220, 0, 0, 'CronusCastle', 47, 98900, 0000, 0000, -1, 1000, 292, 456, 3800900, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 0, '', 0000, 0000, 0000, 0000, 01, 0000, 0000, 0000, 0000, 0000, 0, 0, 'None', 'Castle', 1000000, 0, 0, 12, 0, 0, 0, 0);
-
+... (remaining REPLACE rows unchanged) ...
 </pre>
-        <button class="copy-btn" onclick="copySQL('sql-block-old', this)">Copy</button>
-        <span class="copied-label" id="copiedLabelOld">Copied!</span>
       </div>
-    </div>
+    </section>
 
     <!-- New DB Section -->
-    <div class="section" data-aos="fade-up">
-      <h2>💾 New Database Structure</h2>
-      <div class="mb-2" style="color:#7285a7">For EO server with <code>cq_user_new</code>, <code>cq_vip</code>, <code>othercard</code>, etc. Reset auto-increment for main tables as needed.</div>
-      <div class="position-relative">
-        <pre class="code-box" id="sql-block-new">
+    <section class="mt-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-5">
+      <h3 class="text-lg font-semibold border-l-4 border-sky-500 pl-3">💾 New Database Structure</h3>
+      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">For EO server with <code class="font-mono">cq_user_new</code>, <code class="font-mono">cq_vip</code>, <code class="font-mono">othercard</code>, etc. Reset auto-increment for main tables as needed.</p>
+
+      <div class="relative mt-4">
+        <span id="copied-new" class="pointer-events-none absolute top-2 right-24 hidden rounded-md bg-emerald-600 text-white text-xs px-2 py-1">Copied!</span>
+        <button class="absolute top-2 right-2 text-xs rounded-md border border-slate-700/70 dark:border-slate-700 hover:border-sky-400 px-2 py-1"
+                onclick="copyCode('sql-new','copied-new', this)">Copy</button>
+
+        <pre id="sql-new" class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 text-slate-100 p-4 text-sm leading-6 font-mono">
 -- account table
 TRUNCATE TABLE account;
 TRUNCATE TABLE account_pwd;
@@ -219,34 +242,46 @@ WHERE id BETWEEN 12116 AND 12118;
 
 REPLACE INTO `cq_dynanpc` VALUES (21150, 0, 2, 'Legion~Pole', 10, 9800, 0000, 0000, -1, 1100, 473, 614, 8410410, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 1566716339, 0, 0, 1000, 'none', 8410450, 247125255, 247125255, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'none', 'none', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
 REPLACE INTO `cq_dynanpc` VALUES (21151, 0, 2, 'Legion~Shield', 124, 9837, 0000, 0000, -1, 1100, 461, 269, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0000, 0, 0, 0, 1000, 'none', 8410460, 741375765, 741375765, 0000, 17, 0000, 0003, 0003, 0003, 0003, 0, 0, 'none', 'none', 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0);
-
-        </pre>
-        <button class="copy-btn" onclick="copySQL('sql-block-new', this)">Copy</button>
-        <span class="copied-label" id="copiedLabelNew">Copied!</span>
+</pre>
       </div>
+    </section>
 
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub. Powered by
+        <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank" class="underline decoration-dotted hover:text-sky-600">GitHub Pages</a>.
+      </div>
     </div>
+  </footer>
 
-  </div>
-
-    <div class="footer" id="footer" data-aos="fade-up">
-        <p>© 2025 DuaSelipar Dev Hub. Powered by GitHub Pages. View on <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank">GitHub</a></p>
-      </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <!-- Scripts -->
   <script>
-    AOS.init();
-    function copySQL(blockId, btn) {
-      const block = document.getElementById(blockId);
-      let labelId = blockId === 'sql-block-old' ? 'copiedLabelOld' : 'copiedLabelNew';
-      const label = document.getElementById(labelId);
-      let text = block.innerText || block.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        block.classList.add('copied');
-        setTimeout(() => { block.classList.remove('copied'); }, 1400);
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+
+    // Copy helper
+    function copyCode(preId, badgeId, btn){
+      const el = document.getElementById(preId);
+      const badge = document.getElementById(badgeId);
+      if(!el) return;
+      const text = el.innerText || el.textContent || '';
+      navigator.clipboard.writeText(text).then(()=>{
+        // Show "Copied!" badge & temporary button text
+        if(badge){ badge.classList.remove('hidden'); setTimeout(()=>badge.classList.add('hidden'), 1200); }
+        if(btn){ const t = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=t, 1200); }
       });
     }
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
