@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Extract .pack Client Files — QuickBMS Guide</title>
+  <meta name="description" content="Official-style Tailwind tutorial to extract .pack client files using QuickBMS. Includes ready-to-use TQ_Pack.bms and RUN.bat scripts." />
+  <script>
+    // Theme before paint
+    (function(){
+      try{
+        var t = localStorage.getItem('theme');
+        if(t === 'light') document.documentElement.classList.remove('dark');
+        else if(t === 'dark') document.documentElement.classList.add('dark');
+        else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        } else { document.documentElement.classList.remove('dark'); }
+      }catch(e){}
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode:'class' }
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+  <div class="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-10">
+    <!-- Header -->
+    <header class="flex items-center justify-between gap-4 mb-7">
+      <div class="flex items-center gap-2">
+      </div>
+      <button id="themeToggle" class="inline-flex items-center gap-2 border border-slate-200 dark:border-slate-800 rounded-full px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-900 transition">
+        <svg class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13A9 9 0 1 1 11 2.36 7 7 0 1 0 21.64 13z"/></svg>
+        <svg class="w-4 h-4 dark:hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 12.02l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-1v3h1zm0 19v-3h-1v3h1zM4 12H1v-1h3v1zm19 0h-3v-1h3v1zM6.76 18.36l-1.8 1.79 1.41 1.41 1.79-1.8-1.4-1.4zM18.36 6.76l1.8-1.79-1.41-1.41-1.79 1.8 1.4 1.4zM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+        <span class="hidden sm:inline">Theme</span>
+      </button>
+    </header>
+
+    <!-- Hero -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-sky-500/10 to-transparent p-6 md:p-8 mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Extract <span class="font-mono">.pack</span> Client Files (QuickBMS)</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-400">Step-by-step, Includes a custom BMS script and a batch runner to process all <span class="font-mono">.pack</span> files recursively.</p>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <a href="https://aluigi.altervista.org/quickbms.htm" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2 hover:border-sky-400" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/><path d="M5 5h5V3H3v7h2V5zm0 14v-5H3v7h7v-2H5zm14 0h-5v2h7v-7h-2v5z"/></svg>
+          <span class="font-semibold">Download QuickBMS</span>
+        </a>
+        <a href="#steps" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2 hover:border-sky-400">Jump to Tutorial</a>
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section id="steps" class="mt-6">
+      <h2 class="text-xl font-semibold">Tutorial</h2>
+      <ol class="mt-2 list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300">
+        <li><strong>Download</strong> QuickBMS from the link above and <strong>extract</strong> it.</li>
+        <li>Inside the QuickBMS folder, create two folders: <span class="font-mono">Input</span> and <span class="font-mono">Output</span>.</li>
+        <li>Create a file named <span class="font-mono">TQ_Pack.bms</span> and paste the script below.</li>
+        <li>Create another file named <span class="font-mono">RUN.bat</span> and paste the batch code below.</li>
+        <li>Copy your client <em>data</em> folder (e.g., <span class="font-mono">c3</span> or <span class="font-mono">data</span>) into <span class="font-mono">QuickBMS/Input</span>. All <span class="font-mono">.pack</span> files should be there.</li>
+        <li>Run <span class="font-mono">RUN.bat</span>.</li>
+        <li>Wait until it finishes. Extracted files will appear under the <span class="font-mono">Output</span> folder.</li>
+      </ol>
+    </section>
+
+    <!-- BMS Script -->
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold">Script: <span class="font-mono">TQ_Pack.bms</span></h2>
+      <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
+        <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#bms">Copy</button>
+        <pre id="bms" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono"># Eudemons Online *.pack
+# script for QuickBMS http://quickbms.aluigi.org
+
+goto 28
+get COUNT long
+
+for i = 0 &lt; COUNT
+    get NAMESZ byte
+    getdstring NAME NAMESZ
+    get DSIZE long
+    get CSIZE long
+    get ROFFSET long
+
+    putarray 0 i NAME
+    putarray 1 i DSIZE
+    putarray 2 i CSIZE
+    putarray 3 i ROFFSET
+next i
+
+savepos BOFFSET
+
+for i = 0 &lt; COUNT
+    getarray NAME 0 i
+    getarray DSIZE 1 i
+    getarray CSIZE 2 i
+    getarray ROFFSET 3 i
+
+    xmath DOFFSET "BOFFSET + ROFFSET"
+
+    CLog NAME DOFFSET CSIZE DSIZE
+next i</code></pre>
+      </div>
+    </section>
+
+    <!-- RUN.BAT -->
+    <section class="mt-8">
+      <h2 class="text-xl font-semibold">Batch Runner: <span class="font-mono">RUN.bat</span></h2>
+      <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
+        <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#bat">Copy</button>
+        <pre id="bat" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">@echo off
+setlocal
+
+:: Set paths
+set BMS_SCRIPT=TQ_Pack.bms
+set QUICKBMS=quickbms.exe
+set PACK_DIR=Input
+set OUTPUT_DIR=Output
+
+:: Create output directory if it doesn't exist
+if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
+
+:: Loop through each .pack file in folder & subfolder
+for /r "%PACK_DIR%" %%f in (*.pack) do (
+    echo Processing %%f...
+    "%QUICKBMS%" -o -Y "%BMS_SCRIPT%" "%%f" "%OUTPUT_DIR%"
+)
+
+echo Done!
+pause</code></pre>
+      </div>
+    </section>
+
+    <!-- Credits -->
+    <section class="mt-8">
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-50/40 dark:bg-sky-500/10 p-4 text-slate-700 dark:text-slate-300">
+        <p>Special thanks to <strong>Kent</strong> for providing the BMS script.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-10 text-sm text-slate-500 dark:text-slate-400">
+      <p>© <span id="year"></span> DuaSelipar Guide</p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', function(){
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try{ localStorage.setItem('theme', isDark ? 'dark' : 'light'); }catch(e){}
+    });
+
+    // Copy buttons
+    document.querySelectorAll('[data-copy]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const sel = document.querySelector(btn.getAttribute('data-copy'));
+        if(!sel) return;
+        const text = sel.textContent;
+        navigator.clipboard.writeText(text).then(function(){
+          const prev = btn.textContent; btn.textContent = 'Copied!';
+          setTimeout(function(){ btn.textContent = prev; }, 1200);
+        });
+      });
+    });
+
+    // Year stamp
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

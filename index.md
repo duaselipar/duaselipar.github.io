@@ -171,6 +171,13 @@ title: DuaSelipar Dev Hub
         <div class="desc">Understand action chains, triggers, and scripting for EO servers.</div>
       </div>
     </li>
+    <li>
+      <div class="icon">📥</div>
+      <div class="desc-group">
+        <a class="label" href="/guide/create-client-installer/">Create Client Installer</a>
+        <div class="desc">Create simple installer using WinRAR SFX installer</div>
+      </div>
+    </li>
     <li class="disabled">
       <div class="icon">🗺️</div>
       <div class="desc-group">
@@ -187,6 +194,13 @@ title: DuaSelipar Dev Hub
     EO Tools
   </h2>
   <ul class="list-nocard">
+      <li>
+      <div class="icon">📤</div>
+      <div class="desc-group">
+        <a class="label" href="/eoscripts/extract-pack-client.html">Extract .pack Client</a>
+        <div class="desc">Extract latest client official .pack client using quickbms.</div>
+      </div>
+    </li>
     <li>
       <div class="icon">🎨</div>
       <div class="desc-group">
