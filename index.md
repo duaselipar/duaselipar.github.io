@@ -174,7 +174,7 @@ title: DuaSelipar Dev Hub
     <li>
       <div class="icon">📥</div>
       <div class="desc-group">
-        <a class="label" href="/guide/create-client-installer/">Create Client Installer</a>
+        <a class="label" href="/guide/create-client-installer.html">Create Client Installer</a>
         <div class="desc">Create simple installer using WinRAR SFX installer</div>
       </div>
     </li>
