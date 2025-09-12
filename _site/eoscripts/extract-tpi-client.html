@@ -4,20 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff"/>
-  <title>📦 QuickBMS Guide — Extract .pack Client Files</title>
-  <meta name="description" content="Step-by-step guide to extract to extract .pack client files using QuickBMS. Includes ready-to-use TQ_Pack.bms and RUN.bat scripts.">
+  <title>📦 QuickBMS Guide — Extract .tpi/.tpd</title>
+  <meta name="description" content="Step-by-step guide to extract .tpi/.tpd client files using QuickBMS. Includes ready-to-use TQ_TPI_Pack.bms and RUN_TPI.bat with copy buttons.">
 
   <!-- Tailwind CDN only -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Tailwind config (dark mode + Inter)
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
-        }
-      }
+      theme: { extend: { fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] } } }
     }
   </script>
 
@@ -37,11 +32,11 @@
 </head>
 <body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
-  <!-- Header (same layout/classes as Color Tag Generator) -->
+  <!-- Header (identical layout to Color Tag Generator) -->
   <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
     <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
       <div class="h-14 flex items-center justify-between">
-        <h1 class="text-base md:text-lg font-extrabold tracking-tight">📦 Extract .pack (QuickBMS)</h1>
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">📦 Extract .tpi/.tpd (QuickBMS)</h1>
         <div class="flex items-center gap-2">
           <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
           <!-- Theme toggle -->
@@ -66,12 +61,9 @@
 
     <!-- Hero -->
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-sky-500/10 to-transparent p-6 md:p-8 mb-6">
-      <h2 class="text-2xl md:text-3xl font-bold tracking-tight">
-        Extract <span class="font-mono">.pack</span> Client Files
-      </h2>
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight">Extract <span class="font-mono">.tpi/.tpd</span> Client Files</h2>
       <p class="mt-2 text-slate-600 dark:text-slate-400">
-        Step-by-step, includes a custom BMS script and a batch runner to process all
-        <span class="font-mono">.pack</span> files recursively.
+        Quick guide using QuickBMS. Includes <span class="font-mono">TQ_TPI_Pack.bms</span> and a batch runner to process all archives automatically.
       </p>
       <div class="mt-4 flex flex-wrap items-center gap-3">
         <a href="https://aluigi.altervista.org/quickbms.htm" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2 hover:border-sky-400" target="_blank" rel="noopener">
@@ -86,93 +78,105 @@
     <section id="steps" class="mt-6">
       <h3 class="text-xl font-semibold">Tutorial</h3>
       <ol class="mt-2 list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300">
-        <li><strong>Download</strong> QuickBMS from the link above and <strong>extract</strong> it.</li>
-        <li>Inside the QuickBMS folder, create two folders: <span class="font-mono">Input</span> and <span class="font-mono">Output</span>.</li>
-        <li>Create a file named <span class="font-mono">TQ_Pack.bms</span> and paste the script below.</li>
-        <li>Create another file named <span class="font-mono">RUN.bat</span> and paste the batch code below.</li>
-        <li>Copy your client <em>data</em> folder (e.g., <span class="font-mono">c3</span> or <span class="font-mono">data</span>) into <span class="font-mono">QuickBMS/Input</span>. All <span class="font-mono">.pack</span> files should be there.</li>
-        <li>Run <span class="font-mono">RUN.bat</span>.</li>
-        <li>Wait until it finishes. Extracted files will appear under the <span class="font-mono">Output</span> folder.</li>
+        <li><b>Download</b> QuickBMS and extract it.</li>
+        <li>Create <span class="font-mono">Input</span> and <span class="font-mono">Output</span> folders inside the QuickBMS directory.</li>
+        <li>Save <span class="font-mono">TQ_TPI_Pack.bms</span> (script below) next to <span class="font-mono">quickbms.exe</span>.</li>
+        <li>Save <span class="font-mono">RUN_TPI.bat</span> (batch below).</li>
+        <li>Copy all client <span class="font-mono">.tpi/.tpd</span> files into <span class="font-mono">QuickBMS/Input</span>.</li>
+        <li>Run <span class="font-mono">RUN_TPI.bat</span>.</li>
+        <li>Extracted files will appear under <span class="font-mono">Output</span>.</li>
       </ol>
     </section>
 
     <!-- BMS Script -->
     <section class="mt-8">
-      <h3 class="text-xl font-semibold">Script: <span class="font-mono">TQ_Pack.bms</span></h3>
+      <h3 class="text-xl font-semibold">Script: <span class="font-mono">TQ_TPI_Pack.bms</span></h3>
       <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
         <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#bms">Copy</button>
-<pre id="bms" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono"># Eudemons Online *.pack
-# script for QuickBMS http://quickbms.aluigi.org
+        <pre id="bms" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono"># NetDragon .tpi/.tpd extractor (QuickBMS)
+# Reads .tpi (index) and extracts data from .tpd
+# Place .tpi and .tpd together. If only .tpd exists, script tries direct read.
 
-goto 28
-get COUNT long
+open FDDE tpi 0
+open FDDE tpd 1
 
-for i = 0 &lt; COUNT
-    get NAMESZ byte
-    getdstring NAME NAMESZ
-    get DSIZE long
-    get CSIZE long
-    get ROFFSET long
+idstring "NetDragonDatPkg"
+goto 0x24
+get FILES long
+get INFO_SIZE long
+savepos INFO_OFF
+math INFO_SIZE += INFO_OFF
 
-    putarray 0 i NAME
-    putarray 1 i DSIZE
-    putarray 2 i CSIZE
-    putarray 3 i ROFFSET
+for i = 0 &lt; FILES
+    get NAME_OFF long
+    get DATA_OFF long
+    get SIZE long
+    get ZSIZE long
+    get FLAGS long
+    get TIME long
+    savepos CURR
+    goto NAME_OFF
+    get NAME string
+    goto CURR
+    if ZSIZE &gt; 0
+        clog NAME DATA_OFF ZSIZE SIZE
+    else
+        log NAME DATA_OFF SIZE
+    endif
 next i
-
-savepos BOFFSET
-
-for i = 0 &lt; COUNT
-    getarray NAME 0 i
-    getarray DSIZE 1 i
-    getarray CSIZE 2 i
-    getarray ROFFSET 3 i
-
-    xmath DOFFSET "BOFFSET + ROFFSET"
-
-    CLog NAME DOFFSET CSIZE DSIZE
-next i</code></pre>
+</code></pre>
       </div>
+      <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">If your client layout differs, adjust offsets/fields accordingly.</p>
     </section>
 
-    <!-- RUN.BAT -->
+    <!-- RUN_TPI.BAT -->
     <section class="mt-8">
-      <h3 class="text-xl font-semibold">Batch Runner: <span class="font-mono">RUN.bat</span></h3>
+      <h3 class="text-xl font-semibold">Batch Runner: <span class="font-mono">RUN_TPI.bat</span></h3>
       <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
         <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#bat">Copy</button>
-<pre id="bat" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">@echo off
+        <pre id="bat" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">@echo off
 setlocal
 
-:: Set paths
-set BMS_SCRIPT=TQ_Pack.bms
-set QUICKBMS=quickbms.exe
-set PACK_DIR=Input
-set OUTPUT_DIR=Output
+REM === Paths ===
+set "QUICKBMS=quickbms.exe"
+set "BMS_SCRIPT=TQ_TPI_Pack.bms"
+set "INPUT_DIR=Input"
+set "OUTPUT_DIR=Output"
 
-:: Create output directory if it doesn't exist
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
-:: Loop through each .pack file in folder & subfolder
-for /r "%PACK_DIR%" %%f in (*.pack) do (
-    echo Processing %%f...
-    "%QUICKBMS%" -o -Y "%BMS_SCRIPT%" "%%f" "%OUTPUT_DIR%"
+echo [INFO] Scanning "%INPUT_DIR%" for .tpi/.tpd ...
+
+REM 1) Process pairs by .tpi (index-driven)
+for /r "%INPUT_DIR%" %%I in (*.tpi) do (
+  set "IDX=%%~fI"
+  set "NAME=%%~nI"
+  if exist "%%~dpnI.tpd" (
+    echo [RUN] %%~nxI + %%~nI.tpd
+    "%QUICKBMS%" -o -Y "%BMS_SCRIPT%" "%%~fI" "%OUTPUT_DIR%\!NAME!" || echo [FAIL] %%~nxI
+  ) else (
+    echo [RUN] %%~nxI (no .tpd found; script may fallback)
+    "%QUICKBMS%" -o -Y "%BMS_SCRIPT%" "%%~fI" "%OUTPUT_DIR%\!NAME!" || echo [FAIL] %%~nxI
+  )
 )
 
-echo Done!
-pause</code></pre>
-      </div>
-    </section>
+REM 2) Process lone .tpd (no matching .tpi)
+for /r "%INPUT_DIR%" %%D in (*.tpd) do (
+  if not exist "%%~dpnD.tpi" (
+    echo [RUN] %%~nxD (tpd only)
+    "%QUICKBMS%" -o -Y "%BMS_SCRIPT%" "%%~fD" "%OUTPUT_DIR%\%%~nD" || echo [FAIL] %%~nxD
+  )
+)
 
-    <!-- Credits -->
-    <section class="mt-8">
-      <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-50/60 dark:bg-sky-500/10 p-4 text-slate-700 dark:text-slate-300">
-        <p>Special thanks to <strong>Kent</strong> for providing the BMS script.</p>
+echo.
+echo [DONE] Output: "%OUTPUT_DIR%"
+pause</code></pre>
       </div>
     </section>
 
   </main>
 
-  <!-- Footer (same as Color Tag Generator) -->
+  <!-- Footer (identical to Color Tag Generator) -->
   <footer class="border-t border-slate-200 dark:border-slate-800">
     <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
       <div class="py-6 text-center text-sm text-slate-500">
@@ -189,12 +193,10 @@ pause</code></pre>
       const isDark = root.classList.toggle('dark');
       try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
     });
-
-    // Year stamp
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Copy buttons
-    document.querySelectorAll('[data-copy]').forEach(btn => {
+    document.querySelectorAll('[data-copy]').forEach((btn) => {
       btn.addEventListener('click', () => {
         const sel = document.querySelector(btn.getAttribute('data-copy'));
         if(!sel) return;

@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WinRAR SFX Installer — Tutorial</title>
-  <meta name="description" content="Official‑style guide to building a self‑extracting (SFX) installer with WinRAR using Tailwind CSS, including shortcut creation and optional auto‑launch." />
+  <meta name="description" content="Official-style guide to building a self-extracting (SFX) installer with WinRAR using Tailwind CSS, including shortcut creation and optional auto-launch." />
+
+  <!-- Prevent theme flash -->
   <script>
-    // Ensure theme class applied before paint
     (function(){
       try{
         var t = localStorage.getItem('theme');
@@ -14,58 +15,66 @@
         else if(t === 'dark') document.documentElement.classList.add('dark');
         else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
           document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
         }
       }catch(e){}
     })();
   </script>
+
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            base: {
-              bg: '#0b0f14',
-              card: '#101625',
-              border: '#1c2437',
-            }
-          }
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
         }
       }
     }
   </script>
 </head>
-<body class="bg-white text-slate-800 dark:bg-base-bg dark:text-slate-100">
-  <div class="max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-10">
-    <!-- Header -->
-    <header class="flex items-center justify-between gap-4 mb-7">
-      <div class="flex items-center gap-2">
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
+
+  <!-- HEADER (identical layout/classes to Color Tag Generator) -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🗜️ WinRAR SFX Installer</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <!-- sun (shows in dark) -->
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <!-- moon (shows in light) -->
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="flex items-center gap-3">
-        <button id="themeToggle" class="inline-flex items-center gap-2 border border-slate-200 dark:border-base-border rounded-full px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-base-card transition">
-          <svg class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13A9 9 0 1 1 11 2.36 7 7 0 1 0 21.64 13z"/></svg>
-          <svg class="w-4 h-4 dark:hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 12.02l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-1v3h1zm0 19v-3h-1v3h1zM4 12H1v-1h3v1zm19 0h-3v-1h3v1zM6.76 18.36l-1.8 1.79 1.41 1.41 1.79-1.8-1.4-1.4zM18.36 6.76l1.8-1.79-1.41-1.41-1.79 1.8 1.4 1.4zM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
-          <span class="hidden sm:inline">Theme</span>
-        </button>
-      </div>
-    </header>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16">
 
     <!-- Hero -->
-    <section class="rounded-2xl border border-slate-200 dark:border-base-border bg-gradient-to-tr from-sky-500/10 to-transparent p-6 md:p-8 mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">WinRAR Self‑Extracting (SFX) Installer</h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-400">Package an application into a single <span class="font-semibold">.exe</span> using WinRAR SFX, including a post‑install script to create shortcuts and optionally launch the app.</p>
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-sky-500/10 to-transparent p-6 md:p-8 mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">WinRAR Self-Extracting (SFX) Installer</h1>
+      <p class="mt-2 text-slate-600 dark:text-slate-400">Package an application into a single <span class="font-semibold">.exe</span> using WinRAR SFX, including a post-install script to create shortcuts and optionally launch the app.</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-4">
-        <a href="#requirements" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">1) Requirements</a>
-        <a href="#structure" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">2) Prepare Folder</a>
-        <a href="#vbs" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">3) Shortcut Script (VBS)</a>
-        <a href="#build" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">4) Build SFX</a>
-        <a href="#test" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">5) Test</a>
-        <a href="#troubleshoot" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">6) Troubleshooting</a>
-        <a href="#notes" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">7) Notes & Options</a>
-        <a href="#checklist" class="block rounded-xl border border-slate-200 dark:border-base-border px-3 py-2 hover:border-sky-400">8) Checklist</a>
+        <a href="#requirements" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">1) Requirements</a>
+        <a href="#structure" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">2) Prepare Folder</a>
+        <a href="#vbs" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">3) Shortcut Script (VBS)</a>
+        <a href="#build" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">4) Build SFX</a>
+        <a href="#test" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">5) Test</a>
+        <a href="#troubleshoot" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">6) Troubleshooting</a>
+        <a href="#notes" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">7) Notes & Options</a>
+        <a href="#checklist" class="block rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2 hover:border-sky-400">8) Checklist</a>
       </div>
     </section>
 
@@ -82,7 +91,7 @@
     <!-- Structure -->
     <section id="structure" class="mt-8">
       <h2 class="text-xl font-semibold">2) Prepare the Source Folder</h2>
-      <div class="mt-3 rounded-xl border border-slate-200 dark:border-base-border bg-slate-50 dark:bg-base-card p-4">
+      <div class="mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 p-4">
         <pre class="overflow-x-auto text-sm leading-6 text-slate-800 dark:text-slate-100"><code class="font-mono">Package\
   AppLauncher.exe
   icon.ico              (optional)
@@ -93,11 +102,11 @@
 
     <!-- VBS -->
     <section id="vbs" class="mt-8">
-      <h2 class="text-xl font-semibold">3) <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-base-border font-mono">postinstall.vbs</span> — Create Shortcuts & Launch</h2>
+      <h2 class="text-xl font-semibold">3) <span class="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 font-mono">postinstall.vbs</span> — Create Shortcuts & Launch</h2>
       <p class="mt-2 text-slate-600 dark:text-slate-400">Save this file in the source folder.</p>
-      <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-base-border bg-slate-900 text-slate-100">
+      <div class="relative mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
         <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#vbs-code">Copy</button>
-        <pre id="vbs-code" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">' Post-install: create shortcuts and launch application
+<pre id="vbs-code" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">' Post-install: create shortcuts and launch application
 Option Explicit
 Dim WshShell, fso, instDir, scDesk, smDir, lnk
 Set WshShell = CreateObject("WScript.Shell")
@@ -126,7 +135,7 @@ lnk.Save
 ' Auto launch application (optional)
 WshShell.Run """" & instDir & "\AppLauncher.exe" & """", 1, False</code></pre>
       </div>
-      <p class="mt-2 rounded-xl border border-slate-200 dark:border-base-border bg-sky-50/40 dark:bg-sky-500/10 text-slate-700 dark:text-slate-300 p-3">Replace <span class="font-semibold">Your App</span> and <span class="font-semibold">AppLauncher.exe</span> with your own names if needed.</p>
+      <p class="mt-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-50/60 dark:bg-sky-500/10 text-slate-700 dark:text-slate-300 p-3">Replace <span class="font-semibold">Your App</span> and <span class="font-semibold">AppLauncher.exe</span> with your own names if needed.</p>
     </section>
 
     <!-- Build -->
@@ -134,7 +143,7 @@ WshShell.Run """" & instDir & "\AppLauncher.exe" & """", 1, False</code></pre>
       <h2 class="text-xl font-semibold">4) Build the SFX in WinRAR</h2>
       <ol class="mt-2 list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
         <li>Open <span class="font-semibold">WinRAR</span> and browse into the <em>Package</em> folder.</li>
-        <li>Select all files → click <span class="px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-base-border bg-slate-100 dark:bg-slate-800">Add</span>.</li>
+        <li>Select all files → click <span class="px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800">Add</span>.</li>
         <li>In the dialog, set:
           <ul class="mt-1 list-disc list-inside ml-4 space-y-1">
             <li><span class="font-semibold">Archive format:</span> RAR</li>
@@ -146,9 +155,9 @@ WshShell.Run """" & instDir & "\AppLauncher.exe" & """", 1, False</code></pre>
       </ol>
 
       <h3 class="mt-4 font-semibold">A) Interactive Mode</h3>
-      <div class="relative mt-2 rounded-xl border border-slate-200 dark:border-base-border bg-slate-900 text-slate-100">
+      <div class="relative mt-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
         <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#cmt-a">Copy</button>
-        <pre id="cmt-a" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">;The comment below contains SFX script commands
+<pre id="cmt-a" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">;The comment below contains SFX script commands
 Title=Application Installer
 Path=%ProgramFiles%\Your App
 Overwrite=1
@@ -156,9 +165,9 @@ Setup=wscript.exe postinstall.vbs</code></pre>
       </div>
 
       <h3 class="mt-4 font-semibold">B) Silent Mode</h3>
-      <div class="relative mt-2 rounded-xl border border-slate-200 dark:border-base-border bg-slate-900 text-slate-100">
+      <div class="relative mt-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-100">
         <button class="absolute top-2 right-2 text-xs border border-slate-700 hover:border-sky-400 rounded-md px-2 py-1" data-copy="#cmt-b">Copy</button>
-        <pre id="cmt-b" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">;The comment below contains SFX script commands
+<pre id="cmt-b" class="p-4 overflow-x-auto text-sm leading-6"><code class="font-mono">;The comment below contains SFX script commands
 Title=Application Installer
 Path=%ProgramFiles%\Your App
 Silent=1
@@ -166,7 +175,7 @@ Overwrite=1
 Setup=wscript.exe postinstall.vbs</code></pre>
       </div>
 
-      <p class="mt-3 rounded-xl border border-slate-200 dark:border-base-border bg-sky-50/40 dark:bg-sky-500/10 text-slate-700 dark:text-slate-300 p-3">To avoid UAC, install per‑user instead: <code class="font-mono">Path=%UserProfile%\Apps\Your App</code>.</p>
+      <p class="mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-50/60 dark:bg-sky-500/10 text-slate-700 dark:text-slate-300 p-3">To avoid UAC, install per-user instead: <code class="font-mono">Path=%UserProfile%\Apps\Your App</code>.</p>
     </section>
 
     <!-- Test -->
@@ -175,7 +184,7 @@ Setup=wscript.exe postinstall.vbs</code></pre>
       <ul class="mt-2 list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
         <li>Run the generated <span class="font-semibold">.exe</span> — files extract to the specified folder.</li>
         <li>Shortcuts appear on Desktop and in Start Menu.</li>
-        <li>The application auto‑launches (remove the last VBS line if not desired).</li>
+        <li>The application auto-launches (remove the last VBS line if not desired).</li>
       </ul>
     </section>
 
@@ -184,7 +193,7 @@ Setup=wscript.exe postinstall.vbs</code></pre>
       <h2 class="text-xl font-semibold">6) Troubleshooting</h2>
       <ul class="mt-2 list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
         <li><span class="font-semibold">Window title shows quotes</span> — Use the WinRAR SFX comment format (no quotes). First line must be <code class="font-mono">;The comment below contains SFX script commands</code>.</li>
-        <li><span class="font-semibold">Default folder isn’t Program Files</span> — Use <code class="font-mono">Path=...</code> (WinRAR syntax). <code class="font-mono">InstallPath=</code> is 7‑Zip SFX only.</li>
+        <li><span class="font-semibold">Default folder isn’t Program Files</span> — Use <code class="font-mono">Path=...</code> (WinRAR syntax). <code class="font-mono">InstallPath=</code> is 7-Zip SFX only.</li>
         <li><span class="font-semibold">VBS doesn’t run</span> — Ensure Windows Script Host isn’t disabled by policy/AV.</li>
         <li><span class="font-semibold">No uninstaller</span> — WinRAR SFX does not create one; remove by deleting the folder and shortcuts.</li>
       </ul>
@@ -197,14 +206,14 @@ Setup=wscript.exe postinstall.vbs</code></pre>
         <li><span class="font-semibold">RAR</span> is recommended for larger payloads.</li>
         <li><span class="font-semibold">Overwrite=1</span> ensures updates replace previous files.</li>
         <li><span class="font-semibold">Icon</span>: set SFX icon via <em>Advanced SFX options → Text and icon</em>. Shortcuts use <code class="font-mono">icon.ico</code> from the install folder.</li>
-        <li><span class="font-semibold">Split volumes</span>: configure <em>Split to volumes</em> in <em>Add to Archive…</em> for multi‑part uploads.</li>
+        <li><span class="font-semibold">Split volumes</span>: configure <em>Split to volumes</em> in <em>Add to Archive…</em> for multi-part uploads.</li>
       </ul>
     </section>
 
     <!-- Checklist -->
     <section id="checklist" class="mt-8">
       <h2 class="text-xl font-semibold">8) Quick Checklist</h2>
-      <div class="mt-3 rounded-xl border border-slate-200 dark:border-base-border bg-slate-50 dark:bg-base-card p-4">
+      <div class="mt-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 p-4">
         <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
           <li>Place <code class="font-mono">AppLauncher.exe</code>, <code class="font-mono">icon.ico</code>, and <code class="font-mono">postinstall.vbs</code> in the source folder.</li>
           <li>WinRAR → Add → check <span class="font-semibold">Create SFX archive</span> → choose <span class="font-semibold">RAR5</span>.</li>
@@ -214,35 +223,41 @@ Setup=wscript.exe postinstall.vbs</code></pre>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="mt-10 text-sm text-slate-500 dark:text-slate-400">
-      <p>© <span id="year"></span> DuaSelipar Guide</p>
-    </footer>
-  </div>
+  </main>
 
+  <!-- FOOTER (identical to Color Tag Generator) -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script>
     // Theme toggle
-    document.getElementById('themeToggle').addEventListener('click', function(){
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
       const root = document.documentElement;
       const isDark = root.classList.toggle('dark');
-      try{ localStorage.setItem('theme', isDark ? 'dark' : 'light'); }catch(e){}
-    });
-
-    // Copy buttons
-    document.querySelectorAll('[data-copy]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        const sel = document.querySelector(btn.getAttribute('data-copy'));
-        if(!sel) return;
-        const text = sel.textContent;
-        navigator.clipboard.writeText(text).then(function(){
-          const prev = btn.textContent; btn.textContent = 'Copied!';
-          setTimeout(function(){ btn.textContent = prev; }, 1200);
-        });
-      });
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
     });
 
     // Year stamp
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Copy buttons
+    document.querySelectorAll('[data-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sel = document.querySelector(btn.getAttribute('data-copy'));
+        if(!sel) return;
+        const text = sel.textContent;
+        navigator.clipboard.writeText(text).then(()=>{
+          const prev = btn.textContent; btn.textContent = 'Copied!';
+          setTimeout(()=>{ btn.textContent = prev; }, 1200);
+        });
+      });
+    });
   </script>
 </body>
 </html>
