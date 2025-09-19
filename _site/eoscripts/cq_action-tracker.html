@@ -1,139 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🔍 CQ Action Tracker | DuaSelipar Tools</title>
   <meta name="description" content="A powerful trace tool for Eudemons Online private servers">
-  <title>🧠 CQ Action Tracker | DuaSelipar Tools</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-      min-height: 100vh;
-      color: #212529;
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
     }
-    a {
-      color: #0d6efd;
-    }
-    footer {
-      background-color: #f1f1f1;
-    }
-    .hero {
-      background: #fff;
-      text-align: center;
-      padding: 4rem 2rem;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-    .hero a {
-      background: #0d6efd;
-      padding: 0.75rem 1.5rem;
-      color: #fff;
-      font-weight: bold;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: background 0.3s ease;
-      display: inline-block;
-    }
-    .hero a:hover {
-      background: #0b5ed7;
-    }
-    .section {
-      margin-top: 3rem;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      background: #fff;
-      border: 1px solid #e9ecef;
-    }
-    .section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      border-left: 5px solid #0d6efd;
-      padding-left: 1rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-    }
-    .grid a {
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 10px;
-      text-decoration: none;
-      color: #212529;
-      font-weight: bold;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .grid a:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    }
-    .footer {
-      text-align: center;
-      margin-top: auto;
-      padding: 1.5rem 0;
-      font-size: 0.95rem;
-      color: #6c757d;
-    }
-    .footer a {
-      color: #0d6efd;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
 
-  <div class="hero" data-aos="zoom-in">
-    <h1>🔍 CQ Action Tracker</h1>
-    <p>Trace and analyze cq_action chains from your EO private server with ease.</p>
-    <a href="traceaction.zip" download>📦 Download Tool</a>
-  </div>
-
-  <div class="container py-5 flex-grow-1">
-    <div class="section" data-aos="fade-up">
-      <h2>📖 Introduction</h2>
-      <p>This tool is designed for developers of Eudemons Online private servers. With just a few clicks, you can trace complex <code>cq_action</code> chains, preview NPC interactions, and debug logic without digging through the database manually.</p>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🔍 CQ Action Tracker</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <!-- sun -->
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <!-- moon -->
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <div class="section" data-aos="fade-up">
-      <h2>🛠️ How to Use</h2>
-      <ul>
-        <li>Upload all files into your <code>htdocs</code> or web server</li>
-        <li>Access via <code>http://localhost/traceaction.php</code></li>
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow">
+
+    <!-- Hero -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-8 text-center">
+      <h2 class="text-3xl font-extrabold mb-4">🔍 CQ Action Tracker</h2>
+      <p class="text-slate-600 dark:text-slate-400 mb-6">Trace and analyze <code class="font-mono">cq_action</code> chains from your EO private server with ease.</p>
+      <a href="traceaction.zip" download
+         class="inline-block rounded-lg bg-sky-600 text-white font-semibold px-6 py-3 shadow hover:bg-sky-500 transition">
+        📦 Download Tool
+      </a>
+    </section>
+
+    <!-- Introduction -->
+    <section class="mt-10 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📖 Introduction</h2>
+      <p class="text-slate-700 dark:text-slate-300">This tool is designed for developers of Eudemons Online private servers. With just a few clicks, you can trace complex <code class="font-mono">cq_action</code> chains, preview NPC interactions, and debug logic without digging through the database manually.</p>
+    </section>
+
+    <!-- How to Use -->
+    <section class="mt-10 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">🛠️ How to Use</h2>
+      <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+        <li>Upload all files into your <code class="font-mono">htdocs</code> or web server</li>
+        <li>Access via <code class="font-mono">http://localhost/traceaction.php</code></li>
         <li>Connect to your EO MySQL database server</li>
         <li>Select the database and insert an Action ID to trace</li>
       </ul>
-    </div>
 
-    <div class="section" data-aos="fade-up">
-      <h2>📌 Features</h2>
-      <ul>
+      <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-2">⚡ Alternative: Use Desktop App</h3>
+        <p class="text-slate-700 dark:text-slate-300 mb-3">If you prefer running without a web server, you can use the Windows executable version:</p>
+        <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+          <li>
+            For <b>MySQL 8 (new engine database)</b>:  
+            <a href="https://github.com/duaselipar/TraceDatabaseEO" target="_blank" class="text-sky-600 hover:underline">TraceDatabaseEO</a>
+          </li>
+          <li>
+            For <b>MySQL 4 (old engine database)</b>:  
+            <a href="https://github.com/duaselipar/TraceDatabaseOldEO" target="_blank" class="text-sky-600 hover:underline">TraceDatabaseOldEO</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="mt-10 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📌 Features</h2>
+      <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
         <li>Recursive tracing with multi-branch logic (e.g. 0102, 2012, etc.)</li>
         <li>Supports chained and conditional actions</li>
         <li>Multi-database switching support</li>
         <li>Clean UI with notifications and dark mode compatibility</li>
       </ul>
-    </div>
+    </section>
+  </main>
 
-    <div class="footer" id="footer" data-aos="fade-up">
-        <p>© 2025 DuaSelipar Dev Hub. Powered by GitHub Pages. View on <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank">GitHub</a></p>
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub. Powered by GitHub Pages.
+        <a href="https://github.com/duaselipar/duaselipar.github.io" target="_blank" class="underline hover:text-sky-600">View on GitHub</a>
       </div>
+    </div>
+  </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>AOS.init();</script>
+  <!-- Scripts -->
+  <script>
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
