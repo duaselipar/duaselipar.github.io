@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🎨 Change Login.dat Background | EO Tutorial</title>
+  <meta name="description" content="Step-by-step tutorial to change the Login.dat background in Eudemons Online client.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🎨 Change Login.dat Background</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-10">
+
+    <!-- Intro -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📥 Download Tool</h2>
+      <p class="mb-3">You need <b>Flash Decompiler Trillix 3.0.3 Portable</b>:</p>
+      <a href="https://www.mediafire.com/file/esy3oapnsimd646/Flash_Decompiler_Trillix_3.0.3.470_Portable.rar/file" target="_blank"
+         class="inline-block rounded-lg bg-sky-600 text-white font-semibold px-6 py-2 shadow hover:bg-sky-500 transition">
+        Download Flash Decompiler Trillix
+      </a>
+    </section>
+
+    <!-- Steps -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-6">📝 Steps</h2>
+            <ol class="list-decimal list-inside space-y-6 text-slate-700 dark:text-slate-300">
+            <li>
+                Go to client folder: <code class="font-mono">Client location\data\main</code>
+            </li>
+            <li>
+                Rename <code>Login.dat</code> → <code>Login.swf</code><br>
+                <img src="/assets/dattoswf.png" alt="Rename Login.dat" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Open <b>Flash Decompiler Trillix Portable</b>.
+            </li>
+            <li>
+                In Trillix, <b>open the Login.swf file</b> you just renamed.
+                <img src="/assets/openswffile.png" alt="Open SWF file" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Go to <b>Edit</b> tab and select <b>Images</b>.<br>
+                <img src="/assets/selecttabimage.png" alt="Edit tab select image" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Find <b>ID 245</b> in the Images list.<br>
+                <img src="/assets/selectimage245.png" alt="Find ID 245" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Open <b>Image Properties</b>.<br>
+                <img src="/assets/selectimageproperties.png" alt="Image properties" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Replace the image with your own background.
+                <img src="/assets/selectnewwallpaper.png" alt="Select new background" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+            </li>
+            <li>
+                Save changes in Trillix.
+                <img src="/assets/savefile.png" alt="Save file" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+
+            </li>
+            <li>
+                Rename <code>Login.swf</code> back to <code>Login.dat</code>.
+                <img src="/assets/swftodat.png" alt="Renama Login.swf" class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+
+            </li>
+            </ol>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

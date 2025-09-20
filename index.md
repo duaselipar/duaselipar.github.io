@@ -118,6 +118,7 @@ title: DuaSelipar Dev Hub
       </div>
 
       <ul class="mt-2 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950">
+
         <li class="group">
           <a href="/eudemons-cq_action-guide/" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
             <div class="shrink-0 mt-0.5">
@@ -141,6 +142,19 @@ title: DuaSelipar Dev Hub
             </div>
           </a>
         </li>
+
+        <li class="group">
+          <a href="/guide/change-logindat-bg.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
+            <div class="shrink-0 mt-0.5">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🎨</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold">Change Login.dat Background</div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Tutorial to replace the EO login.dat screen background image.</p>
+            </div>
+          </a>
+        </li>
+
 
         <li class="flex gap-4 p-4 opacity-60 select-none">
           <div class="shrink-0 mt-0.5">
