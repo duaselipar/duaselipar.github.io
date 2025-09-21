@@ -107,9 +107,25 @@
   </h2>
   <p class="text-sm text-slate-600 dark:text-slate-400">
     Open the <code>cq_eudemon_rbn_rqr</code> table → check <code>min</code> and <code>max</code> columns.<br>
-    Increasing the <b>max</b> value will raise the score each time you compose a eudemon. Adjust as needed for faster progress.
+    Increasing the <b>max</b> value will raise the score each time you compose a eudemon. Adjust as needed for faster progress.<br><br>
+    👉 If you want to <b>double</b> the compose rate, run:
+  </p>
+  <pre class="bg-slate-100 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-sm"><code>UPDATE `cq_eudemon_rbn_rqr` 
+SET min = min * 2, 
+    max = max * 2;</code></pre>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mt-4">
+    👉 If you want to restore it back to the original values, run:
+  </p>
+  <pre class="bg-slate-100 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-sm"><code>UPDATE `cq_eudemon_rbn_rqr` 
+SET min = min / 2, 
+    max = max / 2;</code></pre>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mt-4">
+    💡 Tip: If you increase by a larger factor (e.g. ×3, ×4, etc.), you must also divide back by the <b>same factor</b> to return to the original values.<br>
+    Example: if you run <code>*3</code>, then to restore you must run <code>/3</code>.
   </p>
 </section>
+
+
 
 <!-- Q5 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
