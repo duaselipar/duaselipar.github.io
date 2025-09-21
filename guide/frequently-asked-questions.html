@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>❓ Most Common Q&A - EO Server</title>
+  <meta name="description" content="Frequently asked Q&A and database tweaks for Eudemons Online private servers.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">❓ Most Common Q&amp;A</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5">
+            <svg class="h-5 w-5 hidden dark:block" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/></svg>
+            <svg class="h-5 w-5 dark:hidden" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16">
+
+<!-- Q1 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">
+    1. How to set the required compose star so it only needs 19★?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → find the <code>sacrifice_starlev</code> column.<br>
+    Change all values higher than <b>1900</b> to <b>1900</b>. This way, no matter how many stars the main eudemon has, the required will only need 19★ to combine.
+  </p>
+</section>
+
+<!-- Q2 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">2. How to make your eudemon hatch with high stars?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_grade</code> table → find the <code>rarity</code> column.<br>
+    Example: set it to <b>10000</b> = pet will be hatch with 100★.<br>
+    ⚠️ Do not set too high, or the pet may fail to summon.
+  </p>
+</section>
+
+<!-- Q3 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">3. How to switch a eudemon from Warrior to Mage (or vice versa)?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_itemtype</code> table → find the pet’s ID → look for the <code>able_mask</code> column.<br>
+    - <b>7</b> = mount + merge (only for mount pets)<br>
+    - <b>3</b> = can merge (Mage → Warrior requires <code>cq_grade</code> edit)<br>
+    - <b>2</b> = cannot merge (Warrior → Mage requires <code>cq_grade</code> + related <code>cq_action</code> skills)
+  </p>
+</section>
+
+<!-- Q4 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">4. How to change the eudemon compose rate?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → check <code>min</code> and <code>max</code> columns.<br>
+    Increasing the <b>max</b> value will raise the score each time you compose a eudemon. Adjust as needed for faster progress.
+  </p>
+</section>
+
+<!-- Q5 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">5. How to remove the requirement of same attribute when compose eudemon?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → find the <code>sacrifice_dmg_type</code> column.<br>
+    - <b>0</b> = does not require same attribute<br>
+    - <b>1</b> = requires same attribute<br>
+    Change values from 1 → 0 to remove the restriction.
+  </p>
+</section>
+
+<!-- Q6 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">6. How to modify success/failure rate of star compose?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → find the <code>suc_percent</code> column.<br>
+    Set value to <b>100</b> = always succeed.<br>
+    Recommended minimum is <b>75</b> to still keep some chance of failure.
+  </p>
+</section>
+
+<!-- Q7 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">7. How to change Legion War days?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_config</code> table → look for <b>ID 191</b>.<br>
+    Change the 3rd and 4th field values:<br>
+    - <b>1</b> = Monday<br>
+    - <b>3</b> = Wednesday<br>
+    - up to <b>7</b> = Sunday<br>
+    Copy the modified table as a patch to update daily on server restart.<br>
+    ⚠️ In new engine, this is handled by <b>MSG</b>, not database.
+  </p>
+</section>
+
+<!-- Q8 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">8. How to modify VIP batch hatch time?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_config</code> table → find rows where <code>type = 3101–3107</code>.<br>
+    - <b>3101</b> = VIP level 1<br>
+    - <b>3107</b> = VIP level 7<br>
+    Change the <code>data1</code> value → this represents seconds.<br>
+    Example: <b>1 = 1 second</b>. Set to any time you want.<br>
+    (new engine usually change this via tools.)
+  </p>
+</section>
+
+<!-- Q9 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">9. How to modify skill experience and level requirements?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_magictype</code> table.<br>
+    - <code>need_exp</code> = experience required to upgrade<br>
+    - <code>need_level</code> = character level required to upgrade skill<br>
+    Lower the values to make skills level up faster.
+  </p>
+</section>
+
+<!-- Q10 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">10. How to modify leveling speed?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_levexp</code> table.<br>
+    Modify both <code>usruplevExp</code> and <code>euduplevExp</code> (must stay equal).<br>
+    Lowering these values will increase leveling speed for characters and pets.
+  </p>
+</section>
+
+
+<!-- Q11 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">11. How to increase max level beyond 132?
+        <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open the <code>cq_config</code> table → look for level cap row (default 132).<br>
+    Change the value to desired cap (max supported = <b>255</b>).<br>
+    ⚠️ Do not exceed 255 or server will break.
+  </p>
+</section>
+
+<!-- Q12 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">12. How to modify Broadcast limit and cost?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    This is controlled by <b>MSG</b> plugin.<br>
+    Open MSG config → find broadcast/chat settings → edit limit and cost per message.<br>
+    Default cost is usually set in <code>Emoney</code>.
+  </p>
+</section>
+
+<!-- Q13 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">13. How to change the login welcome text?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open client <code>ini/StrRes.ini</code> → find entry <code>10052=...</code>.<br>
+    Edit the message to any custom welcome text.<br>
+    Example: <i>Welcome to My EO Server!</i>
+  </p>
+</section>
+
+<!-- Q14 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">14. How to set default VIP level on login?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Method 1: Open <code>account</code> table → set default value for <code>vip</code> column (0 = normal, 1–7 = VIP levels).<br>
+    Method 2: Use GM tool to set manually.<br>
+    Method 3: Modify directly via ACC control.
+  </p>
+</section>
+
+<!-- Q15 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">15. How to unlock all Legion Totems?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_syndicate</code> table → find your legion row → set <code>totem_pole</code> value to <b>18446744073709551615</b>.<br>
+    This unlocks all totems instantly for that legion.
+  </p>
+</section>
+
+<!-- Q16 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">16. How to edit items in the Emoney (EP) shop?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_goods</code> table → rows with <code>ownerid=1207</code> are EP Shop items.<br>
+    - <code>itemtype</code> = item ID being sold<br>
+    - Price comes from <code>cq_itemtype</code> last column.<br>
+    ⚠️ Client <code>ini/itemtype.dat</code> must match the same price → edit with tool.
+  </p>
+</section>
+
+<!-- Q17 -->
+<!-- Q17 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">17. How to change the appearance of monsters, eudemons (pets), or NPCs?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    <b>1. Monster & Eudemon Lookface:</b><br>
+    - Open the <code>cq_monstertype</code> table.<br>
+    - Find the monster or pet ID you want to modify.<br>
+    - Locate the <code>lookface</code> column (4th column).<br>
+    - Change it to the new model code (example: <b>439</b> = Dragon King model).<br><br>
+
+    <b>2. Eudemon Evolution Stages:</b><br>
+    - Each pet has 6 related <code>lookface</code> IDs:<br>
+      • <b>10710</b>, <b>10790</b> = non-evolved appearance<br>
+      • <b>10711</b>, <b>10791</b> = first evolution appearance<br>
+      • <b>10712</b>, <b>10792</b> = second evolution appearance<br>
+    - Modify these values to change how the pet looks in each stage.<br><br>
+
+    <b>3. NPC Lookface:</b><br>
+    - Open the <code>cq_npc</code> table.<br>
+    - Find the NPC ID you want to modify.<br>
+    - In the <code>lookface</code> column (5th column), replace the value with the model code you want.<br><br>
+
+    <b>Note:</b> Always check and use the correct <b>lookface codes</b>. Wrong codes may cause NPCs, monsters, or pets to not display properly.
+  </p>
+</section>
+
+
+
+<!-- Q18 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">18. How to modify the Castle system?
+        <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    First, make sure your castle system is enabled and working normally on the server.<br><br>
+
+    <b>1. Database side:</b><br>
+    - Open <code>cq_castle_lev_req</code> table.<br>
+    - The first few columns are requirements such as <b>Money, Emoney, Woods, Population</b>.<br>
+    - The last column <code>BuildNumEveryday</code> = max number of units you can build per day. (Max limit: <b>255</b>)<br>
+    - It is strongly recommended to adjust this value, and also adjust the <b>Population</b> column.<br><br>
+
+    <b>2. Client side:</b><br>
+    - Open <code>ini/CastleLevReq.ini</code> in the client.<br>
+    - Format looks like this:<br>
+    <pre class="bg-slate-900 text-slate-100 p-3 rounded text-xs overflow-x-auto">[Level xx]
+Money=xxxxx
+Emoney=xxxxx
+Woods=xxxxx
+Population=xxxxx
+Item=xxxxx
+BuildNumEveryday=xxxxx</pre>
+    - Explanation:<br>
+      • <b>Money</b> = gold required<br>
+      • <b>Emoney</b> = EP required<br>
+      • <b>Woods</b> = wood requirement<br>
+      • <b>Population</b> = population requirement<br>
+      • <b>Item</b> = required items<br>
+      • <b>BuildNumEveryday</b> = daily unit build limit<br><br>
+
+    <b>3. Existing Castles:</b><br>
+    - Open <code>cq_castle</code> table.<br>
+    - Adjust <b>population</b> and <b>food</b> values.<br>
+    - <b>⚠️ Do not exceed</b> the values in <code>max_population</code> and <code>max_food</code> columns.<br>
+    - The <code>build_oper_times</code> column = how many units have already been built today.<br><br>
+
+    ✅ After editing both DB and INI, restart the server + client to apply changes.
+  </p>
+</section>
+
+
+<!-- Q19 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">19. How to batch edit monster drop rates?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_dropitemrule</code> table.<br>
+    Example query:<br>
+    <code>UPDATE cq_dropitemrule SET chance=200000 WHERE chance=500000;</code><br>
+    - <code>chance</code> = drop chance (200000 = low, 500000 = medium, 1000000 = high)<br>
+    - <code>item0–item14</code> = item IDs dropped<br>
+    ⚠️ Always backup before editing.
+  </p>
+</section>
+
+<!-- Q20 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">20. How to increase lottery draw attempts?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_action</code> table.<br>
+    - Find ID <b>3700982</b> → edit <code>param phase = 10</code> to <code>1000</code> = 1000 draws/day.<br>
+    - To remove spam message, find ID <b>8930000</b> → change <code>phase = 0</code> to <code>990</code>. This delays system notice until 990th draw.
+  </p>
+</section>
+
+
+<!-- Q21 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">21. How to make the lottery draw give the items you want?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_lottery</code> table with Navicat.<br><br>
+    - <b>ID</b>: follow the sequence from above.<br>
+    - <b>type</b>: set to <b>1</b>.<br>
+    - <b>rank</b>: priority. Higher rank = easier to be drawn.<br>
+    &nbsp;&nbsp;Example: rank 1 (hardest), rank 2, rank 3 (easiest).<br>
+    - <b>chance</b>: luck value (0%–100%) within the same rank.<br>
+    - <b>prize_name</b>: item name.<br>
+    - <b>prize_item</b>: item ID.<br>
+    - <b>color</b>: item color.<br>
+    - <b>holenum</b>: socket count (max 2).<br>
+    - <b>addition_lev</b>: item level (max 12).<br>
+    - Other stats can go up to 255, <code>warghostexp</code> up to 8.<br><br>
+    ⚠ Only applies to weapons/equipment. For other items, set unused fields to 0.
+  </p>
+</section>
+
+<!-- Q22 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">22. How to increase the number of eudemon you can summon?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_user</code> table → find <code>medal_select</code> column.<br>
+    Change the value to the number of eudemon you want to carry.<br>
+    ⚠ Do not set too high, or it will cause imbalance (mass eudemon spam in PvP).
+  </p>
+</section>
+
+<!-- Q23 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">23. How to clean old/unnecessary data?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    For detailed instructions on which tables to clear and how to safely reset your EO database, please check the full guide here:<br><br>
+    <a href="/eoscripts/reset-database.html" class="text-sky-600 dark:text-sky-400 underline font-medium">
+      👉 Reset Database Tutorial
+    </a><br><br>
+    ⚠️ Always back up your database before deleting or resetting.
+  </p>
+</section>
+
+
+<!-- Q24 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">24. How to connect Navicat to the database?</h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    - Open Navicat → top-right <b>Connection</b>.<br>
+    - Connection name: anything.<br>
+    - Username/password: usually <b>test/test</b> or <b>root/root</b>.<br>
+    - If unsure, check your server config files.<br>
+    - Leave other options default, then connect.<br>
+    ✅ Once connected, you can browse and edit DB tables.
+  </p>
+</section>
+
+<!-- Q25 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">25. How to add 12-pack uni or Special Ball in the shop?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    - Open <code>cq_goods</code>.<br>
+    - First column = ID, second = <b>1207</b>, third = item code.<br>
+    - Codes:<br>
+    &nbsp;&nbsp;• 12-pack uni = <b>813000</b><br>
+    &nbsp;&nbsp;• Special Ball = <b>729032</b><br><br>
+    After saving, these items will be sold in the EP shop.
+  </p>
+</section>
+
+<!-- Q26 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">26. How to properly add a new eudemon?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    <b>Database:</b><br>
+    Add entries into: <code>cq_action</code>, <code>cq_monstertype</code>, <code>cq_itemtype</code>, <code>cq_grade</code>, <code>cq_eudmon_rbn_type</code>, <code>cq_dyna_rank_type</code>, <code>cq_totem_pole_type</code>, <code>cq_talentgain</code>, <code>cq_goods</code>.<br><br>
+    <b>Client:</b><br>
+    Edit files in <code>ANI</code> folder (<b>ItemMiniIcon</b>, <b>PetFace</b>, <b>MapItemIcon</b>).<br>
+    Edit configs in <code>INI</code> folder (<b>itemtype.dat</b>, <b>shop.dat</b>, <b>3dmotion.ini</b>, <b>3dobject.ini</b>, <b>3DSimpleObj.ini</b>, <b>3DSimpleRole.ini</b>, <b>3DTexture.ini</b>, <b>armor.ini</b>).<br>
+    Update eudemon-related configs: <b>Eudbook.ini</b>, <b>EudbookDes.ini</b>, <b>PetDescribe.ini</b>, <b>Totempole.ini</b>, <b>SysTotemPillar.ini</b>.<br><br>
+    ⚠️ Use existing eudemons as reference when adding new ones.
+  </p>
+</section>
+
+<!-- Q27 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">27. How to change the number of eudemon warehouse pages?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    1. Open <code>cq_npc</code> table in your database.<br>
+    2. Search for the eudemon warehouse NPC (e.g. <b>ID 1970 or name Maisie</b>).<br>
+    3. Edit the <b>data3</b> column, thats for controls page count:<br>
+    - <b>10</b> = 2 pages<br>
+    - <b>20</b> = 4 pages<br>
+    - <b>100</b> = 20 pages<br><br>
+  </p>
+</section>
+
+
+<!-- Q28 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">28. How to change NPC position?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_npc</code> table.<br>
+    - <b>mapid</b> = map code (check <code>cq_map</code>)<br>
+    - <b>cellx / celly</b> = NPC coordinates<br><br>
+    Example:<br>
+    Equipment Upgrade NPC → mapid = 1000, cellx = 158, celly = 400.
+  </p>
+</section>
+
+<!-- Q29 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">29. How to change GM announcements shown at screen center?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_action</code> table.<br>
+    Sort by <b>TYPE</b> column.<br>
+    Look for entries where <b>TYPE = 125</b> and <b>DATA = 2011</b>.<br>
+    Edit the message text.
+  </p>
+</section>
+
+<!-- Q30 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">30. How to make equipment indestructible?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_action</code> table.<br>
+    Look for rows with durability settings.<br>
+    The 8th column value controls durability:<br>
+    - <b>4</b> = indestructible<br>
+    - <b>0</b> = normal<br>
+    - <b>1</b> = unidentified<br>
+    - <b>2</b> = unrepairable<br><br>
+    You can also configure gems, soul levels, and attributes by editing the respective columns.<br>
+    ⚠️ Always back up before editing.
+  </p>
+</section>
+
+<!-- Q31 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">31. How to get all item IDs and data?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Use Navicat to connect to your database.<br>
+    Open <code>cq_itemtype</code> table.<br>
+    Export the data → you will get a full list of item IDs and their attributes.
+  </p>
+</section>
+
+<!-- Q32 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">32. How to change login screen image?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    For step-by-step instructions on replacing the login background, please check the full guide here:<br><br>
+    <a href="/guide/change-logindat-bg.html" class="text-sky-600 dark:text-sky-400 underline font-medium">
+      👉 Change Login Background Tutorial
+    </a><br><br>
+    ⚠️ Make sure to keep a backup of the original file before replacing.
+  </p>
+</section>
+
+
+
+<!-- Q33 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">33. How to instantly become business partner?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    In <code>cq_partner</code> table:<br>
+    Change column <b>date</b> type to <code>tinyint</code>.<br>
+    After trading, relog once → instantly becomes business partner.
+  </p>
+</section>
+
+
+<!-- Q34 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">34. How to edit NPCs and monsters?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    - <b>NPC</b>: in <code>cq_npc</code> (id, name, lookface, task0, cellx, celly, mapid).<br>
+    - <b>Monster</b>: in <code>cq_monstertype</code> (name, lookface, life, attack, dodge, defence, actions).<br>
+    You can also edit summoned pets here since they are monsters too.
+  </p>
+</section>
+
+<!-- Q35 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">35. How to modify items?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Database: <code>cq_itemtype</code> → edit stats.<br>
+    Client: edit <code>ini/itemtype.dat</code> for display changes.<br>
+    ⚠️ Both server and client must match.
+  </p>
+</section>
+
+<!-- Q36 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">36. How to assign GM/PM status?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    In <code>cq_user or cq_user_new</code> table:<br>
+    Add <b>[PM]</b> or <b>[GM]</b> after your character name.
+  </p>
+</section>
+
+<!-- Q37 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">37. How to configure mount dismount behavior?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    Open <code>cq_config</code> table.<br>
+    Find row where <b>type = 1100</b>.<br>
+    Edit <b>data1</b>:<br>
+    - 1 = normal attack won’t dismount<br>
+    - 2 = XP normal won’t dismount<br>
+    - 4 = displacement XP won’t dismount<br>
+    - 8 = skill won’t dismount<br>
+    - 16 = displacement skill won’t dismount<br>
+    - 31 = never dismount (any action).
+  </p>
+</section>
+
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
