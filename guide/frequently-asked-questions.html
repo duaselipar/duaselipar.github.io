@@ -1365,6 +1365,37 @@ ADD COLUMN index6 INT(4) DEFAULT 0;
 </section>
 
 
+<!-- Q50 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">50. How to make a PM character act like an NPC (green name)? 
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    You can make a PM appear like an NPC (green name, monsters ignore him, players can interact) by changing the character’s <b>ID</b>.
+  </p>
+
+  <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 mb-3">
+    <li>Open the <code>cq_user</code> table → find your PM character.</li>
+    <li>Change the <b>id</b> column to a value between <b>1–100</b> (tested up to 10 works fine).</li>
+    <li>This will force the game to treat that character as NPC-like (green name, safe from monsters).</li>
+  </ul>
+
+  <p class="text-xs text-slate-500 mb-3">
+    ⚠️ Important: When you change the character <b>ID</b>, all items, pets, and skills will lose their owner link.<br>
+    You must also update their owner IDs in related tables (<code>cq_item</code>, <code>cq_magictype</code>, <code>cq_eudemon</code>, etc).
+  </p>
+
+  <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 
+             px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100">
+<code>
+-- Example: change PM "Test[PM]" to act as NPC
+UPDATE cq_user SET id=10 WHERE name='Test[PM]';
+  </code></pre>
+</section>
+
+
   </main>
 
   <!-- Footer -->
