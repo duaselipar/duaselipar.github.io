@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🎲 Monster Drop System | DuaSelipar Guide</title>
+  <meta name="description" content="Guide to adjust monster drop rate and items in Eudemons Online server using cq_dropitemrule & cq_monstertype.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🎲 Monster Drop System</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-10">
+
+    <!-- Intro -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📖 Overview</h2>
+      <p class="text-slate-700 dark:text-slate-300">
+        Monster drops are controlled by two main tables: <code>cq_dropitemrule</code> and <code>cq_monstertype</code>.
+        Both must match using <b>drop_item_rule</b> ↔ <b>group_id</b>.
+      </p>
+    </section>
+
+    <!-- cq_dropitemrule -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">⚙️ cq_dropitemrule</h2>
+      <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+        <li><b>group_id</b> → must match <code>drop_item_rule</code> in cq_monstertype</li>
+        <li><b>chance</b> → drop rate</li>
+        <li>
+          Example values:<br>
+          <code>200000</code> = low (200k)<br>
+          <code>500000</code> = medium (500k)<br>
+          <code>1000000</code> = high (1M)
+        </li>
+        <li><b>item0–item14</b> → item IDs to drop (from <code>cq_itemtype</code>)</li>
+      </ul>
+    </section>
+
+    <!-- cq_monstertype -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">⚔️ cq_monstertype</h2>
+      <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+        <li><b>drop_money_min</b> → minimum money per gold pile</li>
+        <li><b>drop_money_max</b> → maximum money per gold pile</li>
+        <li><b>drop_money_chance</b> → chance of dropping money</li>
+        <li><b>drop_item_chance</b> → chance of dropping items (includes unidentified/low-quality equipment)</li>
+        <li><b>explode_item_chance1/2/3</b> → extra item drop chances</li>
+        <li><b>drop_item_rule</b> → must match <code>cq_dropitemrule.group_id</code></li>
+      </ul>
+    </section>
+
+    <!-- Example SQL -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">💻 Example SQL</h2>
+      <pre class="bg-black/40 p-4 rounded-xl text-sm overflow-x-auto text-slate-100"><code>
+-- Set drop rule 1001 to drop item ID 729020 with lower chance
+UPDATE cq_dropitemrule 
+SET chance = 200000, item0 = 729020 
+WHERE group_id = 1001;
+
+-- Assign monster 1001 to use drop rule 1001
+UPDATE cq_monstertype 
+SET drop_money_min = 100,
+    drop_money_max = 500,
+    drop_money_chance = 800000,
+    drop_item_chance = 500000, -- includes unidentified / low-quality equips
+    drop_item_rule = 1001
+WHERE id = 1001;
+      </code></pre>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

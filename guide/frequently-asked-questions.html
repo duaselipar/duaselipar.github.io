@@ -63,10 +63,22 @@
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_eudemon_rbn_rqr</code> table → find the <code>sacrifice_starlev</code> column.<br>
-    Change all values higher than <b>1900</b> to <b>1900</b>. This way, no matter how many stars the main eudemon has, the required will only need 19★ to combine.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → find the column <code>sacrifice_starlev</code>.<br><br>
+    - Change all values higher than <b>1900</b> to <b>1900</b>.<br>
+    - This makes all composes require only 19★, regardless of main eudemon’s stars.
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_eudemon_rbn_rqr SET sacrifice_starlev=1900 WHERE sacrifice_starlev > 1900;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: force compose to only need 19★
+UPDATE cq_eudemon_rbn_rqr SET sacrifice_starlev=1900 WHERE sacrifice_starlev > 1900;
+    </code></pre>
+  </div>
 </section>
 
 <!-- Q2 -->
@@ -76,11 +88,23 @@
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_grade</code> table → find the <code>rarity</code> column.<br>
-    Example: set it to <b>10000</b> = pet will be hatch with 100★.<br>
-    ⚠️ Do not set too high, or the pet may fail to summon.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_grade</code> table → find the column <code>rarity</code>.<br><br>
+    - Higher value = higher starting stars when pet hatches.<br>
+    - Example: set <b>10000</b> → pet hatches with ~100★.<br><br>
+    ⚠️ Do not set too high or the pet may fail to summon.
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_grade SET rarity=10000 WHERE id=380;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: make pet ID 380 hatch with ~100★
+UPDATE cq_grade SET rarity=10000 WHERE id=380;
+    </code></pre>
+  </div>
 </section>
 
 <!-- Q3 -->
@@ -90,12 +114,23 @@
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_itemtype</code> table → find the pet’s ID → look for the <code>able_mask</code> column.<br>
-    - <b>7</b> = mount + merge (only for mount pets)<br>
-    - <b>3</b> = can merge (Mage → Warrior requires <code>cq_grade</code> edit)<br>
-    - <b>2</b> = cannot merge (Warrior → Mage requires <code>cq_grade</code> + related <code>cq_action</code> skills)
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_itemtype</code> table → find the pet’s ID → check the <code>able_mask</code> column.<br><br>
+    - <b>7</b> = mount + merge (mount pets only)<br>
+    - <b>3</b> = can merge (Mage → Warrior change may also need <code>cq_grade</code>)<br>
+    - <b>2</b> = cannot merge (Warrior → Mage requires edits in <code>cq_grade</code> + <code>cq_action</code> skills)
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_itemtype SET able_mask=3 WHERE id=12345;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: change pet ID 12345 to mergeable
+UPDATE cq_itemtype SET able_mask=3 WHERE id=12345;
+    </code></pre>
+  </div>
 </section>
 
 <!-- Q4 -->
@@ -105,26 +140,41 @@
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_eudemon_rbn_rqr</code> table → check <code>min</code> and <code>max</code> columns.<br>
-    Increasing the <b>max</b> value will raise the score each time you compose a eudemon. Adjust as needed for faster progress.<br><br>
-    👉 If you want to <b>double</b> the compose rate, run:
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → check the columns <code>min</code> and <code>max</code>.<br><br>
+    - Increasing <b>max</b> = higher score gained each compose.<br>
+    - Adjust both <b>min</b> and <b>max</b> to balance growth speed.<br><br>
+    ⚠️ Backup your table before bulk updates.
   </p>
-  <pre class="bg-slate-100 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-sm"><code>UPDATE `cq_eudemon_rbn_rqr` 
-SET min = min * 2, 
-    max = max * 2;</code></pre>
-  <p class="text-sm text-slate-600 dark:text-slate-400 mt-4">
-    👉 If you want to restore it back to the original values, run:
-  </p>
-  <pre class="bg-slate-100 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-sm"><code>UPDATE `cq_eudemon_rbn_rqr` 
-SET min = min / 2, 
-    max = max / 2;</code></pre>
-  <p class="text-sm text-slate-600 dark:text-slate-400 mt-4">
-    💡 Tip: If you increase by a larger factor (e.g. ×3, ×4, etc.), you must also divide back by the <b>same factor</b> to return to the original values.<br>
-    Example: if you run <code>*3</code>, then to restore you must run <code>/3</code>.
+
+  <!-- Double rate -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_eudemon_rbn_rqr SET min = min * 2, max = max * 2;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Double compose rate for all rows
+UPDATE cq_eudemon_rbn_rqr SET min = min * 2, max = max * 2;
+    </code></pre>
+  </div>
+
+  <!-- Restore rate -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_eudemon_rbn_rqr SET min = min / 2, max = max / 2;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Restore back (divide by same factor)
+UPDATE cq_eudemon_rbn_rqr SET min = min / 2, max = max / 2;
+    </code></pre>
+  </div>
+
+  <p class="text-xs text-slate-500 mt-2">
+    💡 Tip: If you multiply by 3 or 4, you must divide back by the same factor to restore original values.
   </p>
 </section>
-
 
 
 <!-- Q5 -->
@@ -144,17 +194,43 @@ SET min = min / 2,
 
 <!-- Q6 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
-  <h2 class="text-xl font-semibold mb-4">6. How to modify success/failure rate of star compose?
+  <h2 class="text-xl font-semibold mb-4">6. How to modify success/failure rate when composing eudemons?
     <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_eudemon_rbn_rqr</code> table → find the <code>suc_percent</code> column.<br>
-    Set value to <b>100</b> = always succeed.<br>
-    Recommended minimum is <b>75</b> to still keep some chance of failure.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_eudemon_rbn_rqr</code> table → look for the column <code>suc_percent</code>.<br><br>
+    - Set to <b>100</b> → compose will never fail.<br>
+    - Set to <b>75</b> (or lower) → compose will often fail.<br><br>
+    ⚠️ Adjust carefully, too high may break balance, too low frustrates players.
   </p>
+
+  <!-- Always succeed -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_eudemon_rbn_rqr SET suc_percent=100;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: make all compose always succeed
+UPDATE cq_eudemon_rbn_rqr SET suc_percent=100;
+    </code></pre>
+  </div>
+
+  <!-- Harder compose -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_eudemon_rbn_rqr SET suc_percent=75;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: make compose harder (higher chance to fail)
+UPDATE cq_eudemon_rbn_rqr SET suc_percent=75;
+    </code></pre>
+  </div>
 </section>
+
 
 <!-- Q7 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -181,15 +257,41 @@ SET min = min / 2,
       ✅ Old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open the <code>cq_config</code> table → find rows where <code>type = 3101–3107</code>.<br>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_config</code> table → look for rows where <code>type = 3101–3107</code>.<br><br>
     - <b>3101</b> = VIP level 1<br>
-    - <b>3107</b> = VIP level 7<br>
-    Change the <code>data1</code> value → this represents seconds.<br>
-    Example: <b>1 = 1 second</b>. Set to any time you want.<br>
-    (new engine usually change this via tools.)
+    - <b>3107</b> = VIP level 7<br><br>
+    The column <code>data1</code> = hatch time in seconds.<br>
+    Example: <b>1 = 1 second</b>.<br><br>
+    ⚠️ Newer engines usually adjust this via GM tools instead of database edits.
   </p>
+
+  <!-- VIP 7 -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_config SET data1=5 WHERE type=3107;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set VIP 7 batch hatch time to 5 seconds
+UPDATE cq_config SET data1=5 WHERE type=3107;
+    </code></pre>
+  </div>
+
+  <!-- VIP 1 -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_config SET data1=1 WHERE type=3101;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set VIP 1 batch hatch time to instant (1 second)
+UPDATE cq_config SET data1=1 WHERE type=3101;
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q9 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -270,12 +372,46 @@ SET min = min / 2,
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Method 1: Open <code>account</code> table → set default value for <code>vip</code> column (0 = normal, 1–7 = VIP levels).<br>
-    Method 2: Use GM tool to set manually.<br>
-    Method 3: Modify directly via ACC control.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    There are a few ways to assign VIP levels automatically or manually:
   </p>
+
+  <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-400 mb-3">
+    <li><b>Method 1 (Recommended)</b>: Set default value in <code>account</code> table for <code>vip</code> column.<br>
+      • In Navicat: right-click <b>account</b> → <b>Design Table</b> → find <code>vip</code> column → set <b>Default</b> to your desired level.<br>
+      • Example: set <b>7</b> = all new accounts start with VIP 7.<br>
+      • 0 = normal (no VIP), 1–7 = VIP levels.
+    </li>
+    <li><b>Method 2</b>: Use GM tool to assign VIP level per player manually.</li>
+    <li><b>Method 3</b>: Change directly via ACC control scripts.</li>
+  </ul>
+
+  <!-- Set all accounts -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE account SET vip=3;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set all existing accounts to VIP 3
+UPDATE account SET vip=3;
+    </code></pre>
+  </div>
+
+  <!-- Set single account -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE account SET vip=7 WHERE name='TestAccount';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set single account to VIP 7
+UPDATE account SET vip=7 WHERE name='TestAccount';
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q15 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -284,11 +420,39 @@ SET min = min / 2,
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open <code>cq_syndicate</code> table → find your legion row → set <code>totem_pole</code> value to <b>18446744073709551615</b>.<br>
-    This unlocks all totems instantly for that legion.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_syndicate</code> table → find your legion’s row → edit the column <code>totem_pole</code>.<br><br>
+    - Set the value to <b>18446744073709551615</b> → instantly unlocks all totems.<br>
+    - Set the value to <b>0</b> → reset (lock all totems).<br><br>
+    ⚠️ Only apply to the correct legion ID to avoid unintended changes.
   </p>
+
+  <!-- Unlock all totems -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_syndicate SET totem_pole=18446744073709551615 WHERE id=1001;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: unlock all totems for Legion ID 1001
+UPDATE cq_syndicate SET totem_pole=18446744073709551615 WHERE id=1001;
+    </code></pre>
+  </div>
+
+  <!-- Reset totems -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_syndicate SET totem_pole=0 WHERE id=1001;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: reset all totems for Legion ID 1001
+UPDATE cq_syndicate SET totem_pole=0 WHERE id=1001;
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q16 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -305,7 +469,6 @@ SET min = min / 2,
   </p>
 </section>
 
-<!-- Q17 -->
 <!-- Q17 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
   <h2 class="text-xl font-semibold mb-4">17. How to change the appearance of monsters, eudemons (pets), or NPCs?
@@ -390,15 +553,42 @@ BuildNumEveryday=xxxxx</pre>
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open <code>cq_dropitemrule</code> table.<br>
-    Example query:<br>
-    <code>UPDATE cq_dropitemrule SET chance=200000 WHERE chance=500000;</code><br>
-    - <code>chance</code> = drop chance (200000 = low, 500000 = medium, 1000000 = high)<br>
-    - <code>item0–item14</code> = item IDs dropped<br>
-    ⚠️ Always backup before editing.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_dropitemrule</code> table.<br><br>
+    - <code>chance</code> = drop rate value<br>
+      • <b>200000</b> = low<br>
+      • <b>500000</b> = medium<br>
+      • <b>1000000</b> = high<br>
+    - <code>item0–item14</code> = item IDs dropped (from <code>cq_itemtype</code>)<br><br>
+    ⚠️ Always backup your database before making changes.
   </p>
+
+  <!-- Lower drop rates -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_dropitemrule SET chance=200000 WHERE chance=500000;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: batch lower all 500k drop rates to 200k
+UPDATE cq_dropitemrule SET chance=200000 WHERE chance=500000;
+    </code></pre>
+  </div>
+
+  <!-- Change drop item -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_dropitemrule SET item14=729020 WHERE item14=1060020;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: change last item slot (item14) to drop item ID 729020
+UPDATE cq_dropitemrule SET item14=729020 WHERE item14=1060020;
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q20 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -435,7 +625,7 @@ BuildNumEveryday=xxxxx</pre>
     - <b>holenum</b>: socket count (max 2).<br>
     - <b>addition_lev</b>: item level (max 12).<br>
     - Other stats can go up to 255, <code>warghostexp</code> up to 8.<br><br>
-    ⚠ Only applies to weapons/equipment. For other items, set unused fields to 0.
+    ⚠️ Only applies to weapons/equipment. For other items, set unused fields to 0.
   </p>
 </section>
 
@@ -446,12 +636,25 @@ BuildNumEveryday=xxxxx</pre>
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open <code>cq_user</code> table → find <code>medal_select</code> column.<br>
-    Change the value to the number of eudemon you want to carry.<br>
-    ⚠ Do not set too high, or it will cause imbalance (mass eudemon spam in PvP).
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_user</code> table → find the column <code>medal_select</code>.<br><br>
+    - Set the value to the number of eudemons you want to carry.<br>
+    - Example: <b>3</b> = summon 3 eudemons at once.<br><br>
+    ⚠️ Do not set too high, it may break balance (mass eudemon spam in PvP).
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET medal_select=3 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: allow player to summon 3 eudemons
+UPDATE cq_user SET medal_select=3 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
 </section>
+
 
 <!-- Q23 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -525,14 +728,26 @@ BuildNumEveryday=xxxxx</pre>
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    1. Open <code>cq_npc</code> table in your database.<br>
-    2. Search for the eudemon warehouse NPC (e.g. <b>ID 1970 or name Maisie</b>).<br>
-    3. Edit the <b>data3</b> column, thats for controls page count:<br>
-    - <b>10</b> = 2 pages<br>
-    - <b>20</b> = 4 pages<br>
-    - <b>100</b> = 20 pages<br><br>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_npc</code> table → search for the eudemon warehouse NPC (e.g. <b>ID 1970, name Maisie</b>).<br><br>
+    Edit the column <code>data3</code> which controls page count:
+    <ul class="list-disc list-inside mt-2">
+      <li><b>10</b> = 2 pages</li>
+      <li><b>20</b> = 4 pages</li>
+      <li><b>100</b> = 20 pages</li>
+    </ul>
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_npc SET data3=100 WHERE id=1970;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set warehouse NPC (ID 1970) to 20 pages
+UPDATE cq_npc SET data3=100 WHERE id=1970;
+    </code></pre>
+  </div>
 </section>
 
 
@@ -543,14 +758,28 @@ BuildNumEveryday=xxxxx</pre>
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    Open <code>cq_npc</code> table.<br>
-    - <b>mapid</b> = map code (check <code>cq_map</code>)<br>
-    - <b>cellx / celly</b> = NPC coordinates<br><br>
-    Example:<br>
-    Equipment Upgrade NPC → mapid = 1000, cellx = 158, celly = 400.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_npc</code> table and adjust these columns:
+    <ul class="list-disc list-inside mt-2">
+      <li><b>mapid</b> → map code (check <code>cq_map</code>)</li>
+      <li><b>cellx / celly</b> → NPC coordinates</li>
+    </ul>
+    Example: Equipment Upgrade NPC → mapid=<b>1000</b>, cellx=<b>158</b>, celly=<b>400</b>.
   </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_npc SET mapid=1000, cellx=158, celly=400 WHERE id=1970;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: move NPC ID 1970 to Cronus (1000, 158, 400)
+UPDATE cq_npc SET mapid=1000, cellx=158, celly=400 WHERE id=1970;
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q29 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -669,11 +898,39 @@ BuildNumEveryday=xxxxx</pre>
       ✅ New and old Engines
     </span>
   </h2>
-  <p class="text-sm text-slate-600 dark:text-slate-400">
-    In <code>cq_user or cq_user_new</code> table:<br>
-    Add <b>[PM]</b> or <b>[GM]</b> after your character name.
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_user</code> or <code>cq_user_new</code> table → find your character.<br><br>
+    - Add <b>[PM]</b> or <b>[GM]</b> after the name.<br>
+    - Example: <b>Test</b> → <b>Test[PM]</b>.<br><br>
+    ⚠️ Use carefully, GM/PM accounts have full privileges in-game.
   </p>
+
+  <!-- Assign PM -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET name='Test[PM]' WHERE name='Test';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: assign PM status to character "Test"
+UPDATE cq_user SET name='Test[PM]' WHERE name='Test';
+    </code></pre>
+  </div>
+
+  <!-- Assign GM -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET name='Test[GM]' WHERE name='Test';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: assign GM status to character "Test"
+UPDATE cq_user SET name='Test[GM]' WHERE name='Test';
+    </code></pre>
+  </div>
 </section>
+
+
 
 <!-- Q37 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
@@ -693,6 +950,418 @@ BuildNumEveryday=xxxxx</pre>
     - 16 = displacement skill won’t dismount<br>
     - 31 = never dismount (any action).
   </p>
+</section>
+
+<!-- Q38 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">38. How to modify the number of hatch slots?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_user</code> table → find the column <code>eud_pack_size</code>.<br><br>
+    - Set the value to how many slots you want available.<br>
+    - Example: <b>6</b> = you can hatch 6 eudemons at once.<br><br>
+    ⚠️ Do not set too high, it may cause bugs or crashes.
+  </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET eud_pack_size=6 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set player hatch slots to 6
+UPDATE cq_user SET eud_pack_size=6 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
+</section>
+
+
+
+<!-- Q39 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">39. How to change the avatar picture?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400">
+    The EO client uses <b>DDS</b> images for most avatars. You can edit them using Photoshop with a DDS plugin or Paint.NET (recommended).<br><br>
+
+    - <code>data/pic/face/24</code> → small chat avatar (JPEG, 24×24).<br>
+    - <code>data/pic/face/64</code> → top-left round avatar (DDS, 64×64, transparent circle).<br>
+    - <code>data/pic/face/128</code> → big avatar in equipment window (both DDS + JPEG, 128×128).<br><br>
+
+    Example: if the avatar ID is <b>190001</b> → replace:<br>
+    • <code>24/190001.jpg</code> (24×24)<br>
+    • <code>64/190001.dds</code> (64×64)<br>
+    • <code>128/190001.jpg</code> + <code>190001.dds</code> (128×128)<br><br>
+
+    💡 Tip: If <code>face/64</code> folder doesn’t exist, create it manually.
+  </p>
+</section>
+
+<!-- Q40 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">40. How to jail and unjail a player?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Use the <code>cheat_time</code> column in <code>cq_user</code>.
+  </p>
+
+  <!-- Jail -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET cheat_time=9999 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Jail a player
+UPDATE cq_user SET cheat_time=9999 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
+
+  <!-- Unjail -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET cheat_time=0 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Unjail a player
+UPDATE cq_user SET cheat_time=0 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
+</section>
+
+
+<!-- Q41 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">41. How to mute and unmute a player?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Use the <code>disableFlag</code> column in <code>cq_user</code>.
+  </p>
+
+  <!-- Mute -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET disableFlag=1 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Mute a player
+UPDATE cq_user SET disableFlag=1 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
+
+  <!-- Unmute -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_user SET disableFlag=0 WHERE name='Test[PM]';`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Unmute a player
+UPDATE cq_user SET disableFlag=0 WHERE name='Test[PM]';
+    </code></pre>
+  </div>
+</section>
+
+
+<!-- Q42 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">42. How to change Legion Pole and Shield HP?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_dynanpc</code> table → search for the Legion NPC you want to edit.<br>
+    - <b>Legion Pole</b> = ID <b>21150</b><br>
+    - <b>Legion Shield</b> = ID <b>21151</b><br><br>
+    Find the columns <code>life</code> and <code>maxlife</code> and set them to the HP values you want.<br>
+    After saving, restart the server for changes to take effect.
+  </p>
+
+  <!-- Legion Pole -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_dynanpc SET life=500000, maxlife=500000 WHERE id=21150;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set Legion Pole (21150) HP
+UPDATE cq_dynanpc SET life=500000, maxlife=500000 WHERE id=21150;
+    </code></pre>
+  </div>
+
+  <!-- Legion Shield -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_dynanpc SET life=300000, maxlife=300000 WHERE id=21151;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set Legion Shield (21151) HP
+UPDATE cq_dynanpc SET life=300000, maxlife=300000 WHERE id=21151;
+    </code></pre>
+  </div>
+</section>
+
+
+<!-- Q43 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">43. How to restrict GM login by IP?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    To prevent unauthorized GM access, add rules in the <code>cq_config</code> table that bind GM login to a specific IP address.<br><br>
+    - <b>type 1031</b> and <b>type 8000</b> must both be added.<br>
+    - Replace <code>127.0.0.1</code> with the IP address you want to allow.<br><br>
+    ⚠️ Each row needs a unique <code>id</code> value.
+  </p>
+
+  <!-- Type 1031 -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`INSERT INTO cq_config (id, type, data1, data2, data3, data4, data5, str) VALUES (9001, 1031, 1, 0, 0, 0, 0, '127.0.0.1');`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Restrict GM login to IP 127.0.0.1 (type 1031)
+INSERT INTO cq_config (id, type, data1, data2, data3, data4, data5, str) 
+VALUES (9001, 1031, 1, 0, 0, 0, 0, '127.0.0.1');
+    </code></pre>
+  </div>
+
+  <!-- Type 8000 -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`INSERT INTO cq_config (id, type, data1, data2, data3, data4, data5, str) VALUES (9002, 8000, 1, 0, 0, 0, 0, '127.0.0.1');`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Restrict GM login to IP 127.0.0.1 (type 8000)
+INSERT INTO cq_config (id, type, data1, data2, data3, data4, data5, str) 
+VALUES (9002, 8000, 1, 0, 0, 0, 0, '127.0.0.1');
+    </code></pre>
+  </div>
+</section>
+
+
+<!-- Q44 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">44. How to make guards look like players?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_monstertype</code> table → find the row for the guard NPC.<br><br>
+    Edit the column <code>lookface</code>:<br>
+    - <b>1</b> = player male look<br>
+    - <b>2</b> = player female look
+  </p>
+
+  <!-- Male look -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_monstertype SET lookface=1 WHERE id=xxxx;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: change guard to male player look
+UPDATE cq_monstertype SET lookface=1 WHERE id=xxxx;
+    </code></pre>
+  </div>
+
+  <!-- Female look -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_monstertype SET lookface=2 WHERE id=xxxx;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: change guard to female player look
+UPDATE cq_monstertype SET lookface=2 WHERE id=xxxx;
+    </code></pre>
+  </div>
+</section>
+
+<!-- Q45 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">45. How to fix item names that are too long to display?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    In your database, edit the <code>cq_itemtype</code> table.<br><br>
+    - Right-click <b>cq_itemtype</b> → <b>Design Table</b><br>
+    - Find the column <code>name</code><br>
+    - Change its length from <b>15</b> to <b>20</b><br><br>
+    This allows longer item names to display correctly.
+  </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`ALTER TABLE cq_itemtype MODIFY name VARCHAR(20);`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: increase name column size from 15 to 20
+ALTER TABLE cq_itemtype MODIFY name VARCHAR(20);
+    </code></pre>
+  </div>
+</section>
+
+<!-- Q46 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">46. How to make items stack in one slot?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open your database → go to <code>cq_itemtype</code> table → find the item you want to edit.<br><br>
+    - Adjust the column <code>amount_limit</code>.<br>
+    - Example: set <b>10</b> → 10 of the same item will stack into one slot.<br><br>
+    ⚠️ Note: if the item is recyclable, the whole stack will be recycled at once.
+  </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_itemtype SET amount_limit=10 WHERE id=123456;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: set item ID 123456 to stack up to 10 per slot
+UPDATE cq_itemtype SET amount_limit=10 WHERE id=123456;
+    </code></pre>
+  </div>
+</section>
+
+<!-- Q47 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">47. How to restrict normal players from teleporting to VIP maps?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_map</code> table → find the VIP map you want to restrict (example: <b>ID 1914</b>).<br><br>
+    - Edit the column <code>type</code>.<br>
+    - Set its value to <b>1075838980</b>.<br><br>
+    After saving, restart the server to apply changes.<br>
+    ✅ This prevents normal players from using dimensional teleport into that map.
+  </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`UPDATE cq_map SET type=1075838980 WHERE id=1914;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Example: restrict teleport access for map ID 1914
+UPDATE cq_map SET type=1075838980 WHERE id=1914;
+    </code></pre>
+  </div>
+</section>
+
+<!-- Q48 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">48. How to fix nobility ranking table so names display correctly?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ New and old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    Open the <code>cq_donation_dynasort_rec</code> table → add a missing column <code>name</code>.<br><br>
+    - Field name: <b>name</b><br>
+    - Type: <b>varchar</b><br>
+    - Length: <b>16</b><br>
+    - Allow NULL: <b>Yes</b><br>
+    - Default: <b>NULL</b><br><br>
+    ⚠️ The column must be placed as the <b>4th column</b> in the table.
+  </p>
+
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`ALTER TABLE cq_donation_dynasort_rec ADD COLUMN name VARCHAR(16) NULL DEFAULT NULL AFTER id3;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Add missing "name" column to nobility ranking table
+ALTER TABLE cq_donation_dynasort_rec 
+ADD COLUMN name VARCHAR(16) NULL DEFAULT NULL AFTER id3;
+    </code></pre>
+  </div>
+</section>
+
+<!-- Q49 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4">49. How to fix infinite family EXP reward bug?
+    <span class="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
+      ✅ Old Engines
+    </span>
+  </h2>
+  <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">
+    To fix unlimited EXP rewards from family NPCs:<br><br>
+    1. Open <code>cq_dynanpc</code> → check if column <code>harvest_date</code> exists.<br>
+    &nbsp;&nbsp;• If missing, add: <b>harvest_date INT(4) DEFAULT 0</b><br><br>
+    2. Open <code>cq_family_attr</code> → check if <code>index0–index6</code> exist.<br>
+    &nbsp;&nbsp;• If missing, add them as <b>INT(4) DEFAULT 0</b>.<br><br>
+    ✅ After adding these fields, family EXP rewards will no longer be infinite.
+  </p>
+
+  <!-- Add harvest_date -->
+  <div class="relative">
+    <button onclick="navigator.clipboard.writeText(`ALTER TABLE cq_dynanpc ADD COLUMN harvest_date INT(4) DEFAULT 0;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Add missing harvest_date column
+ALTER TABLE cq_dynanpc ADD COLUMN harvest_date INT(4) DEFAULT 0;
+    </code></pre>
+  </div>
+
+  <!-- Add index0–index6 -->
+  <div class="relative mt-4">
+    <button onclick="navigator.clipboard.writeText(`ALTER TABLE cq_family_attr 
+ADD COLUMN index0 INT(4) DEFAULT 0,
+ADD COLUMN index1 INT(4) DEFAULT 0,
+ADD COLUMN index2 INT(4) DEFAULT 0,
+ADD COLUMN index3 INT(4) DEFAULT 0,
+ADD COLUMN index4 INT(4) DEFAULT 0,
+ADD COLUMN index5 INT(4) DEFAULT 0,
+ADD COLUMN index6 INT(4) DEFAULT 0;`)" 
+            class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700">
+      Copy
+    </button>
+    <pre class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-md text-sm leading-snug font-mono text-slate-800 dark:text-slate-100"><code>
+-- Add missing index0–index6 columns
+ALTER TABLE cq_family_attr 
+ADD COLUMN index0 INT(4) DEFAULT 0,
+ADD COLUMN index1 INT(4) DEFAULT 0,
+ADD COLUMN index2 INT(4) DEFAULT 0,
+ADD COLUMN index3 INT(4) DEFAULT 0,
+ADD COLUMN index4 INT(4) DEFAULT 0,
+ADD COLUMN index5 INT(4) DEFAULT 0,
+ADD COLUMN index6 INT(4) DEFAULT 0;
+    </code></pre>
+  </div>
 </section>
 
 
