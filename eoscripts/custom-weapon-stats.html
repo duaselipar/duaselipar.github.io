@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Weapon Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-6">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <h1 class="text-2xl font-bold mb-4">⚔️ Custom Weapon Stats</h1>
+
+    <!-- Form -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl shadow border border-slate-200 dark:border-slate-800">
+
+      <div><label class="block text-sm mb-1">Durability (amount)</label>
+        <input id="amount" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+      <div><label class="block text-sm mb-1">Max Durability (amount_limit)</label>
+        <input id="amount_limit" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+      <div><label class="block text-sm mb-1">Item Type (ident)</label>
+        <select id="ident" class="w-full p-2 rounded border dark:bg-slate-800">
+          <option value="0">Normal</option>
+          <option value="1">Unidentified</option>
+          <option value="2">Unrepairable</option>
+          <option value="4">Indestructible</option>
+        </select></div>
+
+      <div><label class="block text-sm mb-1">Gem Socket 1</label>
+        <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800">
+          <option value="0">None</option>
+          <option value="255">Open Socket</option>
+          <option value="17">BP +3</option>
+          <option value="18">BP +5</option>
+          <option value="21">Attack +20%</option>
+          <option value="24">Damage -15%</option>
+        </select></div>
+
+      <div><label class="block text-sm mb-1">Gem Socket 2</label>
+        <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800">
+          <option value="0">None</option>
+          <option value="255">Open Socket</option>
+          <option value="17">BP +3</option>
+          <option value="18">BP +5</option>
+          <option value="21">Attack +20%</option>
+          <option value="24">Damage -15%</option>
+        </select></div>
+
+      <div><label class="block text-sm mb-1">Magic Soul (magic3)</label>
+        <input id="magic3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+      <div><label class="block text-sm mb-1">F-Soul (warghostexp)</label>
+        <select id="warghostexp" class="w-full p-2 rounded border dark:bg-slate-800">
+          <option value="0">None</option>
+          <option value="8">FSoul 1</option>
+          <option value="16">FSoul 2</option>
+          <option value="32">FSoul 3</option>
+          <option value="64">FSoul 4</option>
+          <option value="128">FSoul 5</option>
+          <option value="256">FSoul 6</option>
+          <option value="512">FSoul 7</option>
+          <option value="1024">FSoul 8</option>
+          <option value="1536">FSoul 9</option>
+        </select></div>
+    </div>
+
+    <!-- SQL Preview -->
+    <div class="relative">
+      <button onclick="copySQL()" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
+      <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto"></pre>
+    </div>
+
+  </div>
+
+<script>
+function updateParam() {
+  let amount = document.getElementById("amount").value || 0;
+  let amount_limit = document.getElementById("amount_limit").value || 0;
+  let ident = document.getElementById("ident").value || 0;
+  let gem1 = document.getElementById("gem1").value || 0;
+  let gem2 = document.getElementById("gem2").value || 0;
+  let magic3 = document.getElementById("magic3").value || 0;
+  if (magic3 > 255) magic3 = 255; // clamp max 255
+  let warghostexp = document.getElementById("warghostexp").value || 0;
+
+  let param = `${amount} ${amount_limit} ${ident} ${gem1} ${gem2} 0 0 ${magic3} 0 ${warghostexp} 0 0`;
+
+  let sql = `-- warrior 
+REPLACE INTO \`cq_action\` VALUES (10000, 10001, 0, 501, 410163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10001, 10002, 0, 501, 420163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10002, 10003, 0, 501, 111083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10003, 10004, 0, 501, 121083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10004, 10005, 0, 501, 131083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10005, 10006, 0, 501, 141083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10006, 0, 0, 501, 161083, '${param}');
+
+-- mage 
+REPLACE INTO \`cq_action\` VALUES (10010, 10011, 0, 501, 440163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10011, 10012, 0, 501, 115083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10012, 10013, 0, 501, 125083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10013, 10014, 0, 501, 135083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10014, 10015, 0, 501, 145083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10015, 0, 0, 501, 165083, '${param}');
+
+-- paladin 
+REPLACE INTO \`cq_action\` VALUES (10020, 10021, 0, 501, 490163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10021, 10022, 0, 501, 113083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10022, 10023, 0, 501, 123083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10023, 10024, 0, 501, 133083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10024, 10025, 0, 501, 143083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10025, 0, 0, 501, 163083, '${param}');
+
+-- vampire 
+REPLACE INTO \`cq_action\` VALUES (10040, 10041, 0, 501, 450163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10041, 10042, 0, 501, 117083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10042, 10043, 0, 501, 127083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10043, 10044, 0, 501, 137083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10044, 10045, 0, 501, 147083, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10045, 0, 0, 501, 167083, '${param}');
+
+-- Dragon Knight 
+REPLACE INTO \`cq_action\` VALUES (10050, 10051, 0, 501, 480163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10051, 10052, 0, 501, 112081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10052, 10053, 0, 501, 122081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10053, 10054, 0, 501, 132081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10054, 10055, 0, 501, 142081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10055, 0, 0, 501, 162081, '${param}');
+
+-- necromancer 
+REPLACE INTO \`cq_action\` VALUES (10060, 10061, 0, 501, 430163, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10061, 10062, 0, 501, 119081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10062, 10063, 0, 501, 129081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10063, 10064, 0, 501, 139081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10064, 10065, 0, 501, 149081, '${param}');
+REPLACE INTO \`cq_action\` VALUES (10065, 0, 0, 501, 169081, '${param}');`;
+
+  document.getElementById("sqlPreview").innerText = sql;
+}
+function copySQL(){navigator.clipboard.writeText(document.getElementById("sqlPreview").innerText);alert("SQL copied!");}
+document.querySelectorAll("input, select").forEach(el=>el.addEventListener("input",updateParam));
+updateParam();
+</script>
+</body>
+</html>
