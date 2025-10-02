@@ -1,145 +1,466 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <title>Custom Weapon Stats</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>⚔️ Custom Weapon Stats (Old Engine)</title>
+  <meta name="description" content="Generate cq_action SQL for weapon stats and cq_item UPDATE for gear by position.">
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 p-6">
-  <div class="max-w-6xl mx-auto space-y-6">
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
 
-    <h1 class="text-2xl font-bold mb-4">⚔️ Custom Weapon Stats</h1>
-
-    <!-- Form -->
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl shadow border border-slate-200 dark:border-slate-800">
-
-      <div><label class="block text-sm mb-1">Durability (amount)</label>
-        <input id="amount" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
-
-      <div><label class="block text-sm mb-1">Max Durability (amount_limit)</label>
-        <input id="amount_limit" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
-
-      <div><label class="block text-sm mb-1">Item Type (ident)</label>
-        <select id="ident" class="w-full p-2 rounded border dark:bg-slate-800">
-          <option value="0">Normal</option>
-          <option value="1">Unidentified</option>
-          <option value="2">Unrepairable</option>
-          <option value="4">Indestructible</option>
-        </select></div>
-
-      <div><label class="block text-sm mb-1">Gem Socket 1</label>
-        <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800">
-          <option value="0">None</option>
-          <option value="255">Open Socket</option>
-          <option value="17">BP +3</option>
-          <option value="18">BP +5</option>
-          <option value="21">Attack +20%</option>
-          <option value="24">Damage -15%</option>
-        </select></div>
-
-      <div><label class="block text-sm mb-1">Gem Socket 2</label>
-        <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800">
-          <option value="0">None</option>
-          <option value="255">Open Socket</option>
-          <option value="17">BP +3</option>
-          <option value="18">BP +5</option>
-          <option value="21">Attack +20%</option>
-          <option value="24">Damage -15%</option>
-        </select></div>
-
-      <div><label class="block text-sm mb-1">Magic Soul (magic3)</label>
-        <input id="magic3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
-
-      <div><label class="block text-sm mb-1">F-Soul (warghostexp)</label>
-        <select id="warghostexp" class="w-full p-2 rounded border dark:bg-slate-800">
-          <option value="0">None</option>
-          <option value="8">FSoul 1</option>
-          <option value="16">FSoul 2</option>
-          <option value="32">FSoul 3</option>
-          <option value="64">FSoul 4</option>
-          <option value="128">FSoul 5</option>
-          <option value="256">FSoul 6</option>
-          <option value="512">FSoul 7</option>
-          <option value="1024">FSoul 8</option>
-          <option value="1536">FSoul 9</option>
-        </select></div>
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">⚔️ Custom Weapon Stats (Old Engine)</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <!-- SQL Preview -->
-    <div class="relative">
-      <button onclick="copySQL()" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
-      <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto"></pre>
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 space-y-8">
+
+    <!-- ====== Original: Custom Weapon Stats (kept as-is) ====== -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-4">Build Custom Weapon Stats</h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-sm mb-1">Quality</label>
+          <select id="quality" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">Normal</option>
+            <option value="1">Refined</option>
+            <option value="2">Unique</option>
+            <option value="3">Elite</option>
+            <option value="4">Super</option>
+          </select>
+        </div>
+
+        <div><label class="block text-sm mb-1">Durability</label>
+          <input id="amount" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">Max Durability</label>
+          <input id="amount_limit" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">Item Type</label>
+          <select id="ident" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">Normal</option>
+            <option value="1">Unidentified</option>
+            <option value="2">Unrepairable</option>
+            <option value="4">Indestructible</option>
+          </select></div>
+
+        <div><label class="block text-sm mb-1">Gem Socket 1</label>
+          <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800">
+              <option value="0">None</option>
+              <option value="255">Empty sockets</option>
+              <option value="16">Normal Amber</option>
+              <option value="17">Refined Amber</option>
+              <option value="18">Super Amber</option>
+              <option value="19">Normal Citrine</option>
+              <option value="20">Refined Citrine</option>
+              <option value="21">Super Citrine</option>
+              <option value="22">Normal Beryl</option>
+              <option value="23">Refined Beryl</option>
+              <option value="24">Super Beryl</option>
+              <option value="25">Normal Amethyst</option>
+              <option value="26">Refined Amethyst</option>
+              <option value="27">Super Amethyst</option>
+              <option value="28">Normal Sapphire</option>
+              <option value="29">Refined Sapphire</option>
+              <option value="30">Super Sapphire</option>
+          </select></div>
+
+        <div><label class="block text-sm mb-1">Gem Socket 2</label>
+          <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800">
+              <option value="0">None</option>
+              <option value="255">Empty sockets</option>
+              <option value="16">Normal Amber</option>
+              <option value="17">Refined Amber</option>
+              <option value="18">Super Amber</option>
+              <option value="19">Normal Citrine</option>
+              <option value="20">Refined Citrine</option>
+              <option value="21">Super Citrine</option>
+              <option value="22">Normal Beryl</option>
+              <option value="23">Refined Beryl</option>
+              <option value="24">Super Beryl</option>
+              <option value="25">Normal Amethyst</option>
+              <option value="26">Refined Amethyst</option>
+              <option value="27">Super Amethyst</option>
+              <option value="28">Normal Sapphire</option>
+              <option value="29">Refined Sapphire</option>
+              <option value="30">Super Sapphire</option>
+          </select></div>
+
+        <div><label class="block text-sm mb-1">Bonus</label>
+          <input id="magic3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">F-Soul</label>
+          <select id="warghostexp" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="8">F-Soul lv.1</option>
+            <option value="16">F-Soul lv.2</option>
+            <option value="32">F-Soul lv.3</option>
+            <option value="64">F-Soul lv.4</option>
+            <option value="128">F-Soul lv.5</option>
+            <option value="256">F-Soul lv.6</option>
+            <option value="512">F-Soul lv.7</option>
+            <option value="1024">F-Soul lv.8</option>
+            <option value="1536">F-Soul lv.9</option>
+          </select></div>
+      </div>
+
+      <div class="relative">
+        <button onclick="copySQL('sqlPreview')" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
+        <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto"></pre>
+      </div>
+    </section>
+
+    <!-- ====== New: Gear UPDATE Generator (by position) ====== -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold">Gear UPDATE (cq_item) by Position</h2>
+        <div class="text-xs text-slate-500">Matches your SET fields + missing boxes you requested</div>
+      </div>
+
+      <!-- Top controls -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-sm mb-1">Player ID</label>
+          <input id="upd_player_id" type="number" value="10000001" class="w-full p-2 rounded border dark:bg-slate-800"/>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Forgename</label>
+          <input id="upd_forgename" type="text" value="DuaSelipar" class="w-full p-2 rounded border dark:bg-slate-800"/>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Item Type</label>
+          <select id="upd_ident" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">Normal</option>
+            <option value="1">Unidentified</option>
+            <option value="2">Unrepairable</option>
+            <option value="4" selected>Indestructible</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <div><label class="block text-sm mb-1">Durability</label>
+          <input id="upd_amount" type="number" value="30000" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Max Durability</label>
+          <input id="upd_amount_limit" type="number" value="30000" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">Gem 1</label>
+          <select id="upd_gem1" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="255">Empty sockets</option>
+            <option value="16">Normal Amber</option>
+            <option value="17">Refined Amber</option>
+            <option value="18">Super Amber</option>
+            <option value="19">Normal Citrine</option>
+            <option value="20">Refined Citrine</option>
+            <option value="21">Super Citrine</option>
+            <option value="22">Normal Beryl</option>
+            <option value="23">Refined Beryl</option>
+            <option value="24">Super Beryl</option>
+            <option value="25">Normal Amethyst</option>
+            <option value="26">Refined Amethyst</option>
+            <option value="27">Super Amethyst</option>
+            <option value="28">Normal Sapphire</option>
+            <option value="29">Refined Sapphire</option>
+            <option value="30">Super Sapphire</option>
+          </select></div>
+        <div><label class="block text-sm mb-1">Gem 2</label>
+          <select id="upd_gem2" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="255">Empty sockets</option>
+            <option value="16">Normal Amber</option>
+            <option value="17">Refined Amber</option>
+            <option value="18">Super Amber</option>
+            <option value="19">Normal Citrine</option>
+            <option value="20">Refined Citrine</option>
+            <option value="21">Super Citrine</option>
+            <option value="22">Normal Beryl</option>
+            <option value="23">Refined Beryl</option>
+            <option value="24">Super Beryl</option>
+            <option value="25">Normal Amethyst</option>
+            <option value="26">Refined Amethyst</option>
+            <option value="27">Super Amethyst</option>
+            <option value="28">Normal Sapphire</option>
+            <option value="29">Refined Sapphire</option>
+            <option value="30">Super Sapphire</option>
+          </select></div>
+
+        <div><label class="block text-sm mb-1">Bonus</label>
+          <input id="upd_magic3" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">F-Soul</label>
+          <select id="upd_warghostexp" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="8">F-Soul lv.1</option>
+            <option value="16">F-Soul lv.2</option>
+            <option value="32">F-Soul lv.3</option>
+            <option value="64">F-Soul lv.4</option>
+            <option value="128">F-Soul lv.5</option>
+            <option value="256">F-Soul lv.6</option>
+            <option value="512">F-Soul lv.7</option>
+            <option value="1024">F-Soul lv.8</option>
+            <option value="1536" selected>F-Soul lv.9</option>
+          </select></div>
+
+        <!-- Missing boxes you asked: eudemon_attack1..4 & special_effect -->
+        <div><label class="block text-sm mb-1">Earth Element</label>
+          <input id="upd_ea1" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Water Element</label>
+          <input id="upd_ea2" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Fire Element</label>
+          <input id="upd_ea3" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Air Element</label>
+          <input id="upd_ea4" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Special Effect</label>
+          <input id="upd_special_effect" type="number" value="8" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+      </div>
+
+      <!-- Positions -->
+      <div class="mb-4">
+        <div class="text-sm font-semibold mb-2">Positions (select any)</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_1" checked> <span>Helmet</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_2" checked> <span>Necklace</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_3" checked> <span>Armor</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_4" checked> <span>Weapon</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_7" checked> <span>Bracelet</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_8" checked> <span>Shoes</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="pos_12" checked> <span>Casual</span></label>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mb-4">
+        <button id="btnMultiQuery" class="px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">Create Script</button>
+        <button id="btnResetDefaults" class="ml-auto px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">Reset Defaults</button>
+      </div>
+
+      <div class="relative">
+        <button onclick="copySQL('sqlUpdatePreview')" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
+<pre id="sqlUpdatePreview"
+     class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto"
+     style="min-height: 12rem"></pre>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
     </div>
+  </footer>
 
-  </div>
-
+<!-- Scripts -->
 <script>
-function updateParam() {
-  let amount = document.getElementById("amount").value || 0;
-  let amount_limit = document.getElementById("amount_limit").value || 0;
-  let ident = document.getElementById("ident").value || 0;
-  let gem1 = document.getElementById("gem1").value || 0;
-  let gem2 = document.getElementById("gem2").value || 0;
-  let magic3 = document.getElementById("magic3").value || 0;
-  if (magic3 > 255) magic3 = 255; // clamp max 255
-  let warghostexp = document.getElementById("warghostexp").value || 0;
+  // ===== Theme toggle =====
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.classList.toggle('dark');
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-  let param = `${amount} ${amount_limit} ${ident} ${gem1} ${gem2} 0 0 ${magic3} 0 ${warghostexp} 0 0`;
+  // ===== Helpers =====
+  function clamp255(n){ n = parseInt(n ?? 0, 10); if (isNaN(n)) n = 0; return Math.max(0, Math.min(255, n)); }
+  function setClampInput(id, onChange){
+    const el = document.getElementById(id);
+    if (!el) return;
+    const handler = ()=>{ el.value = clamp255(el.value); if (typeof onChange === 'function') onChange(); };
+    el.addEventListener('input', handler);
+    el.addEventListener('blur', handler);
+  }
 
-  let sql = `-- warrior 
-REPLACE INTO \`cq_action\` VALUES (10000, 10001, 0, 501, 410163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10001, 10002, 0, 501, 420163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10002, 10003, 0, 501, 111083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10003, 10004, 0, 501, 121083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10004, 10005, 0, 501, 131083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10005, 10006, 0, 501, 141083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10006, 0, 0, 501, 161083, '${param}');
+  // ===== TOP: cq_action weapon builder =====
+  function updateParam() {
+    let q = document.getElementById("quality").value || 0;
+    let amount = document.getElementById("amount").value || 0;
+    let amount_limit = document.getElementById("amount_limit").value || 0;
+    let ident = document.getElementById("ident").value || 0;
+    let gem1 = document.getElementById("gem1").value || 0;
+    let gem2 = document.getElementById("gem2").value || 0;
+    let magic3 = clamp255(document.getElementById("magic3").value);
+    document.getElementById("magic3").value = magic3; // live clamp
+    let warghostexp = document.getElementById("warghostexp").value || 0;
 
--- mage 
-REPLACE INTO \`cq_action\` VALUES (10010, 10011, 0, 501, 440163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10011, 10012, 0, 501, 115083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10012, 10013, 0, 501, 125083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10013, 10014, 0, 501, 135083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10014, 10015, 0, 501, 145083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10015, 0, 0, 501, 165083, '${param}');
+    let param = `${amount} ${amount_limit} ${ident} ${gem1} ${gem2} 0 0 ${magic3} 0 ${warghostexp} 0 0`;
 
--- paladin 
-REPLACE INTO \`cq_action\` VALUES (10020, 10021, 0, 501, 490163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10021, 10022, 0, 501, 113083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10022, 10023, 0, 501, 123083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10023, 10024, 0, 501, 133083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10024, 10025, 0, 501, 143083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10025, 0, 0, 501, 163083, '${param}');
+    let ids = {
+      warrior: [41016,42016,11108,12108,13108,14108,16108],
+      mage:    [44016,11508,12508,13508,14508,16508],
+      paladin: [49016,11308,12308,13308,14308,16308],
+      vampire: [45016,11708,12708,13708,14708,16708],
+      dragon:  [48016,11208,12208,13208,14208,16208],
+      necro:   [43016,11908,12908,13908,14908,16908],
+    };
 
--- vampire 
-REPLACE INTO \`cq_action\` VALUES (10040, 10041, 0, 501, 450163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10041, 10042, 0, 501, 117083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10042, 10043, 0, 501, 127083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10043, 10044, 0, 501, 137083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10044, 10045, 0, 501, 147083, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10045, 0, 0, 501, 167083, '${param}');
+    function buildSQL(label, arr, startId){
+      let sql = `-- ${label}\n`;
+      arr.forEach((base,i)=>{
+        const thisId = startId + i;
+        const nextId = (i < arr.length - 1) ? startId + i + 1 : 0;
+        const itemId = base * 10 + parseInt(q, 10);
+        // NOTE: backticks around table name are escaped as \` inside template string
+        sql += `REPLACE INTO cq_action VALUES (${thisId}, ${nextId}, 0, 501, ${itemId}, '${param}');\n`;
+      });
+      return sql + "\n";
+    }
 
--- Dragon Knight 
-REPLACE INTO \`cq_action\` VALUES (10050, 10051, 0, 501, 480163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10051, 10052, 0, 501, 112081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10052, 10053, 0, 501, 122081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10053, 10054, 0, 501, 132081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10054, 10055, 0, 501, 142081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10055, 0, 0, 501, 162081, '${param}');
+    let sql = "";
+    sql += buildSQL("warrior", ids.warrior, 10000);
+    sql += buildSQL("mage",    ids.mage,    10010);
+    sql += buildSQL("paladin", ids.paladin, 10020);
+    sql += buildSQL("vampire", ids.vampire, 10040);
+    sql += buildSQL("dragon",  ids.dragon,  10050);
+    sql += buildSQL("necro",   ids.necro,   10060);
 
--- necromancer 
-REPLACE INTO \`cq_action\` VALUES (10060, 10061, 0, 501, 430163, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10061, 10062, 0, 501, 119081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10062, 10063, 0, 501, 129081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10063, 10064, 0, 501, 139081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10064, 10065, 0, 501, 149081, '${param}');
-REPLACE INTO \`cq_action\` VALUES (10065, 0, 0, 501, 169081, '${param}');`;
+    document.getElementById("sqlPreview").innerText = sql;
+  }
 
-  document.getElementById("sqlPreview").innerText = sql;
-}
-function copySQL(){navigator.clipboard.writeText(document.getElementById("sqlPreview").innerText);alert("SQL copied!");}
-document.querySelectorAll("input, select").forEach(el=>el.addEventListener("input",updateParam));
-updateParam();
+  function copySQL(id){
+    navigator.clipboard.writeText(document.getElementById(id).innerText);
+    alert("SQL copied!");
+  }
+
+  document.querySelectorAll("#quality,#amount,#amount_limit,#ident,#gem1,#gem2,#magic3,#warghostexp")
+    .forEach(el=>el.addEventListener("input", updateParam));
+  setClampInput('magic3', updateParam);
+  updateParam();
+
+  // ===== BOTTOM: cq_item gear UPDATE generator =====
+  const posMap = [
+    {id:1,  label:'HELMET'},
+    {id:2,  label:'NECKLACE'},
+    {id:3,  label:'ARMOR'},
+    {id:4,  label:'WEAPON'},
+    {id:7,  label:'BRACELET'},
+    {id:8,  label:'SHOES'},
+    {id:12, label:'CASUAL'},
+  ];
+
+  function getVal(id){ return document.getElementById(id)?.value ?? ''; }
+  function getInt(id){ return parseInt(getVal(id)||0,10); }
+  function getClampedInt(id){ return clamp255(getVal(id)); }
+  function posSelected(){ return posMap.filter(p=>document.getElementById(`pos_${p.id}`)?.checked).map(p=>p.id); }
+
+  function buildSetClause(){
+    const ea1 = getClampedInt('upd_ea1');
+    const ea2 = getClampedInt('upd_ea2');
+    const ea3 = getClampedInt('upd_ea3');
+    const ea4 = getClampedInt('upd_ea4');
+    const magic3 = getClampedInt('upd_magic3');
+    const special = getClampedInt('upd_special_effect');
+
+    // reflect clamped values back to UI
+    ['upd_ea1','upd_ea2','upd_ea3','upd_ea4','upd_magic3','upd_special_effect'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value = clamp255(el.value);
+    });
+
+    const amount       = getInt('upd_amount');
+    const amount_limit = getInt('upd_amount_limit');
+    const gem1         = getInt('upd_gem1');
+    const gem2         = getInt('upd_gem2');
+    const warghostexp  = getInt('upd_warghostexp');
+    const ident        = getInt('upd_ident');
+    const forgename    = getVal('upd_forgename').replaceAll("'", "''");
+
+    return `eudemon_attack1=${ea1},eudemon_attack2=${ea2},eudemon_attack3=${ea3},eudemon_attack4=${ea4},
+  magic3=${magic3},special_effect=${special},amount=${amount},amount_limit=${amount_limit},gem1=${gem1},gem2=${gem2},
+  warghostexp=${warghostexp},ident=${ident},forgename='${forgename}'`;
+  }
+
+  // Only Per-Position (Single-Query removed)
+  function buildMultiQuery(){
+    const pid = getInt('upd_player_id');
+    const setClause = buildSetClause();
+    const positions = posMap.filter(p=>document.getElementById(`pos_${p.id}`)?.checked);
+    if (!positions.length){ alert('Select at least one position.'); return; }
+    const sql = positions
+      .map(p => `-- ${p.label}
+UPDATE cq_item SET
+  ${setClause}
+WHERE player_id=${pid} AND position=${p.id};`)
+      .join("\n\n");
+    document.getElementById('sqlUpdatePreview').innerText = sql;
+  }
+
+  function resetDefaults(){
+    document.getElementById('upd_player_id').value = 10000001;
+    document.getElementById('upd_forgename').value = 'DuaSelipar';
+    document.getElementById('upd_ident').value = 0;
+    document.getElementById('upd_amount').value = 30000;
+    document.getElementById('upd_amount_limit').value = 30000;
+    document.getElementById('upd_gem1').value = 0;
+    document.getElementById('upd_gem2').value = 0;
+    document.getElementById('upd_magic3').value = 0;
+    document.getElementById('upd_warghostexp').value = 0;
+    document.getElementById('upd_ea1').value = 0;
+    document.getElementById('upd_ea2').value = 0;
+    document.getElementById('upd_ea3').value = 0;
+    document.getElementById('upd_ea4').value = 0;
+    document.getElementById('upd_special_effect').value = 0;
+    ['pos_1','pos_2','pos_3','pos_4','pos_7','pos_8','pos_12']
+      .forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=true; });
+    document.getElementById('sqlUpdatePreview').innerText = '';
+  }
+
+  document.getElementById('btnMultiQuery').addEventListener('click', buildMultiQuery);
+  document.getElementById('btnResetDefaults').addEventListener('click', resetDefaults);
+
+  // Live clamp for bottom numeric fields
+  ['upd_ea1','upd_ea2','upd_ea3','upd_ea4','upd_special_effect','upd_magic3'].forEach(id=> setClampInput(id));
+
+  // init
+  resetDefaults();
 </script>
+
 </body>
 </html>
