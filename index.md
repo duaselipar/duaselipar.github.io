@@ -213,7 +213,7 @@ title: DuaSelipar Dev Hub
             <div class="min-w-0">
               <div class="font-semibold">Custom Equipment Stats (New Engine)</div>
               <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-                Generator for equipment parameters (quality, durability, sockets, bonus, F-Soul and more) with more updated divine stats.
+                Generator for equipment parameters (quality, durability, sockets, bonus, F-Soul and more) with updated divine stats.
               </p>
             </div>
           </a>
