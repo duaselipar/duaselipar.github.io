@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>⚔️ Custom Equipment Stats (New Engine)</title>
+  <meta name="description" content="Generate cq_action SQL for weapon stats and cq_item UPDATE for gear by position.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] } } }
+    }
+  </script>
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){ document.documentElement.classList.add('dark'); }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased">
+
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">⚔️ Custom Equipment Stats (New Engine)</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 space-y-8">
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold mb-4">Build Custom Equipment Stats</h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <div>
+          <label class="block text-sm mb-1">Quality</label>
+          <select id="quality" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">Normal</option>
+            <option value="1">Refined</option>
+            <option value="2">Unique</option>
+            <option value="3">Elite</option>
+            <option value="4">Super</option>
+            <option value="5">Unique Divine</option>
+            <option value="6">Elite Divine</option>
+            <option value="7">Super Divine</option>
+          </select>
+        </div>
+
+        <div><label class="block text-sm mb-1">Durability</label>
+          <input id="amount" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">Max Durability</label>
+          <input id="amount_limit" type="number" value="0" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+
+        <div><label class="block text-sm mb-1">Item Type</label>
+          <select id="ident" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">Normal</option>
+            <option value="1">Unidentified</option>
+            <option value="2">Unrepairable</option>
+            <option value="4">Indestructible</option>
+          </select></div>
+
+        <!-- Gem 1, Gem 2, Gem 3 (same) -->
+        <div><label class="block text-sm mb-1">Gem Socket 1</label>
+          <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800"></select></div>
+        <div><label class="block text-sm mb-1">Gem Socket 2</label>
+          <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800"></select></div>
+        <div><label class="block text-sm mb-1">Gem Socket 3</label>
+          <select id="gem3" class="w-full p-2 rounded border dark:bg-slate-800"></select></div>
+
+        <!-- magic3 & warghostexp back -->
+        <div><label class="block text-sm mb-1">Bonus</label>
+          <input id="magic3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">F-Soul</label>
+          <select id="warghostexp" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="8">F-Soul lv.1</option>
+            <option value="16">F-Soul lv.2</option>
+            <option value="32">F-Soul lv.3</option>
+            <option value="64">F-Soul lv.4</option>
+            <option value="128">F-Soul lv.5</option>
+            <option value="256">F-Soul lv.6</option>
+            <option value="512">F-Soul lv.7</option>
+            <option value="1024">F-Soul lv.8</option>
+            <option value="1536">F-Soul lv.9</option>
+          </select></div>
+
+        <!-- Attacks, Special, GodExp, newgem -->
+        <div><label class="block text-sm mb-1">Earth Element</label>
+          <input id="ea1" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Water Element</label>
+          <input id="ea2" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Fire Element</label>
+          <input id="ea3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Air Element</label>
+          <input id="ea4" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Special Effect</label>
+          <input id="special_effect" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
+        <div><label class="block text-sm mb-1">Divine Bonus</label>
+          <select id="godexp" class="w-full p-2 rounded border dark:bg-slate-800">
+            <option value="0">None</option>
+            <option value="10000">+1</option>
+            <option value="20000">+2</option>
+            <option value="30000">+3</option>
+            <option value="40000">+4</option>
+            <option value="50000">+5</option>
+            <option value="60000">+6</option>
+            <option value="70000">+7</option>
+            <option value="80000">+8</option>
+            <option value="90000">+9</option>
+          </select></div>
+        <div class="md:col-span-2"><label class="block text-sm mb-1">Alamut Soul</label>
+          <select id="newgem" class="w-full p-2 rounded border dark:bg-slate-800"></select></div>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-sm font-semibold mb-2">Classes (select any)</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_warrior" checked> <span>Warrior</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_mage" checked> <span>Mage</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_paladin" checked> <span>Paladin</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_vampire" checked> <span>Vampire</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_necro" checked> <span>Necromancer</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_shadow" checked> <span>Shadow Knight</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_ranger" checked> <span>Ranger</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_sword" checked> <span>Sword Master</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_star" checked> <span>Star Sage</span></label>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mb-4">
+        <button id="btnTopCreate" class="px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">Create Script</button>
+        <button id="btnTopReset" class="ml-auto px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">Reset Defaults</button>
+      </div>
+
+      <div class="relative">
+        <button onclick="copySQL('sqlPreview')" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
+        <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto" style="min-height: 12rem"></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">© <span id="year"></span> DuaSelipar Dev Hub.</div>
+    </div>
+  </footer>
+
+<script>
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark = root.classList.toggle('dark');
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function clamp255(n){ n = parseInt(n ?? 0, 10); if (isNaN(n)) n = 0; return Math.max(0, Math.min(255, n)); }
+  function setClampInput(id){ const el = document.getElementById(id); if (!el) return; const h = ()=>{ el.value = clamp255(el.value); }; el.addEventListener('input', h); el.addEventListener('blur', h); }
+  function copySQL(id){ var el = document.getElementById(id); if (!el) return; var text = el.innerText || el.textContent || ''; navigator.clipboard.writeText(text).catch(function(err){ alert('Copy failed: ' + err); }); }
+
+  const gemOptions = [
+    {v:0, label:'None'},
+    {v:255, label:'Empty sockets'},
+    {v:16, label:'BP +1 Gem'},
+    {v:17, label:'BP +3 Gem'},
+    {v:18, label:'BP +5 Gem'},
+    {v:19, label:'ATK +5% Gem'},
+    {v:20, label:'ATK +10% Gem'},
+    {v:21, label:'ATK +20% Gem'},
+    {v:22, label:'DMG -5% Gem'},
+    {v:23, label:'DMG -10% Gem'},
+    {v:24, label:'DMG -15% Gem'},
+    {v:25, label:'DURA +20% Gem'},
+    {v:26, label:'DURA +50% Gem'},
+    {v:27, label:'DURA +100% Gem'},
+    {v:28, label:'EXP +10% Gem'},
+    {v:29, label:'EXP +15% Gem'},
+    {v:30, label:'EXP +25% Gem'},
+    {v:31, label:'HP +5% Gem'},
+    {v:32, label:'HP +10% Gem'},
+    {v:33, label:'HP +15% Gem'},
+  ];
+  function fillGemSelect(id){ const sel = document.getElementById(id); if(!sel) return; sel.innerHTML = ''; gemOptions.forEach(o=>{ const opt=document.createElement('option'); opt.value = o.v; opt.textContent = o.label; sel.appendChild(opt); }); }
+  ['gem1','gem2','gem3'].forEach(fillGemSelect);
+
+  const newGemOptions = [
+    [1701630,"Lv.1 Alamut's Soul"],[1702630,"Lv.2 Alamut's Soul"],[1703630,"Lv.3 Alamut's Soul"],[1704630,"Lv.4 Alamut's Soul"],[1705630,"Lv.5 Alamut's Soul"],[1706630,"Lv.6 Alamut's Soul"],[1707630,"Lv.7 Alamut's Soul"],[1708630,"Lv.8 Alamut's Soul"],[1709630,"Lv.9 Alamut's Soul"],[1710630,"Lv.10 Alamut's Soul"],[1711630,"Lv.11 Alamut's Soul"],[1712630,"Lv.12 Alamut's Soul"],[1713630,"Lv.13 Alamut's Soul"],[1714630,"Lv.14 Alamut's Soul"],[1715630,"Lv.15 Alamut's Soul"],[1716630,"Lv.16 Alamut's Soul"],[1717630,"Lv.17 Alamut's Soul"],[1718630,"Lv.18 Alamut's Soul"]
+  ];
+  const newgemSel = document.getElementById('newgem');
+  const noneOpt = document.createElement('option'); noneOpt.value = 0; noneOpt.textContent = 'None'; newgemSel.appendChild(noneOpt);
+  newGemOptions.forEach(([v,txt])=>{ const o=document.createElement('option'); o.value=v; o.textContent=txt; newgemSel.appendChild(o); });
+
+  const classMap = [
+    { key: 'warrior', label: 'Warrior',       startId: 20000 },
+    { key: 'mage',    label: 'Mage',          startId: 20020 },
+    { key: 'paladin', label: 'Paladin',       startId: 20040 },
+    { key: 'vampire', label: 'Vampire',       startId: 20060 },
+    { key: 'necro',   label: 'Necromancer',   startId: 20080 },
+    { key: 'shadow',  label: 'Shadow Knight', startId: 20100 },
+    { key: 'ranger',  label: 'Ranger',        startId: 20120 },
+    { key: 'sword',   label: 'Sword Master',  startId: 20140 },
+    { key: 'star',    label: 'Star Sage',     startId: 20160 }
+  ];
+  const ids = {
+    mage:    [440267,115137,125137,135137,145137,165097],
+    warrior: [420267,410267,111137,121137,131137,141137,161097],
+    paladin: [490267,113137,123137,133137,143137,163097],
+    vampire: [450267,117137,127137,137137,147137,167097],
+    necro:   [430267,119137,129137,139137,149137,169097],
+    shadow:  [480267,112137,122137,132137,142137,162097],
+    ranger:  [460267,118137,128137,138137,148137,168097],
+    sword:   [411267,116137,126137,136137,146137,166097],
+    star:    [412267,316137,326137,336137,346137,366097]
+  };
+
+  function resetTopDefaults(){
+    document.getElementById('quality').value = 0;
+    document.getElementById('amount').value = 0;
+    document.getElementById('amount_limit').value = 0;
+    document.getElementById('ident').value = 0;
+    ['gem1','gem2','gem3'].forEach(id=>document.getElementById(id).value = 0);
+    document.getElementById('magic3').value = 0;
+    document.getElementById('warghostexp').value = 0;
+    ['ea1','ea2','ea3','ea4','special_effect'].forEach(id=>document.getElementById(id).value = 0);
+    document.getElementById('godexp').value = 0;
+    document.getElementById('newgem').value = 0;
+    ['cls_warrior','cls_mage','cls_paladin','cls_vampire','cls_necro','cls_shadow','cls_ranger','cls_sword','cls_star'].forEach(id => { const el = document.getElementById(id); if (el) el.checked = true; });
+    document.getElementById('sqlPreview').innerText = '';
+  }
+
+  function buildTopSQL(){
+    const q            = parseInt(document.getElementById('quality').value||0,10);
+    const amount       = parseInt(document.getElementById('amount').value||0,10);
+    const amount_limit = parseInt(document.getElementById('amount_limit').value||0,10);
+    const ident        = parseInt(document.getElementById('ident').value||0,10);
+    const gem1         = parseInt(document.getElementById('gem1').value||0,10);
+    const gem2         = parseInt(document.getElementById('gem2').value||0,10);
+    const gem3         = parseInt(document.getElementById('gem3').value||0,10);
+
+    // fixed-zero fields (no UI)
+    const magic1 = 0, magic2 = 0, data = 0, gemtype = 0, availabletime = 0, MONOPOLY = 0, prescription = 0;
+
+    const magic3       = clamp255(document.getElementById('magic3').value);
+    const warghostexp  = parseInt(document.getElementById('warghostexp').value||0,10);
+    const ea1          = clamp255(document.getElementById('ea1').value);
+    const ea2          = clamp255(document.getElementById('ea2').value);
+    const ea3          = clamp255(document.getElementById('ea3').value);
+    const ea4          = clamp255(document.getElementById('ea4').value);
+    const special      = clamp255(document.getElementById('special_effect').value);
+    const godexp       = parseInt(document.getElementById('godexp').value||0,10);
+    const newgem       = parseInt(document.getElementById('newgem').value||0,10);
+
+    ['magic3','ea1','ea2','ea3','ea4','special_effect'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value = clamp255(el.value); });
+
+    const tail = [
+      amount, amount_limit, ident, gem1, gem2,
+      magic1, magic2, magic3,
+      data, warghostexp, gemtype, availabletime, MONOPOLY,
+      ea1, ea2, ea3, ea4, special, gem3, godexp, prescription, newgem
+    ];
+    const param = tail.join(' ');
+
+    const selected = classMap.filter(c => document.getElementById('cls_'+c.key)?.checked);
+    if (!selected.length){ alert('Select at least one class.'); document.getElementById('sqlPreview').innerText = ''; return; }
+
+    let out = '';
+    selected.forEach(c => {
+      out += `-- ${c.label}
+`;
+      const arr = ids[c.key];
+      arr.forEach((base, i) => {
+        const thisId = c.startId + i;
+        const nextId = (i < arr.length - 1) ? c.startId + i + 1 : 0;
+        const itemId = base * 10 + q;
+        out += `REPLACE INTO cq_action VALUES (${thisId}, ${nextId}, 0, 501, ${itemId}, '${param}');
+`;
+      });
+      out += `
+`;
+    });
+
+    document.getElementById('sqlPreview').innerText = out;
+  }
+
+  document.getElementById('btnTopCreate').addEventListener('click', buildTopSQL);
+  document.getElementById('btnTopReset').addEventListener('click', resetTopDefaults);
+  ['magic3','ea1','ea2','ea3','ea4','special_effect'].forEach(setClampInput);
+  resetTopDefaults();
+</script>
+
+</body>
+</html>

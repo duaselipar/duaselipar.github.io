@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff"/>
-  <title>⚔️ Custom Weapon Stats (Old Engine)</title>
+  <title>⚔️ Custom Equipment Stats (Old Engine)</title>
   <meta name="description" content="Generate cq_action SQL for weapon stats and cq_item UPDATE for gear by position.">
 
   <!-- Tailwind -->
@@ -40,7 +40,7 @@
   <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
     <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
       <div class="h-14 flex items-center justify-between">
-        <h1 class="text-base md:text-lg font-extrabold tracking-tight">⚔️ Custom Weapon Stats (Old Engine)</h1>
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">⚔️ Custom Equipment Stats (Old Engine)</h1>
         <div class="flex items-center gap-2">
           <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
           <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
@@ -62,7 +62,7 @@
 
     <!-- ====== Original: Custom Weapon Stats (kept as-is) ====== -->
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
-      <h2 class="text-xl font-semibold mb-4">Build Custom Weapon Stats</h2>
+      <h2 class="text-xl font-semibold mb-4">Build Custom Equipment Stats</h2>
 
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <div>
@@ -149,10 +149,31 @@
             <option value="1536">F-Soul lv.9</option>
           </select></div>
       </div>
+      <!-- Classes selector (top) -->
+      <div class="mb-4">
+        <div class="text-sm font-semibold mb-2">Classes (select any)</div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_warrior" checked> <span>Warrior</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_mage" checked> <span>Mage</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_paladin" checked> <span>Paladin</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_vampire" checked> <span>Vampire</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_shadow" checked> <span>Shadow Knight</span></label>
+          <label class="inline-flex items-center gap-2"><input type="checkbox" class="accent-slate-600" id="cls_necro" checked> <span>Necromancer</span></label>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mb-4">
+        <button id="btnTopCreate" class="px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">
+          Create Script
+        </button>
+          <button id="btnTopReset" class="ml-auto px-3 py-2 text-sm rounded-lg ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-950/5 dark:hover:bg-white/5">
+    Reset Defaults
+  </button>
+      </div>
 
       <div class="relative">
         <button onclick="copySQL('sqlPreview')" class="absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600">Copy</button>
-        <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto"></pre>
+        <pre id="sqlPreview" class="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm font-mono leading-snug overflow-x-auto" style="min-height: 12rem"></pre>
       </div>
     </section>
 
@@ -160,7 +181,7 @@
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-semibold">Gear UPDATE (cq_item) by Position</h2>
-        <div class="text-xs text-slate-500">Matches your SET fields + missing boxes you requested</div>
+        <div class="text-xs text-slate-500">Make sure that char equip that gear!</div>
       </div>
 
       <!-- Top controls -->
@@ -319,61 +340,98 @@
     el.addEventListener('blur', handler);
   }
 
-  // ===== TOP: cq_action weapon builder =====
-  function updateParam() {
-    let q = document.getElementById("quality").value || 0;
-    let amount = document.getElementById("amount").value || 0;
-    let amount_limit = document.getElementById("amount_limit").value || 0;
-    let ident = document.getElementById("ident").value || 0;
-    let gem1 = document.getElementById("gem1").value || 0;
-    let gem2 = document.getElementById("gem2").value || 0;
-    let magic3 = clamp255(document.getElementById("magic3").value);
-    document.getElementById("magic3").value = magic3; // live clamp
-    let warghostexp = document.getElementById("warghostexp").value || 0;
-
-    let param = `${amount} ${amount_limit} ${ident} ${gem1} ${gem2} 0 0 ${magic3} 0 ${warghostexp} 0 0`;
-
-    let ids = {
-      warrior: [41016,42016,11108,12108,13108,14108,16108],
-      mage:    [44016,11508,12508,13508,14508,16508],
-      paladin: [49016,11308,12308,13308,14308,16308],
-      vampire: [45016,11708,12708,13708,14708,16708],
-      dragon:  [48016,11208,12208,13208,14208,16208],
-      necro:   [43016,11908,12908,13908,14908,16908],
-    };
-
-    function buildSQL(label, arr, startId){
-      let sql = `-- ${label}\n`;
-      arr.forEach((base,i)=>{
-        const thisId = startId + i;
-        const nextId = (i < arr.length - 1) ? startId + i + 1 : 0;
-        const itemId = base * 10 + parseInt(q, 10);
-        // NOTE: backticks around table name are escaped as \` inside template string
-        sql += `REPLACE INTO cq_action VALUES (${thisId}, ${nextId}, 0, 501, ${itemId}, '${param}');\n`;
-      });
-      return sql + "\n";
-    }
-
-    let sql = "";
-    sql += buildSQL("warrior", ids.warrior, 10000);
-    sql += buildSQL("mage",    ids.mage,    10010);
-    sql += buildSQL("paladin", ids.paladin, 10020);
-    sql += buildSQL("vampire", ids.vampire, 10040);
-    sql += buildSQL("dragon",  ids.dragon,  10050);
-    sql += buildSQL("necro",   ids.necro,   10060);
-
-    document.getElementById("sqlPreview").innerText = sql;
-  }
-
   function copySQL(id){
-    navigator.clipboard.writeText(document.getElementById(id).innerText);
-    alert("SQL copied!");
-  }
+  var el = document.getElementById(id);
+  if (!el) return;
+  var text = el.innerText || el.textContent || '';
+  navigator.clipboard.writeText(text).then(function(){
+    // optional: alert('Copied!');
+  }).catch(function(err){
+    alert('Copy failed: ' + err);
+  });
+}
 
-  document.querySelectorAll("#quality,#amount,#amount_limit,#ident,#gem1,#gem2,#magic3,#warghostexp")
-    .forEach(el=>el.addEventListener("input", updateParam));
-  setClampInput('magic3', updateParam);
-  updateParam();
+// ===== TOP: cq_action weapon builder (empty until Create) =====
+const classMap = [
+  { key: 'warrior', label: 'Warrior',       startId: 10000 },
+  { key: 'mage',    label: 'Mage',          startId: 10010 },
+  { key: 'paladin', label: 'Paladin',       startId: 10020 },
+  { key: 'vampire', label: 'Vampire',       startId: 10040 },
+  { key: 'shadow',  label: 'Shadow Knight', startId: 10050 },
+  { key: 'necro',   label: 'Necromancer',   startId: 10060 },
+];
+
+function resetTopDefaults(){
+  // inputs (top)
+  document.getElementById('quality').value = 0;
+  document.getElementById('amount').value = 0;
+  document.getElementById('amount_limit').value = 0;
+  document.getElementById('ident').value = 0;
+  document.getElementById('gem1').value = 0;
+  document.getElementById('gem2').value = 0;
+  document.getElementById('magic3').value = 0;
+  document.getElementById('warghostexp').value = 0;
+  // classes (tick all)
+  ['cls_warrior','cls_mage','cls_paladin','cls_vampire','cls_shadow','cls_necro']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.checked = true; });
+  // clear output
+  document.getElementById('sqlPreview').innerText = '';
+}
+
+// Item base IDs per class (Shadow Knight mapped here; update if you have exact SK IDs)
+const ids = {
+  warrior: [41016,42016,11108,12108,13108,14108,16108],
+  mage:    [44016,11508,12508,13508,14508,16508],
+  paladin: [49016,11308,12308,13308,14308,16308],
+  vampire: [45016,11708,12708,13708,14708,16708],
+  shadow:  [48016,11208,12208,13208,14208,16208], // <-- adjust if different for SK
+  necro:   [43016,11908,12908,13908,14908,16908],
+};
+
+function buildTopSQL(){
+  const q            = document.getElementById('quality').value || 0;
+  const amount       = document.getElementById('amount').value || 0;
+  const amount_limit = document.getElementById('amount_limit').value || 0;
+  const ident        = document.getElementById('ident').value || 0;
+  const gem1         = document.getElementById('gem1').value || 0;
+  const gem2         = document.getElementById('gem2').value || 0;
+  const magic3       = clamp255(document.getElementById('magic3').value);
+  document.getElementById('magic3').value = magic3; // live clamp
+  const warghostexp  = document.getElementById('warghostexp').value || 0;
+
+  const param = [amount, amount_limit, ident, gem1, gem2, 0, 0, magic3, 0, warghostexp, 0, 0].join(' ');
+
+  const selected = classMap.filter(c => {
+    const box = document.getElementById('cls_'+c.key);
+    return box && box.checked;
+  });
+
+  let out = '';
+  if (!selected.length){
+  alert('Select at least one class.');
+  document.getElementById('sqlPreview').innerText = '';
+  return;
+  } else {
+    selected.forEach(c => {
+      out += `-- ${c.label}\n`;
+      const arr = ids[c.key];
+      arr.forEach((base, i) => {
+        const thisId = c.startId + i;
+        const nextId = (i < arr.length - 1) ? c.startId + i + 1 : 0;
+        const itemId = base * 10 + parseInt(q, 10);
+        out += `REPLACE INTO cq_action VALUES (${thisId}, ${nextId}, 0, 501, ${itemId}, '${param}');\n`;
+      });
+      out += `\n`;
+    });
+  }
+  document.getElementById('sqlPreview').innerText = out;
+}
+
+document.getElementById('btnTopCreate').addEventListener('click', buildTopSQL);
+document.getElementById('btnTopReset').addEventListener('click', resetTopDefaults);
+// keep input clamping but DO NOT auto-generate on load
+setClampInput('magic3');
+
 
   // ===== BOTTOM: cq_item gear UPDATE generator =====
   const posMap = [
