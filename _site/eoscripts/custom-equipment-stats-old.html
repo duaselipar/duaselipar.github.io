@@ -91,46 +91,12 @@
           </select></div>
 
         <div><label class="block text-sm mb-1">Gem Socket 1</label>
-          <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800">
-              <option value="0">None</option>
-              <option value="255">Empty sockets</option>
-              <option value="16">Normal Amber</option>
-              <option value="17">Refined Amber</option>
-              <option value="18">Super Amber</option>
-              <option value="19">Normal Citrine</option>
-              <option value="20">Refined Citrine</option>
-              <option value="21">Super Citrine</option>
-              <option value="22">Normal Beryl</option>
-              <option value="23">Refined Beryl</option>
-              <option value="24">Super Beryl</option>
-              <option value="25">Normal Amethyst</option>
-              <option value="26">Refined Amethyst</option>
-              <option value="27">Super Amethyst</option>
-              <option value="28">Normal Sapphire</option>
-              <option value="29">Refined Sapphire</option>
-              <option value="30">Super Sapphire</option>
-          </select></div>
+          <select id="gem1" class="w-full p-2 rounded border dark:bg-slate-800"></select>
+          </div>
 
         <div><label class="block text-sm mb-1">Gem Socket 2</label>
-          <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800">
-              <option value="0">None</option>
-              <option value="255">Empty sockets</option>
-              <option value="16">Normal Amber</option>
-              <option value="17">Refined Amber</option>
-              <option value="18">Super Amber</option>
-              <option value="19">Normal Citrine</option>
-              <option value="20">Refined Citrine</option>
-              <option value="21">Super Citrine</option>
-              <option value="22">Normal Beryl</option>
-              <option value="23">Refined Beryl</option>
-              <option value="24">Super Beryl</option>
-              <option value="25">Normal Amethyst</option>
-              <option value="26">Refined Amethyst</option>
-              <option value="27">Super Amethyst</option>
-              <option value="28">Normal Sapphire</option>
-              <option value="29">Refined Sapphire</option>
-              <option value="30">Super Sapphire</option>
-          </select></div>
+          <select id="gem2" class="w-full p-2 rounded border dark:bg-slate-800"></select>
+          </div>
 
         <div><label class="block text-sm mb-1">Bonus</label>
           <input id="magic3" type="number" value="0" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
@@ -213,45 +179,11 @@
           <input id="upd_amount_limit" type="number" value="30000" class="w-full p-2 rounded border dark:bg-slate-800"></div>
 
         <div><label class="block text-sm mb-1">Gem 1</label>
-          <select id="upd_gem1" class="w-full p-2 rounded border dark:bg-slate-800">
-            <option value="0">None</option>
-            <option value="255">Empty sockets</option>
-            <option value="16">Normal Amber</option>
-            <option value="17">Refined Amber</option>
-            <option value="18">Super Amber</option>
-            <option value="19">Normal Citrine</option>
-            <option value="20">Refined Citrine</option>
-            <option value="21">Super Citrine</option>
-            <option value="22">Normal Beryl</option>
-            <option value="23">Refined Beryl</option>
-            <option value="24">Super Beryl</option>
-            <option value="25">Normal Amethyst</option>
-            <option value="26">Refined Amethyst</option>
-            <option value="27">Super Amethyst</option>
-            <option value="28">Normal Sapphire</option>
-            <option value="29">Refined Sapphire</option>
-            <option value="30">Super Sapphire</option>
-          </select></div>
+            <select id="upd_gem1" class="w-full p-2 rounded border dark:bg-slate-800"></select>
+            </div>
         <div><label class="block text-sm mb-1">Gem 2</label>
-          <select id="upd_gem2" class="w-full p-2 rounded border dark:bg-slate-800">
-            <option value="0">None</option>
-            <option value="255">Empty sockets</option>
-            <option value="16">Normal Amber</option>
-            <option value="17">Refined Amber</option>
-            <option value="18">Super Amber</option>
-            <option value="19">Normal Citrine</option>
-            <option value="20">Refined Citrine</option>
-            <option value="21">Super Citrine</option>
-            <option value="22">Normal Beryl</option>
-            <option value="23">Refined Beryl</option>
-            <option value="24">Super Beryl</option>
-            <option value="25">Normal Amethyst</option>
-            <option value="26">Refined Amethyst</option>
-            <option value="27">Super Amethyst</option>
-            <option value="28">Normal Sapphire</option>
-            <option value="29">Refined Sapphire</option>
-            <option value="30">Super Sapphire</option>
-          </select></div>
+            <select id="upd_gem2" class="w-full p-2 rounded border dark:bg-slate-800"></select>
+            </div>
 
         <div><label class="block text-sm mb-1">Bonus</label>
           <input id="upd_magic3" type="number" value="255" min="0" max="255" class="w-full p-2 rounded border dark:bg-slate-800"></div>
@@ -489,6 +421,44 @@ WHERE player_id=${pid} AND position=${p.id};`)
       .join("\n\n");
     document.getElementById('sqlUpdatePreview').innerText = sql;
   }
+
+  // Reuse kalau dah ada; kalau tak, define default
+const GEM_OPTIONS = (window.gemOptions && Array.isArray(window.gemOptions))
+  ? window.gemOptions           // [{v:0,label:'None'}, ...]
+  : [
+      {v:0,   label:'None'},
+      {v:255, label:'Empty sockets'},
+      {v:16,  label:'Normal Amber'},
+      {v:17,  label:'Refined Amber'},
+      {v:18,  label:'Super Amber'},
+      {v:19,  label:'Normal Citrine'},
+      {v:20,  label:'Refined Citrine'},
+      {v:21,  label:'Super Citrine'},
+      {v:22,  label:'Normal Beryl'},
+      {v:23,  label:'Refined Beryl'},
+      {v:24,  label:'Super Beryl'},
+      {v:25,  label:'Normal Amethyst'},
+      {v:26,  label:'Refined Amethyst'},
+      {v:27,  label:'Super Amethyst'},
+      {v:28,  label:'Normal Sapphire'},
+      {v:29,  label:'Refined Sapphire'},
+      {v:30,  label:'Super Sapphire'},
+    ];
+
+function fillGemSelect(id) {
+  const sel = document.getElementById(id);
+  if (!sel) return;
+  sel.innerHTML = '';
+  GEM_OPTIONS.forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.v;
+    opt.textContent = o.label;
+    sel.appendChild(opt);
+  });
+}
+
+// Panggil untuk semua dropdown OLD engine
+['gem1','gem2','upd_gem1','upd_gem2'].forEach(fillGemSelect);
 
   function resetDefaults(){
     document.getElementById('upd_player_id').value = 10000001;
