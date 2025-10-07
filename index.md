@@ -391,6 +391,20 @@ title: DuaSelipar Dev Hub
             </div>
           </div>
         </a>
+
+
+      <a href="https://github.com/duaselipar/MapDestinationEditor" target="_blank" class="group rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-950 hover:border-sky-400 transition">
+        <div class="flex items-start gap-3">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🧭</span>
+          <div>
+            <h3 class="font-semibold">MapDestination Editor</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit EO/CT MapDestination.dat, 3-pane UI, hotkeys.</p>
+          </div>
+        </div>
+      </a>
+
+
+
       </div>
     </section>
   </main>
