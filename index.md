@@ -407,6 +407,37 @@ title: DuaSelipar Dev Hub
 
       </div>
     </section>
+
+    <!-- Other Tools -->
+    <section id="othertools" class="mt-8">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-700 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </span>
+        <h2 class="text-lg md:text-xl font-semibold">Other Tools</h2>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+        <a href="https://github.com/duaselipar/ItemtypeDatEditorCT" target="_blank"
+          class="group rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-white dark:bg-slate-950 hover:border-sky-400 transition">
+          <div class="flex items-start gap-3">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">📦</span>
+            <div>
+              <h3 class="font-semibold">ItemtypeDat Editor CT</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                Crazy Tao version of the itemtype.dat editor.
+              </p>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Footer -->
