@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>⚙️ Setup Eudemons/CrazyTao/Zero Online in VPS | DuaSelipar Guide</title>
+  <meta name="description" content="Step-by-step guide to set up Eudemons / CrazyTao / Zero Online private servers on a Windows VPS, including downloads, MySQL 4 setup, and first run.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">⚙️ Setup Eudemons/CrazyTao/Zero Online in VPS</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="hidden sm:inline-block text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-10">
+
+    <!-- Intro -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📦 What this guide covers</h2>
+      <p class="text-slate-700 dark:text-slate-300">
+        This page walks you through the initial setup of <b>Eudemons</b>, <b>CrazyTao</b>, and <b>Zero Online</b> private servers on a Windows VPS.
+      </p>
+    </section>
+
+    <!-- Requirements -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">✅ Requirements (recommended)</h2>
+      <ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+        <li>Windows VPS (Windows Server 2008 R2 / 2012+), Administrator access.</li>
+        <li>Drive <code class="font-mono">C:\</code> with at least <b>10 GB</b> free space.</li>
+      </ul>
+    </section>
+
+    <!-- Downloads -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">📥 Downloads</h2>
+
+      <!-- Server Files (top) -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+        <h3 class="font-semibold mb-2">Server Files</h3>
+        <a href="https://www.mediafire.com/file/9469k1wwkse74ck/TripleServer_Pass_DuaSelipar.rar/file"
+           target="_blank"
+           class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
+          Download Triple Server Pack
+        </a>
+        <p class="mt-2 text-xs text-slate-500">Password : DuaSelipar</p>
+      </div>
+
+      <!-- Client Downloads (below, same button style) -->
+      <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 mt-4">
+        <h3 class="font-semibold mb-3">Client Downloads</h3>
+        <div class="flex flex-col gap-2">
+          <a href="https://www.mediafire.com/file/fek526pe22qps5g/1.TaoClassicClient.rar/file" target="_blank"
+             class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
+            1. Tao Classic Client
+          </a>
+          <a href="https://www.mediafire.com/file/h8wdgni0yg0tx7l/2.JinClassicClient.rar/file" target="_blank"
+             class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
+            Jin Classic Client
+          </a>
+          <a href="https://www.mediafire.com/file/w4jga0m76dftrba/3.ZeroClassicClient.rar/file" target="_blank"
+             class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
+            3. Zero Classic Client
+          </a>
+         <p class="mt-2 text-xs text-slate-500">Password : DuaSelipar</p>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 1 -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">🗂️ Step 1 — Extract the server pack into <code class="font-mono">C:\</code></h2>
+      <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+        <li>Download the <b>Triple Server Pack</b> RAR to your VPS.</li>
+        <li>Right-click the archive → <b>Extract Here</b> (or extract to <code class="font-mono">C:\</code> directly).
+          <div class="mt-3 rounded-lg bg-slate-50 dark:bg-slate-900 p-3 text-xs">
+            <p class="mb-2 font-semibold">Expected path after extraction:</p>
+            <pre class="overflow-x-auto"><code>C:\TripleServer\
+├─ Database\
+├─ 1.TaoClassic
+├─ 2.JinClassic
+└─ 3.ZeroClassic
+</code></pre>
+          </div>
+        </li>
+        <li>Confirm the folder structure matches the pack (no double-nested folders like <code class="font-mono">C:\TripleServer\TripleServer\...</code>).</li>
+      </ol>
+      <img src="/assets/t-extract-server.png" alt="Extract Server File"
+           class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+    </section>
+
+    <!-- Step 2 -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+      <h2 class="text-xl font-semibold mb-3">🗄️ Step 2 — Open <b>ServerDatabase</b> and start <b>MySQL 4 Manager</b> and the database</h2>
+      <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+        <li>Go to <code class="font-mono">C:\TripleServer\ServerDatabase\</code>.</li>
+        <li>Launch <code class="font-mono">MySQL 4 Manager</code> from <code class="font-mono">C:\TripleServer\Database\</code>.</li>
+        <li>Press <code class="font-mono">Start</code> to start the mysql service</li>
+      </ol>
+      <figure class="mt-4">
+      <img src="/assets/t-start-mysql.png" alt="Start database"
+           class="mt-3 rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+        <figcaption class="mt-2 text-sm text-slate-500">MySQL service is started.</figcaption>
+      </figure>
+    </section>
+
+<!-- Step 3 -->
+<!-- Step 3 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+  <h2 class="text-xl font-semibold mb-3">🚀 Step 3 — Configure the server with <b>Easy Setup</b></h2>
+  <p class="mb-3 text-slate-700 dark:text-slate-300">
+    Each server folder (<code class="font-mono">1.TaoClassic</code>, <code class="font-mono">2.JinClassic</code>, <code class="font-mono">3.ZeroClassic</code>)
+    includes an <b>Easy Setup</b> tool to quickly prepare your configuration.
+  </p>
+
+  <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+    <li><b>Open Easy Setup</b> from the server you want to run (e.g. <code class="font-mono">C:\TripleServer\1.TaoClassic\EasySetup.exe</code>).</li>
+
+    <li><b>Server Name</b>: Enter the display name you want (e.g. <code class="font-mono">TaoClassic</code>).</li>
+
+    <li><b>Server IP</b>:
+      <ul class="list-disc list-inside mt-2 space-y-1">
+        <li><b>Local</b> — sets <code class="font-mono">127.0.0.1</code>. Only this machine/VPS can connect (solo testing).</li>
+        <li><b>LAN</b> — sets your private address (e.g. <code class="font-mono">192.168.x.x</code>). Devices on the same router/network can join.</li>
+        <li><b>External</b> — sets your public IP or DNS (for Internet play or VPS). Ensure required ports are open to the world.</li>
+      </ul>
+    </li>
+
+    <li><b>Server Port</b>: Keep defaults unless needed.
+    </li>
+
+    <li><b>Database</b>: Type the MySQL database name (e.g. <code class="font-mono">taoclassic</code>).</li>
+
+    <li><b>Save</b>: Click <b>Save</b> to write the configuration.</li>
+
+    <li><b>Create client .dat</b>: After saving, click <b>Create Server.dat</b>, <b>Worlds.dat</b>, and <b>Oem.dat</b>. Copy the generated files to your client folder
+      (usually <code class="font-mono">Client\ini\</code>) and overwrite existing files.</li>
+  </ol>
+
+  <figure class="mt-4">
+    <img src="/assets/t-easy-setup.png" alt="Easy Setup CT"
+         class="rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+    <figcaption class="mt-2 text-sm text-slate-500">Easy Setup for CrazyTao.</figcaption>
+  </figure>
+
+  <div class="mt-5 rounded-xl border border-amber-300/50 bg-amber-50 dark:bg-amber-900/10 p-4 text-amber-800 dark:text-amber-200">
+    <p class="font-semibold">Notes</p>
+    <ul class="list-disc list-inside text-sm mt-1 space-y-1">
+      <li>For <b>External</b> play on a VPS, allow inbound <code class="font-mono">Login Port,MSG Port and NPC Port</code> in Windows Firewall.</li>
+      <li>If you change any port, re-create the <code class="font-mono">.dat</code> files and copy them to the client again.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Step 4 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+  <h2 class="text-xl font-semibold mb-3">🟢 Step 4 — Start the servers (Auto Maintenance Tool)</h2>
+
+  <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+    <li>
+      Open <b>AutoMaintTool</b> from the server folder you want to run
+      (<code class="font-mono">1.TaoClassic</code> / <code class="font-mono">2.JinClassic</code> / <code class="font-mono">3.ZeroClassic</code>).
+      <span class="text-slate-500">You can create a desktop shortcut for quick access.</span>
+    </li>
+    <li>
+      Click <b>Open Config</b>, set your preferences of maintenance times ,day and duration of the maintenance.
+      Then click <b>Save</b>.
+    </li>
+    <li>
+      Click <b>Start</b> to begin the auto-maintenance cycle. The tool will start the checked servers and keep them running.
+    </li>
+    <li>
+      Or use <b>Manual Start</b> / <b>Manual Stop</b> if you just want to launch/stop the servers immediately without the cycle.
+    </li>
+  </ol>
+
+  <figure class="mt-4">
+    <img src="/assets/t-start-server.png" alt="Eudemons Auto Maintenance Tool" class="rounded-lg border border-slate-200 dark:border-slate-800 shadow">
+    <figcaption class="mt-2 text-sm text-slate-500">Auto Maintenance Tool starting Account, MSG, NPC, and AutoPatch servers.</figcaption>
+  </figure>
+</section>
+
+<!-- Step 5 -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+<h2 class="text-xl font-semibold mb-3">🎮 Step 5 — Happy Gaming!</h2>
+<ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+<li>Make sure your generated <code class=\"font-mono\">Server.dat</code>, <code class=\"font-mono\">Worlds.dat</code>, and <code class=\"font-mono\">Oem.dat</code> are copied into the client folder (usually <code class=\"font-mono\">Client\\ini\\</code>).</li>
+<li>Launch the client, pick your server, and log in. That’s it — have fun!</li>
+</ol>
+</section>
+
+
+<!-- Other Downloads -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+<h2 class="text-xl font-semibold mb-3">⬇️ Other Downloads</h2>
+<ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+<li>
+<a class="text-sky-600 hover:underline" href="https://www.mediafire.com/file/oim85khvgkvgze2/Flash_Player_Installer.exe/file" target="_blank">Flash Player Installer</a>
+— if the game window shows a blank/black screen when opening.
+</li>
+<li>
+<a class="text-sky-600 hover:underline" href="https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.20-windows-x64-installer" target="_blank">.NET 8 Runtime / Desktop Runtime x64</a>
+</li>
+<li>
+<a class="text-sky-600 hover:underline" href="https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.20-windows-x86-installer" target="_blank">.NET 8 Runtime / Desktop Runtime x32</a>
+</li>
+</ul>
+</section>
+
+<!-- Original Release Posts -->
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
+<h2 class="text-xl font-semibold mb-3">📚 Original Release Posts (credit)</h2>
+<ul class="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300">
+<li><a class="text-sky-600 hover:underline" href="https://forum.ragezone.com/threads/request-zero-online-server-client.1217174/post-9197795" target="_blank">Zero Online — RaGEZONE thread</a></li>
+<li><a class="text-sky-600 hover:underline" href="https://www.elitepvpers.com/forum/eo-pserver-guides-releases/4711443-crazytao-server-files-release.html" target="_blank">CrazyTao Online — elitepvpers release</a></li>
+<li><a class="text-sky-600 hover:underline" href="https://www.elitepvpers.com/forum/eo-pserver-guides-releases/191378-release-manequin-english-server-db-client-ready-use-one-link.html" target="_blank">Eudemons Online — elitepvpers release</a></li>
+</ul>
+</section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
