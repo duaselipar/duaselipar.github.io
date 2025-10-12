@@ -140,7 +140,7 @@
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
       <h2 class="text-xl font-semibold mb-3">🗄️ Step 2 — Open <b>ServerDatabase</b> and start <b>MySQL 4 Manager</b> and the database</h2>
       <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
-        <li>Go to <code class="font-mono">C:\TripleServer\ServerDatabase\</code>.</li>
+        <li>Go to <code class="font-mono">C:\TripleServer\Database\</code>.</li>
         <li>Launch <code class="font-mono">MySQL 4 Manager</code> from <code class="font-mono">C:\TripleServer\Database\</code>.</li>
         <li>Press <code class="font-mono">Start</code> to start the mysql service</li>
       </ol>
@@ -228,13 +228,23 @@
 </section>
 
 <!-- Step 5 -->
+<!-- Step 5 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
-<h2 class="text-xl font-semibold mb-3">🎮 Step 5 — Happy Gaming!</h2>
-<ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
-<li>Make sure your generated <code class=\"font-mono\">Server.dat</code>, <code class=\"font-mono\">Worlds.dat</code>, and <code class=\"font-mono\">Oem.dat</code> are copied into the client folder (usually <code class=\"font-mono\">Client\\ini\\</code>).</li>
-<li>Launch the client, pick your server, and log in. That’s it — have fun!</li>
-</ol>
+  <h2 class="text-xl font-semibold mb-3">🎮 Step 5 — Happy Gaming!</h2>
+  <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+    <li>Make sure your generated <code class="font-mono">Server.dat</code>, <code class="font-mono">Worlds.dat</code>, and <code class="font-mono">Oem.dat</code> are copied into the client folder (usually <code class="font-mono">Client\ini\</code>).</li>
+    <li>Launch the client, pick your server, and log in. Have fun!</li>
+  </ol>
+
+  <!-- Trick: run 3 servers on one VPS -->
+  <div class="mt-5 rounded-xl border border-emerald-300/50 bg-emerald-50 dark:bg-emerald-900/10 p-4 text-emerald-800 dark:text-emerald-200">
+    <p class="font-semibold">Trick to run all three servers on one VPS</p>
+    <p class="text-sm mt-1">
+      Start the <b>CrazyTao</b> server first, then start <b>Eudemons</b> and <b>Zero</b>. This order helps avoid conflicts and ensures a smooth startup.
+    </p>
+  </div>
 </section>
+
 
 
 <!-- Other Downloads -->
