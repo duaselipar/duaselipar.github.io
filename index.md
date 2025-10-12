@@ -227,8 +227,7 @@ title: DuaSelipar Dev Hub
             <div class="min-w-0">
               <div class="font-semibold">Setup Eudemons/CrazyTao/Zero Online in VPS</div>
               <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">
-                Step-by-step guide for installing and running Eudemons, CrazyTao, and Zero servers on a Windows VPS —
-                downloads, MySQL 4, Easy Setup, AutoMaintTool, and account registration.
+                Step-by-step guide for installing and running Eudemons, CrazyTao, and Zero servers on a Windows VPS.
               </p>
             </div>
           </a>
