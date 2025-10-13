@@ -234,6 +234,21 @@ title: DuaSelipar Dev Hub
         </li>
 
 
+        <li class="group">
+          <a href="/guide/setup-multiple-server.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
+            <div class="shrink-0 mt-0.5">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🔧</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold">Setup Multiple Eudemons Server in VPS</div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+                Step-by-step guide for installing and running up to 10 eudemons server on a Windows VPS.
+              </p>
+            </div>
+          </a>
+        </li>
+
+
         <li class="flex gap-4 p-4 opacity-60 select-none">
           <div class="shrink-0 mt-0.5">
             <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">🗺️</span>
