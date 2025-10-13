@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#ffffff"/>
   <title>🛡️ Register Account Tool</title>
-  <meta name="description" content="Generate salted-MD5 SQL for EO account register.">
+  <meta name="description" content="Generate salted-MD5 SQL for Eudemon/CrazyTao/Zero account register.">
 
   <!-- 100% Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -66,7 +66,7 @@
     <!-- Form card -->
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
       <h2 class="text-xl font-semibold">Generate SQL</h2>
-      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Salted MD5 hash compatible with EO (custom salt).</p>
+      <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">Salted MD5 hash compatible with Eudemons/CrazyTao/Zero Online (custom salt).</p>
 
       <form class="mt-5 grid gap-4" onsubmit="event.preventDefault(); generateQuery();">
         <div>
@@ -75,27 +75,26 @@
                  class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"/>
         </div>
 
-<div>
-  <label for="password" class="block text-sm font-semibold">Password</label>
-  <div class="relative">
-    <input id="password" type="password" required
-           class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"/>
-    <button type="button" id="togglePassword"
-            class="absolute inset-y-0 right-2 flex items-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
-      👁
-    </button>
-  </div>
-</div>
+        <div>
+          <label for="password" class="block text-sm font-semibold">Password</label>
+          <div class="relative">
+            <input id="password" type="password" required
+                   class="mt-1 w-full rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950 px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"/>
+            <button type="button" id="togglePassword"
+                    class="absolute inset-y-0 right-2 flex items-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+              👁
+            </button>
+          </div>
+        </div>
 
-<script>
-  const toggle = document.getElementById("togglePassword");
-  const pwd = document.getElementById("password");
-  toggle.addEventListener("click", () => {
-    const type = pwd.getAttribute("type") === "password" ? "text" : "password";
-    pwd.setAttribute("type", type);
-  });
-</script>
-
+        <script>
+          const toggle = document.getElementById("togglePassword");
+          const pwd = document.getElementById("password");
+          toggle.addEventListener("click", () => {
+            const type = pwd.getAttribute("type") === "password" ? "text" : "password";
+            pwd.setAttribute("type", type);
+          });
+        </script>
 
         <div class="flex items-center gap-2">
           <button type="submit"
@@ -121,7 +120,10 @@
           <pre class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 text-slate-100 p-4 text-sm leading-6"><code id="sqlResult" class="font-mono"></code></pre>
         </div>
 
-        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Note: Ensure table/columns match your schema: <code class="font-mono">account(name,password)</code>.</p>
+        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+          Note: Ensure your schema matches. Eudemons/Zero/CrazyTao: <code class="font-mono">account(name,password)</code>.
+          CrazyTao Only: <code class="font-mono">account.tbloguin(UserName,passwd)</code>.
+        </p>
       </div>
     </section>
   </main>
@@ -164,7 +166,14 @@
       if(!login || !password) return;
 
       const hash = GenMD5(password);
-      const sql = `insert into account (name,password) values('${sqlEscapeSingleQuotes(login)}','${hash}');`;
+
+      // EO/Eudemons insert
+      const line1 = `insert into account (name,password) values ('${sqlEscapeSingleQuotes(login)}','${hash}');`;
+
+      // CrazyTao insert (requested)
+      const line2 = `-- run this too for CrazyTao account registration\ninsert into account.tbloguin (UserName,passwd) values ('${sqlEscapeSingleQuotes(login)}','${hash}');`;
+
+      const sql = `${line1}\n\n${line2}`;
 
       document.getElementById('sqlResult').textContent = sql;
       document.getElementById('output').classList.remove('hidden');

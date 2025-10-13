@@ -98,15 +98,15 @@
         <div class="flex flex-col gap-2">
           <a href="https://www.mediafire.com/file/fek526pe22qps5g/1.TaoClassicClient.rar/file" target="_blank"
              class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
-            1. Tao Classic Client
+            Tao Classic Client
           </a>
-          <a href="https://www.mediafire.com/file/h8wdgni0yg0tx7l/2.JinClassicClient.rar/file" target="_blank"
+          <a href="https://www.mediafire.com/file/q72qwwyrg7bhugl/2.JinClassicClient.rar/file" target="_blank"
              class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
             Jin Classic Client
           </a>
           <a href="https://www.mediafire.com/file/w4jga0m76dftrba/3.ZeroClassicClient.rar/file" target="_blank"
              class="inline-flex items-center justify-center rounded-lg bg-sky-600 text-white font-semibold px-5 py-2 shadow hover:bg-sky-500 transition w-full">
-            3. Zero Classic Client
+            Zero Classic Client
           </a>
          <p class="mt-2 text-xs text-slate-500">Password : DuaSelipar</p>
 
@@ -116,7 +116,7 @@
 
     <!-- Step 1 -->
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
-      <h2 class="text-xl font-semibold mb-3">🗂️ Step 1 — Extract the server pack into <code class="font-mono">C:\</code></h2>
+      <h2 class="text-xl font-semibold mb-3">🗂️ Step 1 — Extract the server file</h2>
       <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
         <li>Download the <b>Triple Server Pack</b> RAR to your VPS.</li>
         <li>Right-click the archive → <b>Extract Here</b> (or extract to <code class="font-mono">C:\</code> directly).
@@ -138,9 +138,9 @@
 
     <!-- Step 2 -->
     <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
-      <h2 class="text-xl font-semibold mb-3">🗄️ Step 2 — Open <b>ServerDatabase</b> and start <b>MySQL 4 Manager</b> and the database</h2>
+      <h2 class="text-xl font-semibold mb-3">🗄️ Step 2 — Starting <b>database</b> service</h2>
       <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
-        <li>Go to <code class="font-mono">C:\TripleServer\ServerDatabase\</code>.</li>
+        <li>Go to <code class="font-mono">C:\TripleServer\Database\</code>.</li>
         <li>Launch <code class="font-mono">MySQL 4 Manager</code> from <code class="font-mono">C:\TripleServer\Database\</code>.</li>
         <li>Press <code class="font-mono">Start</code> to start the mysql service</li>
       </ol>
@@ -151,7 +151,6 @@
       </figure>
     </section>
 
-<!-- Step 3 -->
 <!-- Step 3 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
   <h2 class="text-xl font-semibold mb-3">🚀 Step 3 — Configure the server with <b>Easy Setup</b></h2>
@@ -229,12 +228,40 @@
 
 <!-- Step 5 -->
 <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6">
-<h2 class="text-xl font-semibold mb-3">🎮 Step 5 — Happy Gaming!</h2>
-<ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
-<li>Make sure your generated <code class=\"font-mono\">Server.dat</code>, <code class=\"font-mono\">Worlds.dat</code>, and <code class=\"font-mono\">Oem.dat</code> are copied into the client folder (usually <code class=\"font-mono\">Client\\ini\\</code>).</li>
-<li>Launch the client, pick your server, and log in. That’s it — have fun!</li>
-</ol>
+  <h2 class="text-xl font-semibold mb-3">🎮 Step 5 — Happy Gaming!</h2>
+  <ol class="list-decimal list-inside space-y-3 text-slate-700 dark:text-slate-300">
+    <li>Make sure your generated <code class="font-mono">Server.dat</code>, <code class="font-mono">Worlds.dat</code>, and <code class="font-mono">Oem.dat</code> are copied into the client folder (usually <code class="font-mono">Client\ini\</code>).</li>
+    <li>Launch the client, pick your server, and log in. Have fun!</li>
+  </ol>
+
+  <!-- RED warning -->
+  <div class="mt-5 rounded-xl border border-red-300/60 bg-red-50 dark:bg-red-900/10 p-4 text-red-800 dark:text-red-200">
+    <p class="font-semibold">Important Warning</p>
+    <p class="text-sm mt-1">
+      Do <b>not rename</b> any files or folders from the server/client pack. Keeping original names ensures this tutorial works correctly.
+    </p>
+  </div>
+
+  <!-- Trick: run 3 servers on one VPS -->
+  <div class="mt-4 rounded-xl border border-emerald-300/50 bg-emerald-50 dark:bg-emerald-900/10 p-4 text-emerald-800 dark:text-emerald-200">
+    <p class="font-semibold">Trick to run all three servers on one VPS</p>
+    <p class="text-sm mt-1">
+      Start the <b>CrazyTao</b> server first, then start <b>Eudemons</b> and <b>Zero</b>. This order helps avoid conflicts and ensures a smooth startup.
+    </p>
+  </div>
+
+  <!-- BLUE info: AV exclusion + restore -->
+  <div class="mt-4 rounded-xl border border-sky-300/60 bg-sky-50 dark:bg-sky-900/10 p-4 text-sky-800 dark:text-sky-200">
+    <p class="font-semibold">Antivirus Exclusion & Restore</p>
+    <ul class="list-disc list-inside text-sm mt-1 space-y-1">
+      <li>Add an antivirus/Defender <b>exclusion</b> for your server folder (e.g. <code class="font-mono">C:\TripleServer\</code>) to prevent <code>.exe</code> files from being removed.</li>
+      <li>If an executable gets deleted, go to <code class="font-mono">GameServer\exebackup.rar</code>, extract it back, and run the server as usual.</li>
+    </ul>
+  </div>
 </section>
+
+
+
 
 
 <!-- Other Downloads -->
