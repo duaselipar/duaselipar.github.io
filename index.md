@@ -446,7 +446,7 @@ title: DuaSelipar Dev Hub
         <div class="flex items-start gap-3">
           <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🏪</span>
           <div>
-            <h3 class="font-semibold">Shop.dat Editor</h3>
+            <h3 class="font-semibold">Shop.dat Editor EO</h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit shop.dat for classic server.</p>
           </div>
         </div>
@@ -457,7 +457,7 @@ title: DuaSelipar Dev Hub
           <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">👹</span>
           <div>
             <h3 class="font-semibold">Monster.dat Editor EO</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit monster.dat stats, drops & spawn data for EO.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit monster.dat for classic server.</p>
           </div>
         </div>
       </a>
@@ -467,7 +467,7 @@ title: DuaSelipar Dev Hub
           <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">📦</span>
           <div>
             <h3 class="font-semibold">Itemtype.dat Editor EO</h3>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit itemtype.dat for Eudemons Online servers.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Edit itemtype.dat for classic server.</p>
           </div>
         </div>
       </a>
