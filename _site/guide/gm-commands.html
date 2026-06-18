@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>💻 GM & Admin Console Commands | DuaSelipar Guide</title>
+  <meta name="description" content="Eudemons Online GM and Admin console commands directly from the community source.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">💻 GM & Admin Commands</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-8">
+    
+    <!-- Intro Banner -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-sky-500/10 to-transparent p-6">
+      <h2 class="text-2xl font-bold tracking-tight mb-2">GM & PM Console Commands</h2>
+      <p class="text-slate-600 dark:text-slate-400 max-w-2xl text-sm md:text-base">
+        Eudemons Online GM, PM and Server console commands reference. Supports both Classic and New engines.
+      </p>
+    </section>
+
+    <!-- Interactive Search/Filters -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- Search bar -->
+        <div class="relative flex-grow">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+          <input type="text" id="searchInput" placeholder="Search commands or descriptions..." 
+            class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: PM CODES -->
+    <section class="space-y-4">
+      <div class="border-l-4 border-sky-500 pl-3">
+        <h3 class="text-lg font-bold">PM Command</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Note: Player names for PM characters must include the <b>[PM]</b> tag (e.g., <code>DuaSelipar[PM]</code>) to use these commands.</p>
+      </div>
+      <div id="allGrid" class="grid gap-4 md:grid-cols-2">
+        <!-- PM commands will be injected here -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: GM CODES -->
+    <section class="space-y-4">
+      <div class="border-l-4 border-emerald-500 pl-3">
+        <h3 class="text-lg font-bold">GM Command</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Note: Player names for GM characters must include the <b>[GM]</b> tag (e.g., <code>DuaSelipar[GM]</code>) to use these commands.</p>
+      </div>
+      <div id="workingGrid" class="grid gap-4 md:grid-cols-2">
+        <!-- GM commands will be injected here -->
+      </div>
+    </section>
+
+    <!-- SECTION 3: MSG CODES -->
+    <section class="space-y-4">
+      <div class="border-l-4 border-amber-500 pl-3">
+        <h3 class="text-lg font-bold">MSG Command (insert command without "/")</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Note: These commands are executed directly in the server MSG console window (not in the in-game chat) and are <b>only for New Engine (1655)</b>.</p>
+      </div>
+      <div class="mb-4">
+        <img src="/assets/msgengine.png" alt="MSG Engine console" class="rounded-xl border border-slate-200 dark:border-slate-800 shadow max-w-md w-full" />
+      </div>
+      <div id="msgGrid" class="grid gap-4 md:grid-cols-2">
+        <!-- MSG commands will be injected here -->
+      </div>
+    </section>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-12 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
+      <span class="text-3xl">🔍</span>
+      <h3 class="mt-2 text-sm font-semibold text-slate-900 dark:text-white">No commands found</h3>
+      <p class="mt-1 text-sm text-slate-500">Try adjusting your search terms.</p>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white dark:bg-white dark:text-slate-950 px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 text-sm font-semibold">
+      <span>✓</span>
+      <span>Copied command to clipboard!</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 mt-auto">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Data - EXACTLY matching the user prompt
+    const workingCommands = [
+      { cmd: "/Chgmap 1000 328 419", desc: "id x coordinate y coordinate of the map", engines: ["Classic", "New"] },
+      { cmd: "/Fly [x] [y]", desc: "Teleport within the same map only.", engines: ["Classic", "New"] },
+      { cmd: "/Fullxp", desc: "plus experience", engines: ["Classic", "New"] },
+      { cmd: "/Find [player name]", desc: "finds a player (case sensetive)", engines: ["Classic", "New"] },
+      { cmd: "/Kickout [player name]", desc: "Kickout a player (player name can be found in cq_user)", engines: ["Classic", "New"] },
+      { cmd: "/Killself [player name]", desc: "empty suicide, followed by the name (player name can be found in cq_user)", engines: ["Classic", "New"] },
+      { cmd: "/Player all", desc: "shows how many players that are online.", engines: ["Classic"] },
+      { cmd: "/Reloadaction 0", desc: "reloads action ID / 0 reloads all cq_action (/reloadaction [cq_action id])", engines: ["Classic", "New"] },
+      { cmd: "/broadall", desc: "broadcast a message to everyone. (or use /千里传音 it will not work if u have a chinese PRC installed on your PC)", engines: ["Classic"] }
+    ];
+
+    const allCommands = [
+      // New Engine (1655) list & Merged Classic ones
+      { cmd: "/getmap", desc: "get current map id", engines: ["New"] },
+      { cmd: "/bp", desc: "show all things relate BP assessment, equipment, knight, and so on", engines: ["New"] },
+      { cmd: "/testfire", desc: "Line 1: total fire score slot 1 - 8. Line 2: Critical Strike, Extra Damage, HP, Resilience, Pierce, Holy Damage, Eudemon HP, Eudemon Resilience, Eudemon Pierce, Eudemon Holy Damage, Crit Rate, Extra Damage Rate.", engines: ["New"] },
+      { cmd: "/atk", desc: "show current physical attack, magic attack, physical defense, magic defense (top left noti)", engines: ["New"] },
+      { cmd: "/processaction [action_id]", desc: "run single line action without using any item or npc as object", engines: ["Classic", "New"] },
+      { cmd: "/runscript [action_id]", desc: "same as processaction", engines: ["New"] },
+      { cmd: "/reloadaction [action_id]", desc: "reload action without restart server. /reloadaction 0 -- reload all action (your server will hang depending on storage)", engines: ["Classic", "New"] },
+      { cmd: "/statuslist", desc: "show status list example: your protection time (shows in chat)", engines: ["Classic", "New"] },
+      { cmd: "/chgmap [map_id] x y", desc: "change map. You can just insert /chgmap [map_id] only, but it will send to a random coordinate.", engines: ["Classic", "New"] },
+      { cmd: "/move x y", desc: "random coordinate. /move 0 0 -- get you to random location", engines: ["New"] },
+      { cmd: "/fly [x] [y]", desc: "change location in same map (this command is used when you open minimap and ctrl + right click on location)", engines: ["Classic", "New"] },
+      { cmd: "/setmaxplayer [number]", desc: "set limit player can enter", engines: ["Classic", "New"] },
+      { cmd: "/奖品 [number]", desc: "something related claim prize dont know pk/leg or family war", engines: ["New"] },
+      { cmd: "/查询", desc: "unknown", engines: ["New"] },
+      { cmd: "/attach", desc: "for prizes (Classic) / can't be sure what it is, but it says 'invalid argument' in top left noti (New)", engines: ["Classic", "New"] },
+      { cmd: "/awardtmpmagic", desc: "unknown", engines: ["New"] },
+      { cmd: "/addmagic [magic_id] [level]", desc: "give skill (same as awardmagic)", engines: ["New"] },
+      { cmd: "/awardmagic [magic_id] [level]", desc: "give skill (level magic 0 is level 1 magic)", engines: ["Classic", "New"] },
+      { cmd: "/testmagic", desc: "unknown", engines: ["New"] },
+      { cmd: "/awardskill", desc: "unknown", engines: ["New"] },
+      { cmd: "/xp", desc: "instant in xp mode", engines: ["New"] },
+      { cmd: "/fullxp", desc: "instant in xp mode / plus experience", engines: ["Classic", "New"] },
+      { cmd: "/showaction", desc: "enable/disable action code in chat", engines: ["Classic", "New"] },
+      { cmd: "/packsize", desc: "tell how many items are in your backpack", engines: ["New"] },
+      { cmd: "/mapdata", desc: "unknown (Classic) / displays map X Y coordinates", engines: ["Classic", "New"] },
+      { cmd: "/mapinfo [map_id]", desc: "show Map id, current monster, amount DynaNPC, Player available, amount Trap (top left noti)", engines: ["New"] },
+      { cmd: "/mana", desc: "unknown", engines: ["New"] },
+      { cmd: "/life", desc: "unknown (New) / set output (Classic)", engines: ["Classic", "New"] },
+      { cmd: "/uplev [number]", desc: "increase level / plus level", engines: ["Classic", "New"] },
+      { cmd: "/upgodlev [number]", desc: "increase divine level", engines: ["New"] },
+      { cmd: "/find [player_name]", desc: "finds a player (case sensitive). Note: not working if you want to find characters with '[PM]' tag.", engines: ["Classic", "New"] },
+      { cmd: "/kickoutall", desc: "kick all in-game players", engines: ["Classic", "New"] },
+      { cmd: "/kickout [player_name]", desc: "kickout player. Note: not working i guess on New Engine.", engines: ["Classic", "New"] },
+      { cmd: "/make [item_id] [amount]", desc: "same as awarditem, max amount per command is 120", engines: ["New"] },
+      { cmd: "/awarditem [item_id] [amount]", desc: "add item in inventory, max amount per command is 120", engines: ["Classic", "New"] },
+      { cmd: "/awardmoney [amount]", desc: "add gold (+ money)", engines: ["Classic", "New"] },
+      { cmd: "/awardemoney [amount]", desc: "add ep / Adds EP (Eudemon Points) to character", engines: ["Classic", "New"] },
+      { cmd: "/addmoney [amount]", desc: "add gold, same as awardmoney", engines: ["New"] },
+      { cmd: "/addemoney [amount]", desc: "add ep, same as awardemoney", engines: ["New"] },
+      { cmd: "/upfly [number]", desc: "flying mount without having pet in bag (bug if it is not flying eudemons). try /upfly 2", engines: ["New"] },
+      { cmd: "/awardgodmoney [number]", desc: "add godmoney in cq_user_new column (old currency before oldgodmoney(plane shop) introduced, so it won't show in-game, but still can be used)", engines: ["New"] },
+      { cmd: "/deltask [task_id]", desc: "delete task located only in cq_taskdetail", engines: ["New"] },
+      { cmd: "/sp", desc: "not working i guess?", engines: ["New"] },
+      { cmd: "/addgsexp", desc: "unknown", engines: ["New"] },
+      { cmd: "/kickoutcheat", desc: "unknown (New) / block cheat cq_gm_checkpunish (Classic)", engines: ["Classic", "New"] },
+      { cmd: "/自杀", desc: "make your char dead", engines: ["New"] },
+      { cmd: "/pk [amount]", desc: "increase your pk (the black/red name)", engines: ["New"] },
+      { cmd: "/testmonster [monster_id] [amount]", desc: "does not summon the monster but runs script action that you put on that monster.", engines: ["New"] },
+      { cmd: "/pro", desc: "unknown", engines: ["New"] },
+      { cmd: "/特效 [effect_name]", desc: "open your client ini/3DEffect.ini just copy what inside '[' ']', relog effect will disappear", engines: ["New"] },
+      { cmd: "/焰火2", desc: "firework style 1", engines: ["New"] },
+      { cmd: "/焰火", desc: "firework style 2", engines: ["New"] },
+      { cmd: "/msgver", desc: "show msg version (top left noti)", engines: ["New"] },
+      { cmd: "/dbdir", desc: "show location of database (top left noti)", engines: ["New"] },
+      { cmd: "/windir", desc: "show system window location (top left noti)", engines: ["New"] },
+      { cmd: "/seuser", desc: "unknown (top left noti)", engines: ["New"] },
+      { cmd: "/hardcode", desc: "show your window hardcode (top left noti)", engines: ["New"] },
+      { cmd: "/attacheudemon", desc: "unknown", engines: ["New"] },
+      { cmd: "/chgpos", desc: "unknown", engines: ["New"] },
+      { cmd: "/petgo", desc: "unknown", engines: ["New"] },
+      { cmd: "/callpet", desc: "unknown", engines: ["New"] },
+      { cmd: "/showid", desc: "unknown", engines: ["New"] },
+      { cmd: "/magicattack", desc: "unknown", engines: ["New"] },
+      { cmd: "/magicposattack", desc: "unknown", engines: ["New"] },
+      { cmd: "/reloadmagictype", desc: "re-read the Magic Table", engines: ["Classic", "New"] },
+      
+      // Classic Engine list exclusive ones
+      { cmd: "/Amount_limit", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Awardattrib1info", desc: "(unknown)", engines: ["Classic"] },
+      { cmd: "/Awardexp 1000", desc: "plus 1000 experience", engines: ["Classic"] },
+      { cmd: "/Awardwood 1000", desc: "plus 1000 wood", engines: ["Classic"] },
+      { cmd: "/Awardwskill", desc: "weapon skill should be added", engines: ["Classic"] },
+      { cmd: "/Auto_pathfind", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Cheater_check", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Closeforge", desc: "closed forging Tester", engines: ["Classic"] },
+      { cmd: "/Createmonster 2043", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/CtExp", desc: "set exp", engines: ["Classic"] },
+      { cmd: "/Court", desc: "Unknown", engines: ["Classic"] },
+      { cmd: "/Createcastle", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Createmgcfield", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Detachstatus", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Disabletalk [player name]", desc: "Mute player (player name can be found in cq_user)", engines: ["Classic"] },
+      { cmd: "/Entercastle", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_absorbghost", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_awardexp [value]", desc: "increase experience", engines: ["Classic"] },
+      { cmd: "/Eud_awardmagic [magic number]", desc: "increase magic", engines: ["Classic"] },
+      { cmd: "/Eud_boord_size", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_evolve", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_rebornlimitadd", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_setlev [levels]", desc: "Set eud to that level", engines: ["Classic"] },
+      { cmd: "/Eud_uplev [levels]", desc: "uplevels the Eudemons", engines: ["Classic"] },
+      { cmd: "/Eud_atk1", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_atk2", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_atk3", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Eud_atk4", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Family_cancleoccupy", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Family_challenge", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Family_enterfight", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Family_judgevictor", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Family_level", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Fileflush", desc: "unknow", engines: ["Classic"] },
+      { cmd: "/Fullteamxp", desc: "full team xp", engines: ["Classic"] },
+      { cmd: "/Firework", desc: "(unknow)", engines: ["Classic"] },
+      { cmd: "/Gem1", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Gem2", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Getexp", desc: "access to the current value of experience in information", engines: ["Classic"] },
+      { cmd: "/Hatch_all", desc: "Open/close bag and all eggs in hatcher are hatched", engines: ["Classic"] },
+      { cmd: "/Killself", desc: "suicide (will kill your self)", engines: ["Classic"] },
+      { cmd: "/killmonster [monster_id] [amount]", desc: "kill specific number of monsters", engines: ["Classic"] },
+      { cmd: "/Leavesyn", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Lifeadjust", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Lotterytest", desc: "draw test unknown", engines: ["Classic"] },
+      { cmd: "/Monster_num 1000", desc: "[may be map number] check the number of monsters within the region", engines: ["Classic"] },
+      { cmd: "/Offerexptofriend", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Openforge", desc: "open forging Tester", engines: ["Classic"] },
+      { cmd: "/Player", desc: "all show online", engines: ["Classic"] },
+      { cmd: "/Partnerfixedproc", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Player map", desc: "map shows map of people", engines: ["Classic"] },
+      { cmd: "/Previewexpball", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Queryrole", desc: "for personal information", engines: ["Classic"] },
+      { cmd: "/Reloadactionscript", desc: "NPC script re-read the test results, but the system crashes ......", engines: ["Classic"] },
+      { cmd: "/Rename", desc: "renamed. Test is not successful", engines: ["Classic"] },
+      { cmd: "/Reborn", desc: "after death directly to the revival of the city, with proposals and life together with killself", engines: ["Classic"] },
+      { cmd: "/Rqr_lev", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Rqr_pro", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Setexp", desc: "set the current experience", engines: ["Classic"] },
+      { cmd: "/Show_eud", desc: "query Eudemons ID", engines: ["Classic"] },
+      { cmd: "/Server_version", desc: "msg procedures for the current version [can be the true test msg]", engines: ["Classic"] },
+      { cmd: "/Setcrimestatus", desc: "of the best guards in the vicinity of use", engines: ["Classic"] },
+      { cmd: "/Showsize", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Superman", desc: "Makes you stronger", engines: ["Classic"] },
+      { cmd: "/Syn_delmember", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Syn_destory", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Talent_evolve_test", desc: "get talent test, no result", engines: ["Classic"] },
+      { cmd: "/Talent_hatch_test", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Talent_hole_test", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Totem_enable", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Upeqaddition", desc: "increase in property and equipment Addition", engines: ["Classic"] },
+      { cmd: "/Upeqlevel", desc: "increase in equipment levels", engines: ["Classic"] },
+      { cmd: "/Upeqquality", desc: "unknown", engines: ["Classic"] },
+      { cmd: "/Useexpball", desc: "Unknown", engines: ["Classic"] },
+      { cmd: "/千里传音", desc: "it will not work if u have a chinese PRC installed on your PC or use /broadall broadcast a message to everyone.", engines: ["Classic"] }
+    ];
+
+    const msgCommands = [
+      { cmd: "restartwindows", desc: "restart msg server" },
+      { cmd: "reconnectaccount", desc: "reestablish connection to account server" },
+      { cmd: "broadcast [message]", desc: "[SYSTEM] message center of client screen" },
+      { cmd: "stoptalk [player name] [Time(Min)]", desc: "mute player (player name can be found in cq_user)" },
+      { cmd: "reloadverifycode", desc: "something related key location that locate window folder" },
+      { cmd: "addpluginfo", desc: "related to extension dll , cant find the source code for this" },
+      { cmd: "delpluginfo", desc: "related to extension dll , cant find the source code for this" },
+      { cmd: "changeusername", desc: "not sure if it change player name or account username" },
+      { cmd: "killoutaccount", desc: "dont know" },
+      { cmd: "kickoutall", desc: "kick all player in-game" },
+      { cmd: "setmaxplayer [number]", desc: "set howmany player can login?" },
+      { cmd: "reloadaction [action_id]", desc: "use this if you have made change on your script without restart the server, reloadaction 0 -- all action will be reload" },
+      { cmd: "processaction [action_id]", desc: "run action" }
+    ];
+
+    const searchInput = document.getElementById('searchInput');
+    const workingGrid = document.getElementById('workingGrid');
+    const allGrid = document.getElementById('allGrid');
+    const msgGrid = document.getElementById('msgGrid');
+    const emptyState = document.getElementById('emptyState');
+    const toast = document.getElementById('toast');
+
+    searchInput.addEventListener('input', filterCommands);
+
+    function showToast() {
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2000);
+    }
+
+    // Function to copy text to clipboard
+    function copyToClipboard(text) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast();
+    }
+
+    function filterCommands() {
+      const query = searchInput.value.toLowerCase().trim();
+
+      const filteredWorking = workingCommands.filter(cmd => {
+        return cmd.cmd.toLowerCase().includes(query) || cmd.desc.toLowerCase().includes(query);
+      });
+
+      const filteredAll = allCommands.filter(cmd => {
+        return cmd.cmd.toLowerCase().includes(query) || cmd.desc.toLowerCase().includes(query);
+      });
+
+      const filteredMsg = msgCommands.filter(cmd => {
+        return cmd.cmd.toLowerCase().includes(query) || cmd.desc.toLowerCase().includes(query);
+      });
+
+      renderSection(workingGrid, filteredWorking);
+      renderSection(allGrid, filteredAll);
+      renderSection(msgGrid, filteredMsg);
+
+      // Hide headers if section empty, or show empty state if both empty
+      const workingSection = workingGrid.parentElement;
+      const allSection = allGrid.parentElement;
+      const msgSection = msgGrid.parentElement;
+
+      if (filteredWorking.length === 0) workingSection.classList.add('hidden');
+      else workingSection.classList.remove('hidden');
+
+      if (filteredAll.length === 0) allSection.classList.add('hidden');
+      else allSection.classList.remove('hidden');
+
+      if (filteredMsg.length === 0) msgSection.classList.add('hidden');
+      else msgSection.classList.remove('hidden');
+
+      if (filteredWorking.length === 0 && filteredAll.length === 0 && filteredMsg.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+      }
+    }
+
+    function renderSection(container, list) {
+      container.innerHTML = '';
+      list.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'group p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 flex flex-col justify-between hover:border-sky-500 transition shadow-sm';
+
+        let rawCmd = item.cmd.trim();
+
+        let engineBadge = '';
+        if (item.engines) {
+          if (item.engines.includes('Classic')) {
+            engineBadge += '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300">Classic</span>';
+          }
+          if (item.engines.includes('New')) {
+            engineBadge += '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300">New Engine (1655)</span>';
+          }
+        }
+        
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <code class="font-mono text-sm text-sky-600 dark:text-sky-400 font-bold break-all">
+                  ${item.cmd}
+                </code>
+                ${engineBadge}
+              </div>
+              <button class="copy-btn shrink-0 text-xs font-semibold px-2 py-1 rounded bg-slate-100 dark:bg-slate-900 hover:bg-sky-500 hover:text-white dark:hover:bg-sky-500 transition">
+                Copy
+              </button>
+            </div>
+            ${item.desc ? `<p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2">${item.desc}</p>` : ''}
+          </div>
+        `;
+
+        card.querySelector('.copy-btn').addEventListener('click', () => {
+          copyToClipboard(rawCmd);
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    // Initial render
+    renderSection(workingGrid, workingCommands);
+    renderSection(allGrid, allCommands);
+    renderSection(msgGrid, msgCommands);
+  </script>
+</body>
+</html>

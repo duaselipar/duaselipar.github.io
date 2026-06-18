@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🗺️ cq_map Type Values Guide | DuaSelipar Guide</title>
+  <meta name="description" content="A simple guide to understanding and calculating cq_map type values for Eudemons Online servers.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🗺️ cq_map type Guide</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-10">
+    
+    <!-- Title Section -->
+    <section class="space-y-3">
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">A Simple Guide to Understanding <code>cq_map</code> Type Values</h1>
+      <p class="text-slate-600 dark:text-slate-400 text-lg">
+        How player rules and server engine switches combine into a single map type database value.
+      </p>
+    </section>
+
+    <!-- Interactive Decoder & Calculator Tool -->
+    <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-6 space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">🛠️ Interactive Bitmask Calculator & Decoder</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Check/uncheck switches to calculate the final value, or type a value to decode it instantly.</p>
+      </div>
+
+      <!-- Live Input and Output boxes -->
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Decimal Value (type)</label>
+          <input type="number" id="calcDecimal" value="2097152" 
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 font-mono text-lg font-bold text-sky-600 dark:text-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-500" />
+        </div>
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Hexadecimal Value (Hex)</label>
+          <input type="text" id="calcHex" value="0x200000" readonly
+            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 font-mono text-lg font-bold text-slate-500 dark:text-slate-400 cursor-not-allowed" />
+        </div>
+      </div>
+
+      <!-- Flags selection grids -->
+      <div class="space-y-4">
+        <!-- High Engine Bits -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Engine Switches (High Bits)</h4>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" id="highFlagsGrid">
+            <!-- Dynamically populated from list -->
+          </div>
+        </div>
+
+        <!-- Low Map Restriction Flags -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Player Rules (Low Bits Checklist)</h4>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" id="lowFlagsGrid">
+            <!-- Dynamically populated from list -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guide Content -->
+    <article class="prose prose-slate dark:prose-invert max-w-none space-y-6 text-slate-700 dark:text-slate-300">
+      
+      <p class="leading-relaxed">
+        If you look at the <code>type</code> column in your <code>cq_map</code> table, you will see a mix of tiny numbers (like <code>12</code>) and massive, ten-digit numbers (like <code>2055864453</code>).
+      </p>
+      
+      <p class="leading-relaxed">
+        These numbers aren't random. They are a combination of <strong>Player Rules</strong> and <strong>Server Engine Switches</strong> packed into a single database value. Here is how it works without the confusing math.
+      </p>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 1 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">1. The Player Rules (The Small Numbers)</h2>
+        <p class="leading-relaxed">
+          Think of the low numbers as a simple <strong>Checklist</strong>. Each restriction or permission on a map has a specific value. If you want a map to have multiple rules, you just <strong>add their numbers together</strong>.
+        </p>
+
+        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">The Rule Checklist:</h3>
+        
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Constant Name</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Decimal</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Hex</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Description / Effect</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_NORMAL</td>
+                <td class="px-4 py-3">0</td>
+                <td class="px-4 py-3">0x0000</td>
+                <td class="px-4 py-3 font-sans">Normal Map (No special rules)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_PKFIELD</td>
+                <td class="px-4 py-3">1</td>
+                <td class="px-4 py-3">0x0001</td>
+                <td class="px-4 py-3 font-sans">PK Field / Arena</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_CHGMAP_DISABLE</td>
+                <td class="px-4 py-3">2</td>
+                <td class="px-4 py-3">0x0002</td>
+                <td class="px-4 py-3 font-sans">Magic call team member disabled; Cannot place Guild Waypoints; Cannot use magic to move.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_RECORD_DISABLE</td>
+                <td class="px-4 py-3">4</td>
+                <td class="px-4 py-3">0x0004</td>
+                <td class="px-4 py-3 font-sans">Cannot record/save point</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_PK_DISABLE</td>
+                <td class="px-4 py-3">8</td>
+                <td class="px-4 py-3">0x0008</td>
+                <td class="px-4 py-3 font-sans">PK Disabled</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_BOOTH_ENABLE</td>
+                <td class="px-4 py-3">16</td>
+                <td class="px-4 py-3">0x0010</td>
+                <td class="px-4 py-3 font-sans">Vending / Stall Setup Enabled</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_TEAM_DISABLE</td>
+                <td class="px-4 py-3">32</td>
+                <td class="px-4 py-3">0x0020</td>
+                <td class="px-4 py-3 font-sans">Teaming / Grouping Disabled</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_TELEPORT_DISABLE</td>
+                <td class="px-4 py-3">64</td>
+                <td class="px-4 py-3">0x0040</td>
+                <td class="px-4 py-3 font-sans">Cannot use "chgmap" command or Town Portal Scrolls; PK prohibited.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_SYN_MAP</td>
+                <td class="px-4 py-3">128</td>
+                <td class="px-4 py-3">0x0080</td>
+                <td class="px-4 py-3 font-sans">Guild / Syndicate Map</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_PRISON_MAP</td>
+                <td class="px-4 py-3">256</td>
+                <td class="px-4 py-3">0x0100</td>
+                <td class="px-4 py-3 font-sans">Prison Map</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_WING_DISABLE</td>
+                <td class="px-4 py-3">512</td>
+                <td class="px-4 py-3">0x0200</td>
+                <td class="px-4 py-3 font-sans">Flying / Bowman fly disabled</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_FAMILY</td>
+                <td class="px-4 py-3">1024</td>
+                <td class="px-4 py-3">0x0400</td>
+                <td class="px-4 py-3 font-sans">Family Map</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_MINEFIELD</td>
+                <td class="px-4 py-3">2048</td>
+                <td class="px-4 py-3">0x0800</td>
+                <td class="px-4 py-3 font-sans">Minefield / Mining Area</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_CALLNEWBIE_DISABLE</td>
+                <td class="px-4 py-3">4096</td>
+                <td class="px-4 py-3">0x1000</td>
+                <td class="px-4 py-3 font-sans">PK Tournament</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_REBORN_NOW_ENABLE</td>
+                <td class="px-4 py-3">8192</td>
+                <td class="px-4 py-3">0x2000</td>
+                <td class="px-4 py-3 font-sans text-xs">Instant Rebirth; No damage; Killing players doesn't add PK points/crime status; No gear drop; No loss of Guild Contribution.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans">MAPTYPE_NEWBIE_PROTECT</td>
+                <td class="px-4 py-3">16384</td>
+                <td class="px-4 py-3">0x4000</td>
+                <td class="px-4 py-3 font-sans">Safe Map with Newbie Protection</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 mt-4 text-sm">
+          <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-500/10 p-4">
+            <strong>Logical Calculation Example 1:</strong><br>
+            If a map is <strong>Teaming Disabled (32)</strong> AND <strong>Vending Enabled (16)</strong>:<br>
+            <code class="font-mono font-bold text-sky-600 dark:text-sky-400">32 + 16 = 48</code>
+          </div>
+          <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-500/10 p-4">
+            <strong>Logical Calculation Example 2:</strong><br>
+            If a map is <strong>PK Field (1)</strong>, <strong>Cannot place Guild Waypoints (2)</strong>, AND <strong>Recording Disabled (4)</strong>:<br>
+            <code class="font-mono font-bold text-sky-600 dark:text-sky-400">1 + 2 + 4 = 7</code>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-4 mt-2 text-sm">
+          <strong>Special Value Example (8710):</strong><br>
+          Supports instant revival, flying disabled, cannot place Guild Waypoints, recording disabled.<br>
+          <code class="font-mono font-bold text-slate-800 dark:text-slate-200">8192 + 512 + 2 + 4 = 8710</code>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 2 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">2. The Engine Switches (The Billion-Tier Baseline)</h2>
+        <p class="leading-relaxed">
+          Why do some maps have numbers in the billions? Because inside the server's C++ source code, the developers created <strong>Giant Hidden System Switches</strong> to tell the server how to handle the map's memory (RAM), timers, and core scripts.
+        </p>
+        <p class="leading-relaxed">
+          Here is a simple breakdown of the baseline switches so you know exactly which one to choose for your custom map:
+        </p>
+        
+        <div class="space-y-4 mt-2">
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">1. <code>2097152</code> (Standard Map Switch)</h4>
+            <ul class="list-disc list-inside text-sm mt-1 text-slate-600 dark:text-slate-400 space-y-1 pl-2">
+              <li><strong>When to use:</strong> Use this for any permanent, open-world public maps where all players gather, trade, and run around.</li>
+              <li><strong>Best for:</strong> Main cities (Cronus, Elven City), standard leveling maps, or training grounds.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">2. <code>16777216</code> (Dungeon Quest Switch)</h4>
+            <ul class="list-disc list-inside text-sm mt-1 text-slate-600 dark:text-slate-400 space-y-1 pl-2">
+              <li><strong>When to use:</strong> Use this for maps dedicated to specific quests, dungeon rooms, or automated scripting areas.</li>
+              <li><strong>Best for:</strong> Quest rooms, custom boss arenas, or scripted leveling event areas.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">3. <code>1073741824</code> (Instance Map Switch)</h4>
+            <ul class="list-disc list-inside text-sm mt-1 text-slate-600 dark:text-slate-400 space-y-1 pl-2">
+              <li><strong>When to use:</strong> Use this when you want a private dungeon map that creates an isolated "copy" (instance) for each party/group. When they finish and leave, the server automatically deletes items on the floor, resets bosses, and clears server RAM memory.</li>
+              <li><strong>Best for:</strong> Family/guild instance dungeons, team boss arenas, or private quest maps.</li>
+            </ul>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">4. <code>3282567168</code> (Global Event Switch)</h4>
+            <ul class="list-disc list-inside text-sm mt-1 text-slate-600 dark:text-slate-400 space-y-1 pl-2">
+              <li><strong>When to use:</strong> Use this for official timed events that are scheduled to run, open, and close automatically at set times of day.</li>
+              <li><strong>Best for:</strong> PK tournaments, preparation lobbies, or race course event maps.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Note on combining High Bits -->
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-500/10 p-4 mt-6 text-sm leading-relaxed">
+          <strong class="text-sky-900 dark:text-sky-300">💡 Can Engine Switches (High Bits) be combined?</strong>
+          <p class="mt-1 text-slate-700 dark:text-slate-300">
+            <strong>Yes, absolutely!</strong> Just like Player Rules, you can add multiple high-bit Engine Switches together if a map requires multiple backend system behaviors. 
+            For example, <strong>DragonCave</strong> combines the <strong>Instance Map Switch (1,073,741,824)</strong> to keep the map private and the <strong>Dungeon Quest Switch (16,777,216)</strong> to handle automated boss spawn scripts.
+          </p>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 3 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">3. Real-World Database Examples Broken Down</h2>
+        <p class="leading-relaxed">
+          When you see a huge number in your database, it is just <strong>One (or more) Engine Switches + Your Player Rules</strong>. Let's decode the 4 most common big numbers found directly in <code>cq_map</code>:
+        </p>
+
+        <div class="space-y-6">
+          <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">Example A: DragonCave (Value: 1090519052)</h4>
+            <p class="text-sm mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+              This is a classic private party dungeon. Even though it sits in <code>cq_map</code>, the engine treats it as an isolated room because of the baseline switch:
+            </p>
+            <ul class="list-disc list-inside text-sm mt-2 space-y-1 pl-2 text-slate-600 dark:text-slate-400">
+              <li><code>1073741824</code> : Instance Map Switch (Keeps the dungeon private for your party)</li>
+              <li><code>16777216</code> : Dungeon Quest Switch (Powers the automated boss reset scripts)</li>
+              <li><code>8</code> : Safe Zone (Keeps the entry room safe from PK)</li>
+              <li><code>4</code> : No Save Point (Stops players from permanently camping inside)</li>
+            </ul>
+            <div class="mt-3 font-semibold text-slate-800 dark:text-slate-200">
+              The Recipe: 1,073,741,824 + 16,777,216 + 8 + 4 = 1,090,519,052
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">Example B: ObstacleCourse (Value: 3282567180)</h4>
+            <p class="text-sm mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+              This is an automated mini-game event map.
+            </p>
+            <ul class="list-disc list-inside text-sm mt-2 space-y-1 pl-2 text-slate-600 dark:text-slate-400">
+              <li><code>3282567168</code> : Global Event Switch (Tells the server clock when to open/close this event)</li>
+              <li><code>8</code> : Safe Zone (Disables PK so players focus purely on racing)</li>
+              <li><code>4</code> : No Save Point (Kicks players out back to Cronus if they log out mid-game)</li>
+            </ul>
+            <div class="mt-3 font-semibold text-slate-800 dark:text-slate-200">
+              The Recipe: 3,282,567,168 + 8 + 4 = 3,282,567,180
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">Example C: LegionLand (Value: 2055864453)</h4>
+            <p class="text-sm mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+              The main warzone for Guild/Legion wars. It combines massive system switches with aggressive gameplay rules:
+            </p>
+            <ul class="list-disc list-inside text-sm mt-2 space-y-1 pl-2 text-slate-600 dark:text-slate-400">
+              <li><code>2055864288</code> : Core Legion War System Switch (Handles alliance scoring and war maps)</li>
+              <li><code>128</code> : Guild/Syndicate Flag (Identifies the zone as guild property)</li>
+              <li><code>32</code> : Disable Party (Forces players to fight for their guild, not a private party)</li>
+              <li><code>4</code> : No Save Point (Dead players are sent out back to main cities)</li>
+              <li><code>1</code> : PK Field (Enables free combat for the war)</li>
+            </ul>
+            <div class="mt-3 font-semibold text-slate-800 dark:text-slate-200">
+              The Recipe: 2,055,864,288 + 128 + 32 + 4 + 1 = 2,055,864,453
+            </div>
+          </div>
+
+          <div class="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
+            <h4 class="font-bold text-slate-900 dark:text-white">Example D: Special Territory / Housing (Value: 1613299724)</h4>
+            <p class="text-sm mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+              Used for localized shared expansion territories or player housing zones:
+            </p>
+            <ul class="list-disc list-inside text-sm mt-2 space-y-1 pl-2 text-slate-600 dark:text-slate-400">
+              <li><code>1613299712</code> : Advanced Sub-Zone Switch (Handles underlying database housing layers)</li>
+              <li><code>8</code> : Safe Zone (No fighting allowed on residential property)</li>
+              <li><code>4</code> : No Save Point (Defaults players back to world hubs if they disconnect)</li>
+            </ul>
+            <div class="mt-3 font-semibold text-slate-800 dark:text-slate-200">
+              The Recipe: 1,613,299,712 + 8 + 4 = 1,613,299,724
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 4 -->
+      <section class="space-y-4 pb-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">4. Pro-Tip for Developers</h2>
+        <p class="leading-relaxed">
+          You do <strong>not</strong> need to memorize or calculate these billion-tier numbers from scratch.
+        </p>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-emerald-500/10 p-4 mt-2 text-sm leading-relaxed">
+          Since the massive part of the number belongs to the core server engine, the easiest and safest way to make a new map is to <strong>find an existing map that works exactly like the one you want, and copy its <code>type</code> value directly.</strong>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 mt-auto">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // High Engine Switches
+    const highFlags = [
+      { name: "Standard Map Switch", dec: 2097152, hex: "0x200000", desc: "Base open-world map switch." },
+      { name: "Dungeon Quest Switch", dec: 16777216, hex: "0x01000000", desc: "Automated boss & spawner scripts." },
+      { name: "Instance Map Switch", dec: 1073741824, hex: "0x40000000", desc: "Cloned party maps, wipes on leave." },
+      { name: "Global Event Switch", dec: 3282567168, hex: "0xC3A00000", desc: "Controlled by automated event timers." },
+      { name: "Legion War Switch", dec: 2055864288, hex: "0x7A8C0000", desc: "Guild war baseline engine switch." },
+      { name: "Advanced Sub-Zone Switch", dec: 1613299712, hex: "0x602A0000", desc: "Housing & territory sub-zone layers." }
+    ];
+
+    // Low bits flags checklist
+    const lowFlags = [
+      { name: "MAPTYPE_PKFIELD", dec: 1, hex: "0x0001", desc: "PK Field / Arena" },
+      { name: "MAPTYPE_CHGMAP_DISABLE", dec: 2, hex: "0x0002", desc: "Magic call team disabled; Cannot place Guild Waypoints; Cannot use magic to move." },
+      { name: "MAPTYPE_RECORD_DISABLE", dec: 4, hex: "0x0004", desc: "Cannot record/save point" },
+      { name: "MAPTYPE_PK_DISABLE", dec: 8, hex: "0x0008", desc: "PK Disabled" },
+      { name: "MAPTYPE_BOOTH_ENABLE", dec: 16, hex: "0x0010", desc: "Vending / Stall Setup Enabled" },
+      { name: "MAPTYPE_TEAM_DISABLE", dec: 32, hex: "0x0020", desc: "Teaming / Grouping Disabled" },
+      { name: "MAPTYPE_TELEPORT_DISABLE", dec: 64, hex: "0x0040", desc: "Cannot use 'chgmap' command or Town Portal Scrolls; PK prohibited." },
+      { name: "MAPTYPE_SYN_MAP", dec: 128, hex: "0x0080", desc: "Guild / Syndicate Map" },
+      { name: "MAPTYPE_PRISON_MAP", dec: 256, hex: "0x0100", desc: "Prison Map" },
+      { name: "MAPTYPE_WING_DISABLE", dec: 512, hex: "0x0200", desc: "Flying / Bowman fly disabled" },
+      { name: "MAPTYPE_FAMILY", dec: 1024, hex: "0x0400", desc: "Family Map" },
+      { name: "MAPTYPE_MINEFIELD", dec: 2048, hex: "0x0800", desc: "Minefield / Mining Area" },
+      { name: "MAPTYPE_CALLNEWBIE_DISABLE", dec: 4096, hex: "0x1000", desc: "PK Tournament" },
+      { name: "MAPTYPE_REBORN_NOW_ENABLE", dec: 8192, hex: "0x2000", desc: "Instant Rebirth; No damage; Killing players doesn't add PK points/crime status; No gear drop; No loss of Guild Contribution." },
+      { name: "MAPTYPE_NEWBIE_PROTECT", dec: 16384, hex: "0x4000", desc: "Safe Map with Newbie Protection" }
+    ];
+
+    const highGrid = document.getElementById('highFlagsGrid');
+    const lowGrid = document.getElementById('lowFlagsGrid');
+    const calcDecimal = document.getElementById('calcDecimal');
+    const calcHex = document.getElementById('calcHex');
+
+    // Populate high bits
+    highFlags.forEach(f => {
+      const container = document.createElement('label');
+      container.className = 'flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer select-none';
+      container.innerHTML = `
+        <input type="checkbox" value="${f.dec}" class="high-flag-checkbox mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+        <div>
+          <span class="block text-sm font-semibold text-slate-900 dark:text-white">${f.name}</span>
+          <span class="block text-xs text-slate-500">${f.hex} (+${f.dec.toLocaleString()})</span>
+        </div>
+      `;
+      highGrid.appendChild(container);
+    });
+
+    // Populate low bits flags selection grid
+    lowFlags.forEach(f => {
+      const container = document.createElement('label');
+      container.className = 'flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-900 cursor-pointer select-none';
+      container.innerHTML = `
+        <input type="checkbox" value="${f.dec}" class="low-flag-checkbox mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+        <div>
+          <span class="block text-sm font-semibold text-slate-900 dark:text-white">${f.name}</span>
+          <span class="block text-xs text-slate-500">${f.hex} (+${f.dec.toLocaleString()})</span>
+        </div>
+      `;
+      lowGrid.appendChild(container);
+    });
+
+    const lowCheckboxes = document.querySelectorAll('.low-flag-checkbox');
+    const highCheckboxes = document.querySelectorAll('.high-flag-checkbox');
+
+    // Calculator updates from checkboxes
+    function updateCalculatorFromUI() {
+      let total = 0n;
+
+      highCheckboxes.forEach(cb => {
+        if (cb.checked) total += BigInt(cb.value);
+      });
+
+      lowCheckboxes.forEach(cb => {
+        if (cb.checked) total += BigInt(cb.value);
+      });
+
+      calcDecimal.value = total.toString();
+      calcHex.value = '0x' + total.toString(16).toUpperCase();
+    }
+
+    // Decoder updates from text inputs
+    function updateCalculatorFromInput() {
+      let val = 0n;
+      try {
+        val = BigInt(calcDecimal.value);
+      } catch (e) {
+        val = 0n;
+      }
+      
+      // Update Hex readout
+      calcHex.value = '0x' + val.toString(16).toUpperCase();
+
+      // Check all individual high bits
+      highCheckboxes.forEach(cb => {
+        let dec = BigInt(cb.value);
+        if ((val & dec) === dec) {
+          cb.checked = true;
+        } else {
+          cb.checked = false;
+        }
+      });
+
+      // Check all individual low bits
+      lowCheckboxes.forEach(cb => {
+        let dec = BigInt(cb.value);
+        if ((val & dec) === dec) {
+          cb.checked = true;
+        } else {
+          cb.checked = false;
+        }
+      });
+    }
+
+    // Attach listeners
+    highCheckboxes.forEach(cb => {
+      cb.addEventListener('change', updateCalculatorFromUI);
+    });
+    lowCheckboxes.forEach(cb => {
+      cb.addEventListener('change', updateCalculatorFromUI);
+    });
+    calcDecimal.addEventListener('input', updateCalculatorFromInput);
+
+    // Initial state set to Cronus baseline
+    flag_base_checkbox = Array.from(highCheckboxes).find(c => c.value === "2097152");
+    if(flag_base_checkbox) {
+      flag_base_checkbox.checked = true;
+    }
+    updateCalculatorFromUI();
+  </script>
+</body>
+</html>

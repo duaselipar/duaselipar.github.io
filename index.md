@@ -132,6 +132,42 @@ title: DuaSelipar Dev Hub
         </li>
 
         <li class="group">
+          <a href="/guide/gm-commands.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
+            <div class="shrink-0 mt-0.5">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">💻</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold">PM &amp; GM Commands</div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Complete list of console commands for PM and GM characters in Eudemons Online servers.</p>
+            </div>
+          </a>
+        </li>
+
+        <li class="group">
+          <a href="/guide/cq-map-bitmask.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
+            <div class="shrink-0 mt-0.5">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🗺️</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold">cq_map Type Bitmask Explained</div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Understand and calculate map type flags, Safe Zones, and Dynamic instances.</p>
+            </div>
+          </a>
+        </li>
+
+        <li class="group">
+          <a href="/guide/cq-map-new-engine.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
+            <div class="shrink-0 mt-0.5">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">🗺️</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold">cq_map New Engine Toggles</div>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Explore explicit column toggles (no_pk, no_fly, no_ride) used in V1.6.5.5+ servers.</p>
+            </div>
+          </a>
+        </li>
+
+        <li class="group">
           <a href="/guide/create-client-installer.html" class="flex gap-4 p-4 hover:bg-sky-50/50 dark:hover:bg-sky-500/10 transition">
             <div class="shrink-0 mt-0.5">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-1 ring-sky-500/30">📥</span>
@@ -246,20 +282,6 @@ title: DuaSelipar Dev Hub
               </p>
             </div>
           </a>
-        </li>
-
-
-        <li class="flex gap-4 p-4 opacity-60 select-none">
-          <div class="shrink-0 mt-0.5">
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-400 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">🗺️</span>
-          </div>
-          <div class="min-w-0">
-            <div class="font-semibold">
-              CQ_Map Guide
-              <span class="text-xs ml-2 rounded-full bg-slate-100 dark:bg-slate-900 px-2 py-0.5 ring-1 ring-slate-200 dark:ring-slate-800">Coming soon</span>
-            </div>
-            <p class="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Map structure, attributes, and customizing EO worlds.</p>
-          </div>
         </li>
       </ul>
     </section>

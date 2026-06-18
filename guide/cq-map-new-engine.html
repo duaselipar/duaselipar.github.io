@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <title>🗺️ cq_map Fields Guide (New Engine) | DuaSelipar Guide</title>
+  <meta name="description" content="A comprehensive reference guide for cq_map fields and dedicated gameplay toggles in Eudemons Online V1.6.5.5 server engines.">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto','Helvetica','Arial'] }
+        }
+      }
+    }
+  </script>
+
+  <!-- Prevent theme flash -->
+  <script>
+    (function(){
+      try{
+        const t = localStorage.getItem('theme');
+        if (t === 'dark') document.documentElement.classList.add('dark');
+        else if (t === 'light') document.documentElement.classList.remove('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+          document.documentElement.classList.add('dark');
+        }
+      }catch(e){}
+    })();
+  </script>
+</head>
+<body class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased flex flex-col min-h-screen text-[16px]">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur border-b border-slate-200/70 dark:border-slate-800/70">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="h-14 flex items-center justify-between">
+        <h1 class="text-base md:text-lg font-extrabold tracking-tight">🗺️ cq_map fields Guide (New Engine)</h1>
+        <div class="flex items-center gap-2">
+          <a href="/" class="text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-950/5 dark:hover:bg-white/5">Home</a>
+          <button id="themeToggle" class="inline-flex items-center justify-center h-9 w-9 rounded-lg ring-1 ring-slate-200 dark:ring-slate-800 hover:bg-slate-950/5 dark:hover:bg-white/5" title="Toggle theme">
+            <svg class="h-5 w-5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m16.95 6.95-1.41-1.41M6.46 6.46 5.05 5.05m13.49 0-1.41 1.41M6.46 17.54l-1.41 1.41"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8 py-8 pb-16 flex-grow space-y-10">
+    
+    <!-- Title Section -->
+    <section class="space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-600 dark:text-sky-400 ring-1 ring-sky-500/30">
+        Engine Edition: V1.6.5.5+
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Comprehensive Guide to <code>cq_map</code> Fields (New Engine Edition)</h1>
+      <p class="text-slate-600 dark:text-slate-400 text-lg">
+        Understand explicit column toggles and map parameters introduced in newer Eudemons Online server architectures.
+      </p>
+    </section>
+
+    <!-- Guide Content -->
+    <article class="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-slate-300">
+      
+      <p class="leading-relaxed">
+        In newer Eudemons server engines (such as V1.6.5.5), the architecture shifted away from packing every single gameplay restriction into a single mathematical bitmask. Instead, the engine utilizes **Explicit Columns (Dedicated Toggles)**, making map configuration much cleaner, while upgrading the <code>type</code> column to a 64-bit <code>bigint</code> to handle backend system infrastructure.
+      </p>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 1 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">1. Core Map Identity & Engine Setup</h2>
+        <p class="leading-relaxed">
+          These fields define the map identity, map graphic layouts to load, and CPU thread routing in server memory:
+        </p>
+        
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white w-1/4">Column Name</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white w-1/4">Type</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Description / Function</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">id</td>
+                <td class="px-4 py-3">int(11)</td>
+                <td class="px-4 py-3 font-sans">Unique Map ID. Map IDs &ge; 4,000,000,000 are explicitly flagged for instances/dungeons by the core system.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">name</td>
+                <td class="px-4 py-3">varchar(32)</td>
+                <td class="px-4 py-3 font-sans">The internal name of the map.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">describe_text</td>
+                <td class="px-4 py-3">varchar(255)</td>
+                <td class="px-4 py-3 font-sans">Descriptive text or client-side UI reference name.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">mapdoc</td>
+                <td class="px-4 py-3">int(11)</td>
+                <td class="px-4 py-3 font-sans">The physical graphic map file ID (e.g., <code>1000.map</code>). Multiple Map IDs can share the same <code>mapdoc</code> to save server memory.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">type</td>
+                <td class="px-4 py-3">bigint(20)</td>
+                <td class="px-4 py-3 font-sans">Strictly used to define core engine infrastructure switches (e.g., Global Cross-Server maps or Dynamic Copies). Standard rules are now handled by individual <code>no_</code> columns.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">mapgroup</td>
+                <td class="px-4 py-3">int(11)</td>
+                <td class="px-4 py-3 font-sans">Maps this layout to a specific processing thread (<code>CMapGroupThread</code>). Only maps assigned to the active group load into that specific thread group.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">idxserver</td>
+                <td class="px-4 py-3">int(11)</td>
+                <td class="px-4 py-3 font-sans">Server cluster index. <code>-1</code> means local/all sub-servers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Backwards compatibility highlight block -->
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-sky-500/10 p-5 space-y-2 mt-4">
+          <div class="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+            <span>🔄</span>
+            <h3>Backwards-Compatible <code>type</code> Flag</h3>
+          </div>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            Even in the New Engine edition, the <strong><code>type</code></strong> column maintains full backward compatibility. The engine supports <strong>both methods simultaneously</strong>: it parses the traditional bitmask switches (like Safe Zone, No Save, etc.) while also checking the individual columns.
+          </p>
+          <p class="text-sm text-slate-700 dark:text-slate-300 pt-1">
+            👉 Need to calculate or decode the legacy bitmask switches for the <code>type</code> field? View our interactive calculator: <br class="hidden sm:inline">
+            <a href="/guide/cq-map-bitmask.html" class="inline-flex items-center font-bold text-sky-600 dark:text-sky-400 hover:underline mt-1">
+              🗺️ cq_map Type Bitmask Explained &amp; Calculator &rarr;
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 2 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">2. Gameplay Restriction Toggles (The <code>no_</code> Fields)</h2>
+        <p class="leading-relaxed">
+          Configure these flags using simple boolean integers: <strong><code>0</code> = Allowed (Default)</strong>, <strong><code>1</code> = Prohibited / Blocked</strong>.
+        </p>
+
+        <!-- Combat -->
+        <div class="space-y-3">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>⚔️</span> Combat &amp; PK Rules
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-900">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Effect when set to <code>1</code></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_pk</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables player versus player combat entirely (Safe Zone).</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_xp</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Restricts and prohibits players from casting or activating XP skills on this map.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_addpkvalue</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Killing players on this map does not increase a player's PK points/crime status.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_magicreborn</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Prevents players from using character revival/resurrection spells (e.g., Water Taoist revive).</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_reborn</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Prevents instant in-place resurrection windows upon death.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Movement -->
+        <div class="space-y-3 pt-2">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>🏃</span> Movement &amp; Navigation
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-900">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Effect when set to <code>1</code></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_random</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables the use of Random Teleport Scrolls.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_fly</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables flying actions or Ranger/Bowman flight skills.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_ride</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables mounting or riding pets.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_jmp</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Completely disables character jumping.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_autorun</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Blocks the client-side automatic pathfinding/auto-running system.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">dojumpcount</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Set to <code>1</code> on specialized jumping-intensive maps (e.g., Legion War maps or Arenas) to accurately register jump tallies. Keep at <code>0</code> for normal maps to prevent rubber-banding/bouncing glitches.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pets -->
+        <div class="space-y-3 pt-2">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>🔮</span> Eudemons &amp; Pets
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-900">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Effect when set to <code>1</code></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_calbb</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables summoning or bringing out Eudemons/babies.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_callpackagepet</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Restricts pets from following out in the open. Upon entering this map, active accompanying pets are automatically recalled back to the inventory.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Economy -->
+        <div class="space-y-3 pt-2">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <span>💰</span> Economy &amp; Character Status
+          </h3>
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+              <thead class="bg-slate-50 dark:bg-slate-900">
+                <tr>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Effect when set to <code>1</code></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_dorpitem</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">When a player dies, their equipped gear and inventory items will not drop on the floor. However, gold coins will still drop normally.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">noacceptdup</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">When set to <code>1</code>, players on this map automatically auto-reject any incoming quest or team invitations from other players.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">notofficeonline</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">Disables "Dead Man Online" functionality (offline botting, vending, or training states) inside this map structure.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2.5 font-sans font-semibold">no_itemrecordpos</td>
+                  <td class="px-4 py-2.5 font-sans text-slate-600 dark:text-slate-400">
+                    Set to <code>1</code> to prohibit players from marking coordinates using the <em>Eye of Memory</em> item (ID: <code>820200</code>).
+                    <p class="text-xs text-slate-500 mt-1 font-sans"><em>Note:</em> The engine still honors the legacy method (setting bitwise <code>4</code> in the <code>type</code> flag), but this standalone column is preferred.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 3 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">3. Skill Resource Control</h2>
+        <p class="leading-relaxed">
+          These toggles determine whether utilizing spells/skills consumes character energy resources:
+        </p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Effect when set to <code>1</code></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold">no_expendmp</td>
+                <td class="px-4 py-3 font-sans">Using character skills on this map does not consume any Mana points (MP).</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold">no_expenenergy</td>
+                <td class="px-4 py-3 font-sans">Using character skills on this map does not deplete Stamina/Physical Energy (except during jumping maneuvers).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 4 -->
+      <section class="space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">4. Script Actions &amp; Dynamic Town Portals</h2>
+        <p class="leading-relaxed">
+          Configure triggers that execute script IDs or define where Town Portals/Recalls return the character:
+        </p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Purpose &amp; Behavior</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">enter_action</td>
+                <td class="px-4 py-3 font-sans">Fires a specific script ID (from the <code>cq_action</code> table) immediately when a character steps onto or warps into this map.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">leave_action</td>
+                <td class="px-4 py-3 font-sans">Fires a specific script ID immediately when a character departs or teleports away from this map.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">backmapid</td>
+                <td class="px-4 py-3 font-sans">The destination Map ID when a player uses a Town Portal scroll or hits a "Return to Town" UI button.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">backmap_x</td>
+                <td class="px-4 py-3 font-sans">The target X coordinate for the town return spawn location.</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">backmap_y</td>
+                <td class="px-4 py-3 font-sans">The target Y coordinate for the town return spawn location.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr class="border-slate-200 dark:border-slate-800" />
+
+      <!-- Section 5 -->
+      <section class="space-y-4 pb-6">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">5. Experience Modifier Rates</h2>
+        <p class="leading-relaxed">
+          These multipliers boost or adjust experience gained when defeating monsters on the map:
+        </p>
+        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-sm">
+            <thead class="bg-slate-50 dark:bg-slate-900">
+              <tr>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white w-1/3">Column</th>
+                <th class="px-4 py-3 font-semibold text-slate-900 dark:text-white">Multiplier Behavior</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-950 font-mono">
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">addexp</td>
+                <td class="px-4 py-3 font-sans">Additional baseline leveling experience gained from slaying monsters. <code>100</code> represents a literal $+100\%$ bonus ($2\times$ experience).</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-sans font-semibold text-sky-600 dark:text-sky-400">addgodexp</td>
+                <td class="px-4 py-3 font-sans">Additional Divine Experience multiplier gained from slaying monsters. <code>100</code> represents a $+100\%$ bonus ($2\times$ divine experience).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 mt-auto">
+    <div class="mx-auto max-w-[1080px] w-full px-4 md:px-6 lg:px-8">
+      <div class="py-6 text-center text-sm text-slate-500">
+        © <span id="year"></span> DuaSelipar Dev Hub.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Theme toggle
+    document.getElementById('themeToggle')?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch(e){}
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
